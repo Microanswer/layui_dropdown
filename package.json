@@ -1,0 +1,26 @@
+{
+  "name": "layui_dropdown",
+  "version": "1.0.0",
+  "description": "layui框架适用的下拉控件，不同于表单里的select，本控件可用于各种下拉展示、下拉菜单等用途。",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "layui",
+    "dropdown",
+    "microanswer"
+  ],
+  "url": "http://test.microanswer.cn/dropdown.html",
+  "author": "Microanswer",
+  "license": "ISC",
+  "devDependencies": {
+    "gulp": "^4.0.2",
+    "gulp-header": "^2.0.9",
+    "gulp-minify-css": "^1.2.4",
+    "gulp-uglify": "^3.0.2",
+    "gulp-zip": "^5.0.1",
+    "minimist": "^1.2.5",
+    "webpack": "^4.42.0"
+  }
+}

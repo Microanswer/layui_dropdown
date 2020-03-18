@@ -1,0 +1,27 @@
+/*
+layui 下拉框控件的css。
+作者: Microanswer
+*/
+
+.dropdown-root {
+    position: fixed;
+    background-color: white;
+    border-radius: 2px;
+    box-shadow: 1px 1px 3px #a9a9a9;
+    outline: none;
+
+    display: none;
+}
+
+.dropdown-root .menu-item {
+    line-height: 36px;
+}
+.dropdown-root .menu-item a{
+    display: block;
+    color: #333;
+    padding: 0 20px;
+}
+.dropdown-root .menu-item a:hover{
+    color: #000;
+    background-color: #f2f2f2;
+}

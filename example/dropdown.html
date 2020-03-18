@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Layui·dropdown-下拉控件测试</title>
+    <link type="text/css" rel="stylesheet" href="../layui/css/layui.css">
+    <link type="text/css" rel="stylesheet" href="../dist/dropdown.css">
+    <style>
+        body {
+            padding: 20px;
+        }
+        h1 {
+            margin: 12px 0 6px;
+        }
+        p {
+            margin: 2px 10px 8px 10px;
+            font-size: 16px;
+        }
+        .pln {
+            color: #000
+        }
+
+        @media screen {
+            .str {
+                color: #080
+            }
+
+            .kwd {
+                color: #008
+            }
+
+            .com {
+                color: #800
+            }
+
+            .typ {
+                color: #606
+            }
+
+            .lit {
+                color: #066
+            }
+
+            .clo,.opn,.pun {
+                color: #660
+            }
+
+            .tag {
+                color: #008
+            }
+
+            .atn {
+                color: #606
+            }
+
+            .atv {
+                color: #080
+            }
+
+            .dec,.var {
+                color: #606
+            }
+
+            .fun {
+                color: red
+            }
+        }
+
+        @media print,projection {
+            .kwd,.tag,.typ {
+                font-weight: 700
+            }
+
+            .str {
+                color: #060
+            }
+
+            .kwd {
+                color: #006
+            }
+
+            .com {
+                color: #600;
+                font-style: italic
+            }
+
+            .typ {
+                color: #404
+            }
+
+            .lit {
+                color: #044
+            }
+
+            .clo,.opn,.pun {
+                color: #440
+            }
+
+            .tag {
+                color: #006
+            }
+
+            .atn {
+                color: #404
+            }
+
+            .atv {
+                color: #060
+            }
+        }
+
+        pre.prettyprint {
+            padding: 10px 3px;
+            border-radius: 3px;
+            background-color: rgba(226,226,226,0.48);
+            /*border: 1px solid #888*/
+        }
+
+        ol.linenums {
+            margin-top: 0;
+            margin-bottom: 0
+        }
+        ol.linenums code {
+            white-space: pre-wrap;
+        }
+
+        li.L1,li.L3,li.L5,li.L7,li.L9 {
+            background: #eaeaea;
+        }
+    </style>
+</head>
+<body>
+<div class="layui-container">
+    <h1>一、简介预览</h1>
+    <p>
+        layui框架下拉框控件，非表单里的下拉选择器。现在你可以在layui框架里使用下拉控件了。<br>
+        支持：下拉菜单条目、自定义下拉内容、浏览器边缘检测、兼容表格。
+    </p>
+    <p>先看看效果：</p>
+    <div>
+        <button class="layui-btn layui-btn-sm" lay-filter="test1"
+                lay-dropdown="{align:'left', menus: [{layIcon:'layui-icon-username',txt: '个人中心', event:'usercenter'}, {layIcon: 'layui-icon-set',txt: '设置', event:'set'}, {layIcon: 'layui-icon-logout', txt: '退出登录', event:'loginout'}]}">
+            <span>下拉菜单</span>
+            <i class="layui-icon layui-icon-triangle-d"></i>
+        </button>
+        、
+        <button class="layui-btn layui-btn-sm" lay-filter="test2"
+                lay-dropdown="{align:'center', menus: [{layIcon:'layui-icon-username',txt: '个人中心', event:'usercenter'}, {layIcon: 'layui-icon-set',txt: '设置', event:'set'}, {layIcon: 'layui-icon-logout', txt: '退出登录', event:'loginout'}]}">
+            <span>中对齐</span>
+            <i class="layui-icon layui-icon-triangle-d"></i>
+        </button>
+        、
+        <button class="layui-btn layui-btn-sm" lay-filter="test3"
+                lay-dropdown="{align:'right', menus: [{layIcon:'layui-icon-username',txt: '个人中心', event:'usercenter'}, {layIcon: 'layui-icon-set',txt: '设置', event:'set'}, {layIcon: 'layui-icon-logout', txt: '退出登录', event:'loginout'}]}">
+            <span>右对齐</span>
+            <i class="layui-icon layui-icon-triangle-d"></i>
+        </button>
+        、
+        <button class="layui-btn layui-btn-sm" lay-filter="test4"
+                lay-dropdown="{showBy: 'hover',align:'left', menus: [{layIcon:'layui-icon-username',txt: '个人中心', event:'usercenter'}, {layIcon: 'layui-icon-set',txt: '设置', event:'set'}, {layIcon: 'layui-icon-logout', txt: '退出登录', event:'loginout'}]}">
+            <span>hover的下拉菜单</span>
+            <i class="layui-icon layui-icon-triangle-d"></i>
+        </button>
+        、
+        <button class="layui-btn layui-btn-sm" lay-filter="test5">
+            <span>下拉自定义内容</span>
+            <i class="layui-icon layui-icon-triangle-d"></i>
+        </button>
+
+        、
+        可以把其他dom也作为触发器，比如这个img：<img style="width: 20px;height: 20px;background-color: #ff6619;border-radius: 50%"
+                                    lay-filter="test6"
+                                    lay-dropdown="{align:'left', menus: [{layIcon:'layui-icon-username',txt: '个人中心', event:'usercenter'}, {layIcon: 'layui-icon-set',txt: '设置', event:'set'}, {layIcon: 'layui-icon-logout', txt: '退出登录', event:'loginout'}]}">
+    </div>
+    <br>
+    <p>在表格里使用：</p>
+    <div>
+        <table id="mytable" lay-filter="table1"></table>
+    </div>
+</div>
+
+<!-- 自定义下拉菜单内容 -->
+<script id="mymenu" type="text/html">
+    <div style="padding: 20px;max-width: 300px;display: flex;display: -webkit-flex">
+        <img style="width: 60px;min-width:60px;height: 60px;border-radius: 50%;background-color: #1E9FFF">
+        <div style="display: inline-block;word-break: break-all;margin-left: 20px">
+            大家好，我是自定义下拉内容，在这里你可以放任何你希望放置的下拉内容哦。<br><br>
+            <button class="layui-btn layui-btn-xs layui-btn-primary modify">修改信息</button>
+            <button class="layui-btn layui-btn-xs openvip">开通会员</button>
+        </div>
+    </div>
+</script>
+
+<!-- 表格行toolbar模板 -->
+<script id="tb" type="text/html">
+    <button class="layui-btn layui-btn-xs" lay-filter="ft{{d.id}}" lay-dropdown="{align:'right', menus: [{layIcon:'layui-icon-username',txt: '详细信息', event:'{{d.id}}-detail'}, {layIcon: 'layui-icon-set',txt: '开通会员', event:'{{d.id}}-openvip'}, {layIcon: 'layui-icon-logout', txt: '删除账户', event:'{{d.id}}-deleteaccount'}]}">
+        <span>操作</span>
+        <i class="layui-icon layui-icon-triangle-d"></i>
+    </button>
+</script>
+
+<hr>
+<h1>使用方法</h1>
+
+
+<script src="../layui/layui.js"></script>
+<script src="//cdn.jsdelivr.net/gh/google/code-prettify@master/loader/prettify.min.js"></script>
+<script>
+    prettyPrint();
+
+    layui.config({
+        base: '../dist/'
+    }).use(['dropdown', 'table', 'layer'], function () {
+        var table = layui.table;
+        var dropdown = layui.dropdown;
+        var layer = layui.layer;
+
+        dropdown.onFilter("test1", function (event) {layer.msg("你点击了test1：" + event);});
+        dropdown.onFilter("test2", function (event) {layer.msg("你点击了test2：" + event);});
+        dropdown.onFilter("test3", function (event) {layer.msg("你点击了test3：" + event);});
+        dropdown.onFilter("test4", function (event) {layer.msg("你点击了test4：" + event);});
+        dropdown.onFilter("test6", function (event) {layer.msg("你点击了test6：" + event);});
+
+        dropdown.suite("[lay-filter='test5']", {
+            template: "#mymenu",
+            success: function ($dom) {
+                $dom.find(".modify").click(function () {
+                    layer.msg("你点击了【修改信息】")
+                });
+
+                $dom.find(".openvip").click(function () {
+                    layer.msg("你点击了【开通会员】")
+                });
+            }
+        });
+
+        table.render({
+            elem: '#mytable'
+            ,height: 200
+            ,data: [
+                {id: "1", username: "张三", sex: "男", city: "成都", score: "100", classify: "会计", },
+                {id: "2", username: "王五", sex: "女", city: "成都", score: "120", classify: "CEO",},
+                {id: "3", username: "赵四", sex: "男", city: "成都", score: "130", classify: "董事长",}
+            ]
+            ,page: true //开启分页
+            ,cols: [[ //表头
+                {field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'}
+                ,{field: 'username', title: '用户名', width:80}
+                ,{field: 'sex', title: '性别', width:80, sort: true}
+                ,{field: 'city', title: '城市', width:80}
+                ,{field: 'score', title: '评分', width: 80, sort: true}
+                ,{field: 'classify', title: '职业', width: 80},
+                {fixed: 'right', title: '操作', width:100, toolbar: "#tb"}
+            ]],
+            done: function (res) {
+                dropdown.suite();
+                for (var i = 0; i < res.data.length; i++) {
+                    dropdown.onFilter("ft" + res.data[i].id, function (event) {
+                        layer.msg("你点击了："  + event);
+                    });
+                }
+            }
+        });
+    });
+</script>
+</body>
+</html>
