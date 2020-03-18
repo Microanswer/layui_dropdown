@@ -16,9 +16,12 @@
  |----|----|----|
  |![](https://file.microanswer.cn/dropdown_hover%E7%9A%84%E4%B8%8B%E6%8B%89%E8%8F%9C%E5%8D%95.png)|![](https://file.microanswer.cn/dropdown_%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%8B%E6%8B%89%E5%86%85%E5%AE%B9.png)|![](https://file.microanswer.cn/dropdown_%E4%BB%BB%E6%84%8F%E8%A7%A6%E5%8F%91%E5%99%A8.png)|
  
+  
+要立刻体验？可以[点击此处](http://test.microanswer.cn/dropdown.html)立即在线体验。
+ 
  ### 二、安装
  
- 只需要[点击下载]()将JavaScript文件解压到layui的lay目录，或者放在你的layui扩展目录，然后将css文件找一个自己喜欢的目录，最后将其引入html文件里即可开始使用。
+ 只需要[点击下载](http://file.microanswer.cn/dropdown_1.0.0.zip)将JavaScript文件解压到你的layui扩展目录，然后将css文件找一个自己喜欢的目录，最后将其引入html文件里即可开始使用。
  
  下面示例页面中如何使用：
  
@@ -38,15 +41,8 @@
         </button>
         
         <script>
-            // 如果你把 dropdown.js 放在了 layui 的lay目录，你可以直接:
-            layui.use(['dropdown'], function () {
-                var dropdown = layui.dropdown;
-                // ...其它业务代码
-            });
-
-            // =====================================================================
-            
-            // 如果你把 dropdown.js 放在了你的扩展控件目录，你可以:
+                       
+            // 把 dropdown.js 放在了你的扩展控件目录，你可以:
             layui.config({
                 base: '你的扩展目录'
             }).use(['dropdown'], function () {
@@ -77,7 +73,11 @@
             <i class="layui-icon layui-icon-triangle-d"></i>
 </button>
 <script>
-layui.use(['dropdown'], function () {
+layui.config({
+    base: '你的扩展目录'
+}).config({
+    base: '你的扩展目录'
+}).use(['dropdown'], function () {
 
 });
 </script> 
@@ -91,7 +91,9 @@ layui.use(['dropdown'], function () {
 
 ```html
 <script>
-layui.use(['dropdown'], function () {
+layui.config({
+    base: '你的扩展目录'
+}).use(['dropdown'], function () {
     var dropdown = layui.dropdown;
     
     // test1 就是触发下拉的按钮的lay-filter属性的内容
@@ -148,7 +150,9 @@ layui.use(['dropdown'], function () {
 <button class="layui-btn layui-btn-sm" id="mybtn">异步初始化下拉</buton>
 
 <script>
-    layui.use(['dropdown'], function () {
+    layui.config({
+        base: '你的扩展目录'
+    }).use(['dropdown'], function () {
         var dropdown = layui.dropdown;
         // 通过代码(也就是后期异步初始化)进行初始化下拉
 
@@ -197,8 +201,12 @@ var option = {
     align: "left",
     
     // 【与menus两者必填一个】自定义下拉模板id
-    // 如果同时配置了 menus 则优先 menus
+    // 如果同时配置了 menus，则优先 menus 作为下拉内容。
     template: "",
+
+    // 【可选】当你使用template自定义模板时，支持通过此
+    // data 向模板里提供数据，从而实现动态渲染。
+    data: {},
     
     // 【与template两者必填一个】下拉菜单项，数组，里面放多个对象。
     menus: [
@@ -242,3 +250,9 @@ var option = {
     success: function ($dom) {}
 }
 ```
+
+### 六、网站
+
+博文：[点击前往](https://www.microanswer.cn/blog/74)。
+
+不错，去网站：([microanswer.cn](https://www.microanswer.cn))点个赞。

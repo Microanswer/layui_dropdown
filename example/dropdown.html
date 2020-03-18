@@ -2,10 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Layui·dropdown-下拉控件测试</title>
-    <link type="text/css" rel="stylesheet" href="../layui/css/layui.css">
-    <link type="text/css" rel="stylesheet" href="../dist/dropdown.css">
+    <title>Layui·dropdown-下拉控件</title>
+    <link type="text/css" rel="stylesheet" href="./layui/css/layui.css">
+    <link type="text/css" rel="stylesheet" href="./layui/css/dropdown.css">
     <style>
+        ol li, ul li {
+            list-style-position: inside;
+            list-style-type: unset;
+        }
         body {
             padding: 20px;
         }
@@ -177,6 +181,20 @@
     <div>
         <table id="mytable" lay-filter="table1"></table>
     </div>
+    <hr>
+    <h1>二、控件&文档</h1>
+    <p>
+        直接下载使用：<a href="http://file.microanswer.cn/dropdown_1.0.0.zip">下载控件</a><br>
+        查看使用文档：<a href="https://www.microanswer.cn/blog/74">dropdown下拉控件文档</a>。
+    </p>
+    <hr>
+    <h1>三、Github</h1>
+    <p>觉得不错，去<a href="https://github.com/MicroAnswer/layui_dropdown" target="_blank">Github</a>给个<strong>star</strong>吧！</p>
+
+    <script type="text/javascript">
+        var cnzz_protocol = (("https:" == document.location.protocol) ? "https://" : "http://");
+        document.write(unescape("%3Cspan style='vertical-align:middle' id='cnzz_stat_icon_1263962182'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s22.cnzz.com/z_stat.php%3Fid%3D1263962182%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));
+    </script>
 </div>
 
 <!-- 自定义下拉菜单内容 -->
@@ -199,17 +217,12 @@
     </button>
 </script>
 
-<hr>
-<h1>使用方法</h1>
 
-
-<script src="../layui/layui.js"></script>
-<script src="//cdn.jsdelivr.net/gh/google/code-prettify@master/loader/prettify.min.js"></script>
+<script src="./layui/layui.js"></script>
 <script>
-    prettyPrint();
 
     layui.config({
-        base: '../dist/'
+        base: "./js/"
     }).use(['dropdown', 'table', 'layer'], function () {
         var table = layui.table;
         var dropdown = layui.dropdown;
