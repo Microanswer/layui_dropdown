@@ -222,7 +222,7 @@
 <script>
 
     layui.config({
-        base: "./js/"
+        base: "../dist/"
     }).use(['dropdown', 'table', 'layer'], function () {
         var table = layui.table;
         var dropdown = layui.dropdown;
@@ -247,6 +247,8 @@
             }
         });
 
+        var tableData;
+
         table.render({
             elem: '#mytable'
             ,height: 200
@@ -266,14 +268,19 @@
                 {fixed: 'right', title: '操作', width:100, toolbar: "#tb"}
             ]],
             done: function (res) {
+                tableData = res;
                 dropdown.suite();
-                for (var i = 0; i < res.data.length; i++) {
-                    dropdown.onFilter("ft" + res.data[i].id, function (event) {
+                for (var i = 0; i < tableData.data.length; i++) {
+                    dropdown.onFilter("ft" + tableData.data[i].id, function (event) {
                         layer.msg("你点击了："  + event);
                     });
                 }
             }
         });
+
+        table.on("sort(table1)", function () {
+            dropdown.suite();
+        })
     });
 </script>
 </body>
