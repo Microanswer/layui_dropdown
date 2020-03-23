@@ -8,9 +8,33 @@ layui.define(['jquery', 'laytpl'], function (exports){
     "use strict";
 
 
-    var $         = layui.jquery || layui.$,
-        laytpl    = layui.laytpl,
-        $body     = $(window.document.body),
+    var $           = layui.jquery || layui.$,
+        laytpl      = layui.laytpl,
+        $body       = $(window.document.body),
+
+        // === 内部事件模块, 由于layui不让同一事件注册多次监听了，故此处自己实现。 ===>
+        EVENT       = {
+            DROPDOWN_SHOW: "a"
+        },
+        // 内部事件。目前仅仅有一个打开下拉框事件。此事件不暴露给开发者，仅作为内部使用。
+        INNER_EVENT = {},
+
+        // 监听指定事件。
+        onEvent     = function (event, cb) {
+            var evnts = INNER_EVENT[event] || [];
+            evnts.push(cb);
+
+            INNER_EVENT[event] = evnts;
+        },
+
+        // 发出事件
+        makeEvent   = function(event, param) {
+            var evnts = INNER_EVENT[event] || [];
+            $.each(evnts, function (index, value) {
+                value(param);
+            });
+        },
+        // <=== 内部事件模块 ===
 
         // 允许通过为 window 设置 MICROANSWER_DROPDOWAN 变量来改变本组件的注册名。
         // 以避免将来 layui 官方加入下拉控件与本控件重名时，可让本控件依然能正常运行
@@ -98,7 +122,7 @@ layui.define(['jquery', 'laytpl'], function (exports){
         Dropdown.prototype.init = function () {
             var _this = this;
 
-            if (_this.option.menus) {
+            if (_this.option.menus && _this.option.menus.length > 0) {
                 laytpl(MENUS_TEMPLATE).render(_this.option, function (html) {
                     _this.$down = $(html);
                     _this.$dom.after(_this.$down);
@@ -131,7 +155,7 @@ layui.define(['jquery', 'laytpl'], function (exports){
 
 
             } else {
-                layui.hint().error("下拉框目前即没配置菜单项，也没配置下拉模板。");
+                layui.hint().error("下拉框目前即没配置菜单项，也没配置下拉模板。[#" + (_this.$dom.attr("id")||"") + ",filter="+_this.option.filter + "]");
             }
         };
 
@@ -175,6 +199,9 @@ layui.define(['jquery', 'laytpl'], function (exports){
 
             this.$down.addClass("layui-show");
             this.opened = true;
+
+            // 发出通知，告诉其他dropdown，我打开了，你们自己看情况办事!
+            makeEvent(EVENT.DROPDOWN_SHOW, this);
         };
 
         // 隐藏下拉内容
@@ -209,6 +236,33 @@ layui.define(['jquery', 'laytpl'], function (exports){
         Dropdown.prototype.initEvent = function () {
             var _this = this;
 
+            // 全局仅允许同时开启一个下拉菜单。所以这里注册一个监听。
+            // 如果打开的下拉菜单不是我本身，则我应该隐藏自己。
+            onEvent(EVENT.DROPDOWN_SHOW, function (dropdown) {
+                if (dropdown !== _this) {
+                    _this.hide();
+                }
+            });
+
+            _this.$dom.mouseenter(function () {
+                _this.mouseInCompoent = true;
+                if (_this.option.showBy === 'hover') {
+                    _this.fcd = true;
+                    _this.$down.focus();
+                    _this.show();
+                }
+            });
+            _this.$dom.mouseleave(function () {
+                _this.mouseInCompoent = false;
+            });
+            _this.$down.mouseenter(function () {
+                _this.mouseInCompoent = true;
+                _this.$down.focus();
+            });
+            _this.$down.mouseleave(function () {
+                _this.mouseInCompoent = false;
+            });
+
             if (_this.option.showBy === 'click') {
                 _this.$dom.on("click", function () {
                     _this.fcd = true;
@@ -216,59 +270,17 @@ layui.define(['jquery', 'laytpl'], function (exports){
                 });
             }
 
-            _this.$down.on("click", function () {
-                _this.fcd = true;
-                _this.$down.focus();
-            });
+
 
             $body.on("click", function () {
                 if (!_this.mouseInCompoent) {
                     _this.fcd = false;
-                }
-                _this.hideWhenCan();
-            });
-
-            $(window).on("scroll", function () {
-                _this.initPosition();
-            });
-
-            $(window).on("resize", function () {
-                _this.initPosition();
-            });
-
-            $(window).on("mousemove", function (event) {
-                var x = event.pageX;
-                var y = event.pageY;
-
-                var ofst = _this.$dom.offset();
-
-                _this.mouseInCompoent =
-                    (x >= ofst.left && x <= ofst.left + _this.$dom.width()) &&
-                    (y >= ofst.top && y <= ofst.top + _this.$dom.height());
-
-
-                var ofst2;
-                if (_this.$down && _this.opened) {
-                    ofst2 = _this.$down.offset();
-
-                    _this.mouseInCompoent = _this.mouseInCompoent ||
-                        (x >= ofst2.left && x <= ofst2.left + _this.$down.width()) &&
-                        (y >= ofst2.top && y <= ofst2.top + _this.$down.height());
-
-                }
-
-                if (_this.mouseInCompoent) {
-                    if (_this.option.showBy === 'hover') {
-                        _this.fcd = true;
-                        _this.$down.focus();
-                        _this.show();
-                    }
-                } else {
-                    if (_this.option.showBy === 'hover') {
-                        _this.hideWhenCan();
-                    }
+                    _this.hideWhenCan();
                 }
             });
+
+            $(window).on("scroll", function () {_this.initPosition();});
+            $(window).on("resize", function () {_this.initPosition();});
 
             _this.$dom.on("blur", function () {
                 _this.fcd = false;
@@ -284,7 +296,7 @@ layui.define(['jquery', 'laytpl'], function (exports){
                 var $md = $("[" + MOD_NAME + "-id='" + _this.option.downid + "']");
 
                 $md.on("click", "a", function () {
-                    var event = $(this).attr('lay-event');
+                    var event = ($(this).attr('lay-event') || '').trim();
                     if (event) {
                         layui.event.call(this, MOD_NAME, MOD_NAME + '(' + _this.option.filter + ')', event);
                         _this.hide();
