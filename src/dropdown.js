@@ -1,7 +1,8 @@
 /**
- * @Name layui 下拉控件。
- * @Author: Microanswer
- * @License: ISC
+ * @Name ${name}
+ * @Author: ${author}
+ * @License: ${license}
+ * @Version: ${version}
  */
 layui.define(['jquery', 'laytpl'], function (exports){
     "use strict";
@@ -26,17 +27,31 @@ layui.define(['jquery', 'laytpl'], function (exports){
         MENUS_TEMPLATE_END = "</div>",
 
         // 菜单项目模板。
-        MENUS_TEMPLATE = MENUS_TEMPLATE_START+
+        MENUS_TEMPLATE =
+            MENUS_TEMPLATE_START+
                 "{{# layui.each(d.menus, function(index, item){ }}" +
-                    "<div class='menu-item'>" +
-                        "<a href='javascript:;' lay-event='{{item.event}}'>" +
-                            "{{# if (item.layIcon){ }}" +
-                                "<i class='layui-icon {{item.layIcon}}'></i>&nbsp;" +
-                            "{{# } }}" +
-                            "<span>{{item.txt}}</span>" +
-                        "</a>" +
-                    "</div>" +
-                "{{# }); }}" + MENUS_TEMPLATE_END,
+                    "{{# if ('hr' === item) { }}" +
+                        "<hr>" +
+                    "{{# } else if (item.header) { }}" +
+                        "{{# if (item.withLine) { }}" +
+                            "<fieldset class=\"layui-elem-field layui-field-title menu-header\" style=\"margin-left:0;margin-bottom: 0;margin-right: 0\">" +
+                                "<legend>{{item.header}}</legend>" +
+                            "</fieldset>" +
+                        "{{# } else { }}" +
+                            "<div class='menu-header' style='text-align: {{item.align||\'left\'}}'>{{item.header}}</div>" +
+                        "{{# } }}" +
+                    "{{# } else { }}" +
+                        "<div class='menu-item'>" +
+                            "<a href='javascript:;' lay-event='{{item.event}}'>" +
+                                "{{# if (item.layIcon){ }}" +
+                                    "<i class='layui-icon {{item.layIcon}}'></i>&nbsp;" +
+                                "{{# } }}" +
+                                "<span>{{item.txt}}</span>" +
+                            "</a>" +
+                        "</div>" +
+                    "{{# } }}" +
+                "{{# }); }}" +
+            MENUS_TEMPLATE_END,
 
 
         // 默认配置。
@@ -302,5 +317,5 @@ layui.define(['jquery', 'laytpl'], function (exports){
         // 执行一次，立马让界面上的dropdown乖乖听话。
         suite();
 
-    exports(MOD_NAME, {suite: suite, onFilter: onFilter});
+    exports(MOD_NAME, {suite: suite, onFilter: onFilter, version: "${version}"});
 });

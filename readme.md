@@ -7,9 +7,16 @@
 
 那么先不妨先看看本控件的预览效果：
 
- |默认|中对齐|右对齐|
+ |左对齐|中对齐|右对齐|
  |----|----|----|
  |![](https://file.microanswer.cn/%E9%BB%98%E8%AE%A4.png)|![](https://file.microanswer.cn/dropdown_%E4%B8%AD%E5%AF%B9%E9%BD%90.png)|![](https://file.microanswer.cn/dropdown_%E5%8F%B3%E5%AF%B9%E9%BD%90.png)|
+ 
+ 
+ 注意：分割线、菜单头功能自版本(v1.0.1)加入。
+ 
+ |分割线|菜单头|带横线的菜单头|
+ |----|----|----|
+ |![](https://file.microanswer.cn/dropdown_%E5%88%86%E5%89%B2%E7%BA%BF.png)|![](https://file.microanswer.cn/dropdown_%E8%8F%9C%E5%8D%95%E5%A4%B4.png)|![](https://file.microanswer.cn/dropdown_%E8%8F%9C%E5%8D%95%E5%A4%B42.png)|
  
  
  |hover|自定义下拉|任意触发器|
@@ -21,7 +28,7 @@
  
  ### 二、安装
  
- 只需要[点击下载](http://file.microanswer.cn/dropdown_1.0.0.zip)将JavaScript文件解压到你的layui扩展目录，然后将css文件找一个自己喜欢的目录，最后将其引入html文件里即可开始使用。
+ 只需要[点击下载](http://file.microanswer.cn/dropdown_1.0.1.zip?a)将JavaScript文件解压到你的layui扩展目录，然后将css文件找一个自己喜欢的目录，最后将其引入html文件里即可开始使用。
  
  下面示例页面中如何使用：
  
@@ -205,9 +212,26 @@ var option = {
     // data 向模板里提供数据，从而实现动态渲染。
     data: {},
     
-    // 【与template两者必填一个】下拉菜单项，数组，里面放多个对象。
+    // 【与template两者必填一个】下拉菜单项，数组。
     menus: [
         ...
+        
+        // 分割线 (v1.0.1)
+        "hr",
+
+        // 菜单头 (v1.0.1)
+        {
+            // 菜单头文案内容
+            header: "通用",
+                        
+            // 菜单头文案对齐方式, 可填:left(默认),center,right
+            align: "left",
+
+            // 是否启用带横线的菜单头。当设置为true时，align字段属性不会生效。
+            withLine: false    
+        },
+
+        // 普通按钮项
         {
             // 菜单图标，示例: layui-icon-heart-fill
             // layui图标大全：https://www.layui.com/doc/element/icon.html

@@ -13,6 +13,24 @@ layui 下拉框控件的css。
     display: none;
 }
 
+
+.dropdown-root .menu-header:first-child {
+    margin-top: 10px;
+}
+
+.dropdown-root .menu-header,
+.dropdown-root .menu-header legend{
+    font-size: 12px!important;
+    line-height: 15px!important;
+    padding: 0 10px!important;
+    color: #c2c2c2;
+}
+.dropdown-root .menu-item:first-child {
+    margin-top: 10px;
+}
+.dropdown-root .menu-item:last-child {
+    margin-bottom: 10px;
+}
 .dropdown-root .menu-item {
     line-height: 36px;
 }
@@ -20,6 +38,8 @@ layui 下拉框控件的css。
     display: block;
     color: #333;
     padding: 0 20px;
+    text-indent: 0;
+    font-size: 14px;
 }
 .dropdown-root .menu-item a:hover{
     color: #000;

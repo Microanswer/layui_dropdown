@@ -1,6 +1,6 @@
 {
   "name": "layui_dropdown",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "layui框架适用的下拉控件，不同于表单里的select，本控件可用于各种下拉展示、下拉菜单等用途。",
   "main": "index.js",
   "scripts": {
@@ -18,6 +18,7 @@
     "gulp": "^4.0.2",
     "gulp-header": "^2.0.9",
     "gulp-minify-css": "^1.2.4",
+    "gulp-replace": "^1.0.0",
     "gulp-uglify": "^3.0.2",
     "gulp-zip": "^5.0.1",
     "minimist": "^1.2.5",

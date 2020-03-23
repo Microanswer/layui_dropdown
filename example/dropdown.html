@@ -4,8 +4,11 @@
     <meta charset="UTF-8">
     <title>Layui·dropdown-下拉控件</title>
     <link type="text/css" rel="stylesheet" href="./layui/css/layui.css">
-    <link type="text/css" rel="stylesheet" href="./layui/css/dropdown.css">
+    <link type="text/css" rel="stylesheet" href="../dist/dropdown.css">
     <style>
+        ol,ul {
+            padding-left: 35px;
+        }
         ol li, ul li {
             list-style-position: inside;
             list-style-type: unset;
@@ -14,173 +17,96 @@
             padding: 20px;
         }
         h1 {
-            margin: 12px 0 6px;
+            margin: 24px 0 12px;
         }
         p {
-            margin: 2px 10px 8px 10px;
-            font-size: 16px;
+            margin: 23px 10px 6px 10px;
+            font-size: 17px;
+            line-height: 23px;
         }
-        .pln {
-            color: #000
-        }
-
-        @media screen {
-            .str {
-                color: #080
-            }
-
-            .kwd {
-                color: #008
-            }
-
-            .com {
-                color: #800
-            }
-
-            .typ {
-                color: #606
-            }
-
-            .lit {
-                color: #066
-            }
-
-            .clo,.opn,.pun {
-                color: #660
-            }
-
-            .tag {
-                color: #008
-            }
-
-            .atn {
-                color: #606
-            }
-
-            .atv {
-                color: #080
-            }
-
-            .dec,.var {
-                color: #606
-            }
-
-            .fun {
-                color: red
-            }
-        }
-
-        @media print,projection {
-            .kwd,.tag,.typ {
-                font-weight: 700
-            }
-
-            .str {
-                color: #060
-            }
-
-            .kwd {
-                color: #006
-            }
-
-            .com {
-                color: #600;
-                font-style: italic
-            }
-
-            .typ {
-                color: #404
-            }
-
-            .lit {
-                color: #044
-            }
-
-            .clo,.opn,.pun {
-                color: #440
-            }
-
-            .tag {
-                color: #006
-            }
-
-            .atn {
-                color: #404
-            }
-
-            .atv {
-                color: #060
-            }
-        }
-
-        pre.prettyprint {
-            padding: 10px 3px;
-            border-radius: 3px;
-            background-color: rgba(226,226,226,0.48);
-            /*border: 1px solid #888*/
-        }
-
-        ol.linenums {
-            margin-top: 0;
-            margin-bottom: 0
-        }
-        ol.linenums code {
-            white-space: pre-wrap;
-        }
-
-        li.L1,li.L3,li.L5,li.L7,li.L9 {
-            background: #eaeaea;
+        .bold {
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
 <div class="layui-container">
-    <h1>一、简介预览</h1>
+    <h1>一、控件简介</h1>
     <p>
-        layui框架下拉框控件，非表单里的下拉选择器。现在你可以在layui框架里使用下拉控件了。<br>
-        支持：下拉菜单条目、自定义下拉内容、浏览器边缘检测、兼容表格。
+        dropdown 是一款基于layui框架的下拉框控件，填补了layui原生没有下拉框这个空隙。借助下拉框的操作方式和UI交互，可以带来更加直观、便于操作、模块划分清晰等优势。<br>
     </p>
-    <p>先看看效果：</p>
-    <div>
+    <p>    带来了这些优势的同时又加入了许多意想不到的细节:
+    </p>
+    <ul>
+        <li>如果下拉框出现的位置会超出浏览器边缘，那么会自动找一个‘凉快’的地方呆着。</li>
+        <li>在你打开下拉框后又进行了界面滚动，她也不依不舍的跟着你走。</li>
+    </ul>
+
+    <h1>二、控件体验</h1>
+    <p class="bold">1、基本效果：</p>
+    <p>
         <button class="layui-btn layui-btn-sm" lay-filter="test1"
                 lay-dropdown="{align:'left', menus: [{layIcon:'layui-icon-username',txt: '个人中心', event:'usercenter'}, {layIcon: 'layui-icon-set',txt: '设置', event:'set'}, {layIcon: 'layui-icon-logout', txt: '退出登录', event:'loginout'}]}">
-            <span>下拉菜单</span>
+            <span>左对齐</span>
             <i class="layui-icon layui-icon-triangle-d"></i>
-        </button>
-        、
+        </button>、
         <button class="layui-btn layui-btn-sm" lay-filter="test2"
                 lay-dropdown="{align:'center', menus: [{layIcon:'layui-icon-username',txt: '个人中心', event:'usercenter'}, {layIcon: 'layui-icon-set',txt: '设置', event:'set'}, {layIcon: 'layui-icon-logout', txt: '退出登录', event:'loginout'}]}">
             <span>中对齐</span>
             <i class="layui-icon layui-icon-triangle-d"></i>
-        </button>
-        、
+        </button>、
         <button class="layui-btn layui-btn-sm" lay-filter="test3"
                 lay-dropdown="{align:'right', menus: [{layIcon:'layui-icon-username',txt: '个人中心', event:'usercenter'}, {layIcon: 'layui-icon-set',txt: '设置', event:'set'}, {layIcon: 'layui-icon-logout', txt: '退出登录', event:'loginout'}]}">
             <span>右对齐</span>
             <i class="layui-icon layui-icon-triangle-d"></i>
-        </button>
-        、
+        </button>、
         <button class="layui-btn layui-btn-sm" lay-filter="test4"
-                lay-dropdown="{showBy: 'hover',align:'left', menus: [{layIcon:'layui-icon-username',txt: '个人中心', event:'usercenter'}, {layIcon: 'layui-icon-set',txt: '设置', event:'set'}, {layIcon: 'layui-icon-logout', txt: '退出登录', event:'loginout'}]}">
-            <span>hover的下拉菜单</span>
+                lay-dropdown="{menus: [{layIcon:'layui-icon-username',txt: '个人中心', event:'usercenter'}, {layIcon: 'layui-icon-set',txt: '设置', event:'set'}, 'hr',{layIcon: 'layui-icon-logout', txt: '退出登录', event:'loginout'}]}">
+            <span>菜单分割线</span>
+            <i class="layui-icon layui-icon-triangle-d"></i>
+        </button>、
+        <button class="layui-btn layui-btn-sm" lay-filter="test5"
+                lay-dropdown="{menus: [{header: '用户'},{layIcon:'layui-icon-username',txt: '个人中心', event:'usercenter'}, {layIcon: 'layui-icon-set',txt: '信息设置', event:'set'}, {header: '操作',align:'center'},{layIcon: 'layui-icon-praise', txt: '点赞加油', event:'praise'},{layIcon: 'layui-icon-logout', txt: '退出登录', event:'loginout'},{header: '其他',align:'right'},{layIcon: 'layui-icon-tips', txt: '关于网站', event:'about'}]}">
+            <span>带header的下拉菜单</span>
+            <i class="layui-icon layui-icon-triangle-d"></i>
+        </button>、
+        <button class="layui-btn layui-btn-sm" lay-filter="test6"
+                lay-dropdown="{menus: [{header: '用户', withLine: true},{layIcon:'layui-icon-username',txt: '个人中心', event:'usercenter'}, {layIcon: 'layui-icon-set',txt: '设置', event:'set'}, {header: '操作', withLine: true},{layIcon: 'layui-icon-logout', txt: '退出登录', event:'loginout'}]}">
+            <span>带header的下拉菜单2</span>
             <i class="layui-icon layui-icon-triangle-d"></i>
         </button>
-        、
-        <button class="layui-btn layui-btn-sm" lay-filter="test5">
+    </p>
+    <p class="bold">2、Hover触发：</p>
+    <p>
+        <button class="layui-btn layui-btn-sm" lay-filter="test7"
+                lay-dropdown="{showBy: 'hover',align:'left', menus: [{layIcon:'layui-icon-username',txt: '个人中心', event:'usercenter'}, {layIcon: 'layui-icon-set',txt: '设置', event:'set'}, {layIcon: 'layui-icon-logout', txt: '退出登录', event:'loginout'}]}">
+            <span>hover触发下拉菜单</span>
+            <i class="layui-icon layui-icon-triangle-d"></i>
+        </button>
+    </p>
+    <p class="bold">3、自定义下拉内容：</p>
+    <p>
+        <button class="layui-btn layui-btn-sm" lay-filter="test8">
             <span>下拉自定义内容</span>
             <i class="layui-icon layui-icon-triangle-d"></i>
+        </button>、
+        <button class="layui-btn layui-btn-sm" lay-filter="test9" lay-dropdown="{template: '#myimg'}">
+            <span>下拉显示图片</span>
+            <i class="layui-icon layui-icon-triangle-d"></i>
         </button>
-
-        、
-        可以把其他dom也作为触发器，比如这个img：<img style="width: 20px;height: 20px;background-color: #ff6619;border-radius: 50%"
-                                    lay-filter="test6"
-                                    lay-dropdown="{align:'left', menus: [{layIcon:'layui-icon-username',txt: '个人中心', event:'usercenter'}, {layIcon: 'layui-icon-set',txt: '设置', event:'set'}, {layIcon: 'layui-icon-logout', txt: '退出登录', event:'loginout'}]}">
-    </div>
+    </p>
+    <p class="bold">4、任意下拉触发器：</p>
+    <p>
+        <small>点击这个小图片弹出下拉:</small><img style="width: 20px;height: 20px;background-color: #ff6619;border-radius: 50%"
+             src="https://file.microanswer.cn/microanswer_head.png"
+             lay-filter="test10"
+             lay-dropdown="{align:'left', menus: [{layIcon:'layui-icon-username',txt: '个人中心', event:'usercenter'}, {layIcon: 'layui-icon-set',txt: '设置', event:'set'}, {layIcon: 'layui-icon-logout', txt: '退出登录', event:'loginout'}]}">
+    </p>
     <br>
-    <p>在表格里使用：</p>
-    <div>
+    <p class="bold">5、在表格里使用：</p>
+    <p>
         <table id="mytable" lay-filter="table1"></table>
-    </div>
+    </p>
     <hr>
     <h1>二、控件&文档</h1>
     <p>
@@ -200,7 +126,7 @@
 <!-- 自定义下拉菜单内容 -->
 <script id="mymenu" type="text/html">
     <div style="padding: 20px;max-width: 300px;display: flex;display: -webkit-flex">
-        <img style="width: 60px;min-width:60px;height: 60px;border-radius: 50%;background-color: #1E9FFF">
+        <img src="https://file.microanswer.cn/microanswer_head.png" style="width: 60px;min-width:60px;height: 60px;border-radius: 50%;">
         <div style="display: inline-block;word-break: break-all;margin-left: 20px">
             大家好，我是自定义下拉内容，在这里你可以放任何你希望放置的下拉内容哦。<br><br>
             <button class="layui-btn layui-btn-xs layui-btn-primary modify">修改信息</button>
@@ -209,6 +135,10 @@
     </div>
 </script>
 
+<!-- 自定义下拉菜单内容 - 图片 -->
+<script id="myimg" type="text/html">
+    <img src="https://file.microanswer.cn/microanswer_head.png" style="width: 150px;height: 150px;">
+</script>
 <!-- 表格行toolbar模板 -->
 <script id="tb" type="text/html">
     <button class="layui-btn layui-btn-xs" lay-filter="ft{{d.id}}" lay-dropdown="{align:'right', menus: [{layIcon:'layui-icon-username',txt: '详细信息', event:'{{d.id}}-detail'}, {layIcon: 'layui-icon-set',txt: '开通会员', event:'{{d.id}}-openvip'}, {layIcon: 'layui-icon-logout', txt: '删除账户', event:'{{d.id}}-deleteaccount'}]}">
@@ -232,9 +162,13 @@
         dropdown.onFilter("test2", function (event) {layer.msg("你点击了test2：" + event);});
         dropdown.onFilter("test3", function (event) {layer.msg("你点击了test3：" + event);});
         dropdown.onFilter("test4", function (event) {layer.msg("你点击了test4：" + event);});
+        dropdown.onFilter("test5", function (event) {layer.msg("你点击了test5：" + event);});
         dropdown.onFilter("test6", function (event) {layer.msg("你点击了test6：" + event);});
+        dropdown.onFilter("test7", function (event) {layer.msg("你点击了test7：" + event);});
 
-        dropdown.suite("[lay-filter='test5']", {
+        dropdown.onFilter("test10", function (event) {layer.msg("你点击了test10：" + event);});
+
+        dropdown.suite("[lay-filter='test8']", {
             template: "#mymenu",
             success: function ($dom) {
                 $dom.find(".modify").click(function () {
