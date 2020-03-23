@@ -28,7 +28,7 @@
  
  ### 二、安装
  
- 只需要[点击下载](http://file.microanswer.cn/dropdown_1.0.1.zip?a)将JavaScript文件解压到你的layui扩展目录，然后将css文件找一个自己喜欢的目录，最后将其引入html文件里即可开始使用。
+ 只需要[点击下载](http://file.microanswer.cn/dropdown_1.0.2.zip?a)将JavaScript文件解压到你的layui扩展目录，然后将css文件找一个自己喜欢的目录，最后将其引入html文件里即可开始使用。
  
  下面示例页面中如何使用：
  
