@@ -267,8 +267,19 @@ var option = {
     filter: "",
     
     // 【可选】通过template参数自定义下拉内容时
-    // 模板渲染成功此方法调用，$dom: 包含你的自定义模板的jquery对象。
-    success: function ($dom) {}
+    // 模板渲染成功此方法调用，$down: 包含你的自定义模板的jquery对象。
+    success: function ($down) {},
+
+    // 【可选】当此下拉框被打开时，此方法会被调用。[v1.0.3]
+    // $maker 是触发下拉框的jquery对象（就是你按的那个按钮的jquery对象）， $down 是包含下拉框的jquery对象。
+    // 不过要注意，layui-icon(即layui图标)若要成功执行transform动画，你需要为它添加css: display:inlibe-block
+    onShow: function ($maker, $down) {},
+
+    // 【可选】当此下拉框被关闭时，此方法会被调用。[v1.0.3]
+    // $maker 和 $down 和 onShow 方法的参数是一样的。
+    // 通过 onShow 和 onHide 你就可以完成对界面交互更加协调的视觉体验。
+    // 比如：按钮右侧小箭头根据相应状态变化指向。
+    onHide: function($maker, $down) {}
 }
 ```
 

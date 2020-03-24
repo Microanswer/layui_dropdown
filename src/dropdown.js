@@ -202,6 +202,9 @@ layui.define(['jquery', 'laytpl'], function (exports){
 
             // 发出通知，告诉其他dropdown，我打开了，你们自己看情况办事!
             makeEvent(EVENT.DROPDOWN_SHOW, this);
+
+            // 调起回调。
+            this.option.onShow && this.option.onShow(this.$dom, this.$down);
         };
 
         // 隐藏下拉内容
@@ -209,6 +212,8 @@ layui.define(['jquery', 'laytpl'], function (exports){
             this.fcd = false;
             this.$down.removeClass("layui-show");
             this.opened = false;
+
+            this.option.onHide && this.option.onHide(this.$dom, this.$down);
         };
 
         // 当可以条件允许隐藏时，进行隐藏。

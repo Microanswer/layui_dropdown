@@ -45,6 +45,10 @@
     <h1>二、控件体验</h1>
     <p class="bold">1、基本效果：</p>
     <p>
+        <button class="layui-btn layui-btn-sm" lay-filter="test0">
+            <span>下拉菜单</span>
+            <i class="layui-icon layui-icon-triangle-d" style="display: inline-block"></i>
+        </button>、
         <button class="layui-btn layui-btn-sm" lay-filter="test1"
                 lay-dropdown="{align:'left', menus: [{layIcon:'layui-icon-username',txt: '个人中心', event:'usercenter'}, {layIcon: 'layui-icon-set',txt: '设置', event:'set'}, {layIcon: 'layui-icon-logout', txt: '退出登录', event:'loginout'}]}">
             <span>左对齐</span>
@@ -110,7 +114,7 @@
     <hr>
     <h1>二、控件&文档</h1>
     <p>
-        直接下载使用：<a href="http://file.microanswer.cn/dropdown_1.0.2.zip">下载控件</a><br>
+        直接下载使用：<a href="http://file.microanswer.cn/dropdown_1.0.3.zip">下载控件</a><br>
         查看使用文档：<a href="https://www.microanswer.cn/blog/74">dropdown下拉控件文档</a>。
     </p>
     <hr>
@@ -158,6 +162,22 @@
         var dropdown = layui.dropdown;
         var layer = layui.layer;
 
+        dropdown.suite("[lay-filter='test0']", {
+            menus: [
+                {txt: "菜单1", event: "menu1"},
+                {txt: "菜单2", event: "menu2"},
+                {txt: "菜单3", event: "menu3"},
+                {txt: "菜单4", event: "menu4"},
+            ],
+            onShow: function ($maker, $down) {
+                $maker.find(".layui-icon").css('transition-duration', '300ms');
+                $maker.find(".layui-icon").css('transform', 'rotate(180deg)');
+            },
+            onHide: function ($maker, $down) {
+                $maker.find(".layui-icon").css('transform', 'rotate(0)');
+            }
+        });
+        dropdown.onFilter("test0", function (event) {layer.msg("你点击了test0：" + event);});
         dropdown.onFilter("test1", function (event) {layer.msg("你点击了test1：" + event);});
         dropdown.onFilter("test2", function (event) {layer.msg("你点击了test2：" + event);});
         dropdown.onFilter("test3", function (event) {layer.msg("你点击了test3：" + event);});
