@@ -279,7 +279,13 @@ var option = {
     // $maker 和 $down 和 onShow 方法的参数是一样的。
     // 通过 onShow 和 onHide 你就可以完成对界面交互更加协调的视觉体验。
     // 比如：按钮右侧小箭头根据相应状态变化指向。
-    onHide: function($maker, $down) {}
+    onHide: function($maker, $down) {},
+
+    // 在界面滚动时，下拉框的行为， 默认为：follow 跟随按钮，可选值:hidden 表示隐藏
+    scrollBehavior: "follow",
+
+    // 下拉框背景颜色
+    backgroundColor: "#FFF"
 }
 ```
 

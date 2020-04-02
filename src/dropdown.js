@@ -41,18 +41,25 @@ layui.define(['jquery', 'laytpl'], function (exports){
         // 在另一个名称上。
         MOD_NAME = window.MICROANSWER_DROPDOWAN || "dropdown",
 
+        // 小箭头模板
+        MENUS_POINTER_TEMPLATE = "<div class='dropdown-pointer'></div>",
         MENUS_TEMPLATE_START = "<div tabindex='0' " +
             "class='layui-anim layui-anim-upbit dropdown-root' " + MOD_NAME + "-id='{{d.downid}}' " +
-            "style='min-width: {{d.minWidth}}px;" +
+            "style='z-index: {{d.zIndex}}'>" +
+            MENUS_POINTER_TEMPLATE +
+            "<div class='dropdown-content' " +
+            "style='margin: {{d.gap}}px {{d.gap}}px;" +
+            "background-color: {{d.backgroundColor}};" +
+            "min-width: {{d.minWidth}}px;" +
             "min-height: {{d.minHeight}}px;" +
             "max-height: {{d.maxHeight}}px;" +
-            "overflow: auto;" +
-            "z-index: {{d.zIndex}}'>",
-        MENUS_TEMPLATE_END = "</div>",
+            "overflow: auto;'>",
+        MENUS_TEMPLATE_END = "</div></div>",
+
 
         // 菜单项目模板。
         MENUS_TEMPLATE =
-            MENUS_TEMPLATE_START+
+            MENUS_TEMPLATE_START +
                 "{{# layui.each(d.menus, function(index, item){ }}" +
                     "{{# if ('hr' === item) { }}" +
                         "<hr>" +
@@ -99,7 +106,19 @@ layui.define(['jquery', 'laytpl'], function (exports){
             zIndex: 102,
 
             // 下拉框和触发按钮的间隙
-            gap: 4
+            gap: 8,
+
+            // 隐藏事件
+            onHide: function ($dom, $down) {},
+
+            // 显示事件
+            onShow: function ($dom, $down) {},
+
+            // 滚动界面的时候，如果下拉框是显示的，则将隐藏，如果值为 follow 则不会隐藏。
+            scrollBehavior: "follow",
+
+            // 下拉内容背景颜色
+            backgroundColor: "#FFF",
         },
 
         /**
@@ -115,6 +134,10 @@ layui.define(['jquery', 'laytpl'], function (exports){
                 filter: $dom.attr("lay-filter")
             }, DEFAULT_OPTION, option);
 
+            if (this.option.gap > 20) {
+                this.option.gap = 20;
+            }
+
             this.init();
         };
 
@@ -127,6 +150,7 @@ layui.define(['jquery', 'laytpl'], function (exports){
                     _this.$down = $(html);
                     _this.$dom.after(_this.$down);
 
+                    _this.initSize();
                     _this.initEvent();
                 });
             } else if (_this.option.template) {
@@ -137,26 +161,25 @@ layui.define(['jquery', 'laytpl'], function (exports){
                     templateId = _this.option.template;
                 }
 
-                var data = $.extend({
-                    downid: _this.option.downid,
-                    minWidth: _this.option.minWidth,
-                    minHeight: _this.option.minHeight,
-                    maxHeight: _this.option.maxHeight,
-                    zIndex: _this.option.zIndex
-                }, _this.option.data || {});
+                var data = $.extend($.extend({}, _this.option), _this.option.data || {});
                 laytpl(MENUS_TEMPLATE_START + $(templateId).html() + MENUS_TEMPLATE_END).render(data, function (html) {
                     _this.$down = $(html);
                     _this.$dom.after(_this.$down);
 
                     _this.option.success && _this.option.success(_this.$down);
 
+                    _this.initSize();
                     _this.initEvent();
                 });
-
 
             } else {
                 layui.hint().error("下拉框目前即没配置菜单项，也没配置下拉模板。[#" + (_this.$dom.attr("id")||"") + ",filter="+_this.option.filter + "]");
             }
+        };
+
+        Dropdown.prototype.initSize = function () {
+            this.$down.find(".dropdown-pointer").css("width", this.option.gap * 2);
+            this.$down.find(".dropdown-pointer").css("height", this.option.gap * 2);
         };
 
         // 初始化位置信息
@@ -165,29 +188,51 @@ layui.define(['jquery', 'laytpl'], function (exports){
             var btnHeight = this.$dom.outerHeight();
             var btnWidth  = this.$dom.outerWidth();
             var btnLeft = btnOffset.left;
-            var btnTop  = btnOffset.top - window.scrollY;
+            var btnTop  = btnOffset.top - window.pageYOffset;
 
             var downHeight = this.$down.outerHeight();
             var downWidth = this.$down.outerWidth();
 
             var downLeft;
             var downTop;
+            var pointerLeft;  // 箭头左边偏移量
+            var pointerTop; // 箭头右边偏移量
             if (this.option.align === 'right') {
-                downLeft = (btnLeft + btnWidth) - downWidth;
+                downLeft = (btnLeft + btnWidth) - downWidth + this.option.gap;
+                pointerLeft = - (Math.min(downWidth - (this.option.gap * 2), btnWidth) / 2);
             } else if (this.option.align === 'center') {
                 downLeft = btnLeft + ((btnWidth - downWidth) / 2);
+                pointerLeft =  (downWidth - (this.option.gap * 2)) / 2;
             } else {
-                downLeft = btnLeft;
+                downLeft = btnLeft - this.option.gap;
+                pointerLeft = Math.min(downWidth - (this.option.gap * 2), btnWidth) / 2;
             }
-            downTop = btnHeight + btnTop + this.option.gap;
+            downTop = btnHeight + btnTop;// + this.option.gap;
 
+            var pt = this.$down.find(".dropdown-pointer");
+            // var pointerHeigt = Math.pow(this.option.gap, 2) / Math.sqrt(Math.pow(this.option.gap, 2)*2);
+            pointerTop = -this.option.gap;
+
+            if (pointerLeft > 0) {
+                pt.css("left", pointerLeft);
+                pt.css("right", "unset");
+            } else {
+                pt.css("left", "unset");
+                pt.css("right", (-1 * pointerLeft));
+            }
             // 检测是否超出浏览器边缘
             if (downTop + downHeight >= window.innerHeight) {
-                downTop = btnTop - downHeight - this.option.gap;
+                downTop = btnTop - downHeight;// - this.option.gap;
+                pointerTop = downHeight - (this.option.gap); //(pointerHeigt * 2) - 1;
+
+                pt.css("top", pointerTop).addClass("bottom");
+            } else {
+                pt.css("top", pointerTop).removeClass("bottom");
             }
             if (downLeft + downWidth >= window.innerWidth) {
-                downLeft = window.innerWidth - downWidth - this.option.gap;
+                downLeft = window.innerWidth - downWidth + this.option.gap;
             }
+
 
             this.$down.css("left", downLeft);
             this.$down.css("top", downTop);
@@ -234,6 +279,19 @@ layui.define(['jquery', 'laytpl'], function (exports){
                 this.hide();
             } else {
                 this.show();
+            }
+        };
+
+
+        // 滚动界面时此方法会执行
+        Dropdown.prototype._onScroll = function() {
+            var _this = this;
+            if (this.option.scrollBehavior === 'follow') {
+                setTimeout(function () {
+                    _this.initPosition();
+                }, 1);
+            } else {
+                this.hide();
             }
         };
 
@@ -284,7 +342,8 @@ layui.define(['jquery', 'laytpl'], function (exports){
                 }
             });
 
-            $(window).on("scroll", function () {_this.initPosition();});
+            $(window).on("scroll", function () {_this._onScroll();});
+            _this.$dom.parents().on("scroll", function () {_this._onScroll();});
             $(window).on("resize", function () {_this.initPosition();});
 
             _this.$dom.on("blur", function () {
@@ -325,7 +384,7 @@ layui.define(['jquery', 'laytpl'], function (exports){
             $(sector || "[lay-"+ MOD_NAME +"]").each(function () {
                 var $this = $(this);
                 var attrOption = new Function('return '+ ($this.attr("lay-" + MOD_NAME) || "{}"))();
-
+                $this.removeAttr("lay-" + MOD_NAME); // 移除节点上的这个标签，因为它很长，不利于调试。
                 var dp = $this.data(MOD_NAME) || new Dropdown($this, $.extend({}, attrOption, option || {}));
                 $this.data(MOD_NAME, dp);
             });
