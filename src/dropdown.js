@@ -103,7 +103,7 @@ layui.define(['jquery', 'laytpl'], function (exports){
             // 最大高度
             maxHeight: 300,
 
-            zIndex: 102,
+            zIndex: 891,
 
             // 下拉框和触发按钮的间隙
             gap: 8,
