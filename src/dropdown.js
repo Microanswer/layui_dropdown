@@ -458,7 +458,6 @@ layui.define(['jquery', 'laytpl'], function (exports){
                 var dp = $this.data(MOD_NAME);
                 if (dp) {
                     dp.show(true);
-                    console.log("显示")
                 } else {
                     layui.hint().error("警告：尝试在选择器【" + sector + "】上进行下拉框show操作，但此选择器对应的dom并没有初始化下拉框。");
                     // 尝试在一个没有初始化下拉框的dom上调用show方法，这里立即进行初始化。

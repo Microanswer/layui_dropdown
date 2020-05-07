@@ -37,7 +37,7 @@
     <head>
         <title>dropdown</title>
         <link type="text/css" rel="stylesheet" href="假设这是你原本layui的css目录/layui.css">
-        <link type="text/css" rel="stylesheet" href="你放css的目录/dropdown.css"><!-- 从v2.1.0开始，css可以不写的，将会自动加载。 -->
+        <link type="text/css" rel="stylesheet" href="你放css的目录/dropdown.css"><!-- 从v2.1.0开始，css可以不用写了，将会自动加载。 -->
     </head>
     <body>
         <button class="layui-btn layui-btn-sm" 
