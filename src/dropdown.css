@@ -2,7 +2,8 @@
 layui 下拉框控件的css。
 作者: Microanswer
 */
-
+/* 加载就绪标志 */
+html #layuicss-dropdown_css{display:none; position: absolute; width:1989px;}
 .dropdown-root {
     position: fixed;
     outline: none;
