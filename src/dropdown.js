@@ -119,6 +119,9 @@ layui.define(['jquery', 'laytpl'], function (exports){
 
             // 下拉内容背景颜色
             backgroundColor: "#FFF",
+
+            // 默认css地址，允许通过配置指定其它地址
+            cssLink: "https://cdn.jsdelivr.net/gh/microanswer/layui_dropdown@${version}/dist/dropdown.css",
         },
 
         /**
@@ -127,6 +130,18 @@ layui.define(['jquery', 'laytpl'], function (exports){
          * @Param $dom 可以是这些内容: jquery对象、选择器。
          */
         Dropdown = function($dom, option) {
+
+            /*
+            * 在实现逻辑中使用了一些字段挂载在 Dropdown 上，这里统一做一个介绍：
+            * this.$dom:   表示触发器的jquery对象。
+            * this.$down:  表示下拉框下拉部分的jquery对象。在init方法里初始化。
+            * this.option: 表示选项配置。
+            * this.opened: 表示下拉框是否展开。
+            * this.fource: 表示下拉框是否通过调用show方法强制显示的。一但强制显示了，则不能通过点击其它位置隐藏，
+            * this.fcd:    表示当前是否处于有焦点状态。
+            * this.mic:    表示鼠标是否在组件范围内， 鼠标在 触发器+下拉框 里即算是在组件范围内。mic = mouseInComponent
+            * */
+
             if (typeof $dom === "string") {$dom = $($dom);}
             this.$dom = $dom;
             this.option = $.extend({
@@ -140,6 +155,9 @@ layui.define(['jquery', 'laytpl'], function (exports){
 
             this.init();
         };
+
+        // 加载css，使外部不需要手动引入css。允许通过设置 window.dropdown_cssLink 来修改默认css地址。
+        layui.link(window[MOD_NAME+"_cssLink"] || DEFAULT_OPTION.cssLink, function () {/*ignore*/}, MOD_NAME + "_css");
 
         // 初始化下拉菜单。
         Dropdown.prototype.init = function () {
@@ -239,11 +257,12 @@ layui.define(['jquery', 'laytpl'], function (exports){
         };
 
         // 显示下拉内容
-        Dropdown.prototype.show = function () {
+        Dropdown.prototype.show = function (fource) {
             this.initPosition();
 
             this.$down.addClass("layui-show");
             this.opened = true;
+            this.fource = fource || false;
 
             // 发出通知，告诉其他dropdown，我打开了，你们自己看情况办事!
             makeEvent(EVENT.DROPDOWN_SHOW, this);
@@ -257,6 +276,7 @@ layui.define(['jquery', 'laytpl'], function (exports){
             this.fcd = false;
             this.$down.removeClass("layui-show");
             this.opened = false;
+            this.fource = false;
 
             this.option.onHide && this.option.onHide(this.$dom, this.$down);
         };
@@ -264,7 +284,10 @@ layui.define(['jquery', 'laytpl'], function (exports){
         // 当可以条件允许隐藏时，进行隐藏。
         // 条件：鼠标在下拉框范围外、下拉框和触发按钮都没有焦点
         Dropdown.prototype.hideWhenCan = function () {
-            if (this.mouseInCompoent) {
+            if (this.mic) {
+                return;
+            }
+            if (this.fource) {
                 return;
             }
             if (this.fcd) {
@@ -308,7 +331,7 @@ layui.define(['jquery', 'laytpl'], function (exports){
             });
 
             _this.$dom.mouseenter(function () {
-                _this.mouseInCompoent = true;
+                _this.mic = true;
                 if (_this.option.showBy === 'hover') {
                     _this.fcd = true;
                     _this.$down.focus();
@@ -316,14 +339,14 @@ layui.define(['jquery', 'laytpl'], function (exports){
                 }
             });
             _this.$dom.mouseleave(function () {
-                _this.mouseInCompoent = false;
+                _this.mic = false;
             });
             _this.$down.mouseenter(function () {
-                _this.mouseInCompoent = true;
+                _this.mic = true;
                 _this.$down.focus();
             });
             _this.$down.mouseleave(function () {
-                _this.mouseInCompoent = false;
+                _this.mic = false;
             });
 
             if (_this.option.showBy === 'click') {
@@ -333,10 +356,8 @@ layui.define(['jquery', 'laytpl'], function (exports){
                 });
             }
 
-
-
             $body.on("click", function () {
-                if (!_this.mouseInCompoent) {
+                if (!_this.mic) {
                     _this.fcd = false;
                     _this.hideWhenCan();
                 }
@@ -393,5 +414,58 @@ layui.define(['jquery', 'laytpl'], function (exports){
         // 执行一次，立马让界面上的dropdown乖乖听话。
         suite();
 
-    exports(MOD_NAME, {suite: suite, onFilter: onFilter, version: "${version}"});
+    exports(MOD_NAME, {
+
+        /**
+         * 方便手动对界面上的按钮进行初始化
+         */
+        suite: suite,
+
+        /**
+         * 监听menu菜单点击事件
+         */
+        onFilter: onFilter,
+
+        /**
+         * 传入选择器，将其对应的下拉框隐藏。
+         * 这个方法常常用代码调用。它不被设计为某个按钮点击后执行这个方法。
+         * 因为下拉框的隐藏会在失去focus时自动隐藏，无论点击哪个按钮都会使
+         * 下拉框失去focus而隐藏，此方法调用也没意义了。
+         * @param {String} sector
+         */
+        hide: function (sector) {
+            // 隐藏指定下拉框。
+            $(sector).each(function () {
+                var $this = $(this);
+                var dp = $this.data(MOD_NAME);
+                if (dp) {
+                    dp.hide();
+                }
+            });
+        },
+        /**
+         * 传入选择器，将其对应的下拉框显示。
+         *
+         * 注意:如果选择器对应的dom没有进行下拉初始化，则此方法会进行初始化。此时会用到参数option，你可以
+         * 通过第二个参数传入。但是通常建议传入的选择器对应的dom是经过了下拉框初始化的。
+         * @param sector
+         * @param option
+         */
+        show: function (sector, option) {
+            // 显示指定下拉框。
+            $(sector).each(function () {
+                var $this = $(this);
+                var dp = $this.data(MOD_NAME);
+                if (dp) {
+                    dp.show(true);
+                    console.log("显示")
+                } else {
+                    layui.hint().error("警告：尝试在选择器【" + sector + "】上进行下拉框show操作，但此选择器对应的dom并没有初始化下拉框。");
+                    // 尝试在一个没有初始化下拉框的dom上调用show方法，这里立即进行初始化。
+                    suite(sector, option);
+                }
+            });
+        },
+        version: "${version}"
+    });
 });

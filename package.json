@@ -1,6 +1,6 @@
 {
   "name": "layui_dropdown",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "layui框架适用的下拉控件，不同于表单里的select，本控件可用于各种下拉展示、下拉菜单等用途。",
   "main": "index.js",
   "scripts": {
