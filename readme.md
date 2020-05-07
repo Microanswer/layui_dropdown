@@ -28,7 +28,7 @@
  
  ### 二、安装
  
- 只需要[点击下载](http://file.microanswer.cn/dropdown_1.0.2.zip?a)将JavaScript文件解压到你的layui扩展目录，然后将css文件找一个自己喜欢的目录，最后将其引入html文件里即可开始使用。
+ 只需要[点击下载](http://file.microanswer.cn/dropdown_2.1.0.zip) 将JavaScript文件解压到你的layui扩展目录，然后将css文件找一个自己喜欢的目录，最后将其引入html文件里即可开始使用。
  
  下面示例页面中如何使用：
  
@@ -37,7 +37,7 @@
     <head>
         <title>dropdown</title>
         <link type="text/css" rel="stylesheet" href="假设这是你原本layui的css目录/layui.css">
-        <link type="text/css" rel="stylesheet" href="你放css的目录/dropdown.css">
+        <link type="text/css" rel="stylesheet" href="你放css的目录/dropdown.css"><!-- 从v2.1.0开始，css可以不写的，将会自动加载。 -->
     </head>
     <body>
         <button class="layui-btn layui-btn-sm" 
@@ -193,6 +193,14 @@ layui.use(['dropdown'], function () {
 #### 2、dropdown.onFilter(filter, cb)
 
 监听菜单点击事件，通过它可以监听使用`menus`配置的菜单条目点击事件。对于自定义下拉模板内的dom点击事件，可通过`option`提供的`success`回调函数进行监听，详见下一节`option`配置说明。
+
+#### 3、dropdown.hide(selector) v2.1.0新增
+
+隐藏指定选择器的下拉框。
+
+#### 4、dropdown.show(selector) v2.1.0新增
+
+显示指定选择器的下拉框。注意:如果选择器对应的dom没有进行下拉初始化，则此方法会进行初始化。此时会用到参数option，你可以通过第二个参数传入。但是通常建议传入的选择器对应的dom是经过了下拉框初始化的。
 
 ### 五、lay-dropdown配置详解
 
