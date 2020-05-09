@@ -42,7 +42,7 @@ layui.define(['jquery', 'laytpl'], function (exports){
         MOD_NAME = window.MICROANSWER_DROPDOWAN || "dropdown",
 
         // 小箭头模板
-        MENUS_POINTER_TEMPLATE = "<div class='dropdown-pointer'></div>",
+        MENUS_POINTER_TEMPLATE = "{{# if (d.arrow){ }}<div class='dropdown-pointer'></div>{{# } }}",
         MENUS_TEMPLATE_START = "<div tabindex='0' " +
             "class='layui-anim layui-anim-upbit dropdown-root' " + MOD_NAME + "-id='{{d.downid}}' " +
             "style='z-index: {{d.zIndex}}'>" +
@@ -122,6 +122,12 @@ layui.define(['jquery', 'laytpl'], function (exports){
 
             // 默认css地址，允许通过配置指定其它地址
             cssLink: "https://cdn.jsdelivr.net/gh/microanswer/layui_dropdown@${version}/dist/dropdown.css",
+
+            // 初始化完成后是否立即显示下拉框。
+            immed: false,
+
+            // 是否显示小箭头
+            arrow: true,
         },
 
         /**
@@ -137,7 +143,6 @@ layui.define(['jquery', 'laytpl'], function (exports){
             * this.$down:  表示下拉框下拉部分的jquery对象。在init方法里初始化。
             * this.option: 表示选项配置。
             * this.opened: 表示下拉框是否展开。
-            * this.fource: 表示下拉框是否通过调用show方法强制显示的。一但强制显示了，则不能通过点击其它位置隐藏，
             * this.fcd:    表示当前是否处于有焦点状态。
             * this.mic:    表示鼠标是否在组件范围内， 鼠标在 触发器+下拉框 里即算是在组件范围内。mic = mouseInComponent
             * */
@@ -167,9 +172,10 @@ layui.define(['jquery', 'laytpl'], function (exports){
                 laytpl(MENUS_TEMPLATE).render(_this.option, function (html) {
                     _this.$down = $(html);
                     _this.$dom.after(_this.$down);
-
                     _this.initSize();
                     _this.initEvent();
+
+                    _this.onSuccess();
                 });
             } else if (_this.option.template) {
                 var templateId;
@@ -183,11 +189,10 @@ layui.define(['jquery', 'laytpl'], function (exports){
                 laytpl(MENUS_TEMPLATE_START + $(templateId).html() + MENUS_TEMPLATE_END).render(data, function (html) {
                     _this.$down = $(html);
                     _this.$dom.after(_this.$down);
-
-                    _this.option.success && _this.option.success(_this.$down);
-
                     _this.initSize();
                     _this.initEvent();
+
+                    _this.onSuccess();
                 });
 
             } else {
@@ -227,7 +232,7 @@ layui.define(['jquery', 'laytpl'], function (exports){
             }
             downTop = btnHeight + btnTop;// + this.option.gap;
 
-            var pt = this.$down.find(".dropdown-pointer");
+            var pt = this.$arrowDom || (this.$arrowDom = this.$down.find(".dropdown-pointer"));
             // var pointerHeigt = Math.pow(this.option.gap, 2) / Math.sqrt(Math.pow(this.option.gap, 2)*2);
             pointerTop = -this.option.gap;
 
@@ -239,6 +244,9 @@ layui.define(['jquery', 'laytpl'], function (exports){
                 pt.css("right", (-1 * pointerLeft));
             }
             // 检测是否超出浏览器边缘
+            if (downLeft + downWidth >= window.innerWidth) {
+                downLeft = window.innerWidth - downWidth + this.option.gap;
+            }
             if (downTop + downHeight >= window.innerHeight) {
                 downTop = btnTop - downHeight;// - this.option.gap;
                 pointerTop = downHeight - (this.option.gap); //(pointerHeigt * 2) - 1;
@@ -247,9 +255,6 @@ layui.define(['jquery', 'laytpl'], function (exports){
             } else {
                 pt.css("top", pointerTop).removeClass("bottom");
             }
-            if (downLeft + downWidth >= window.innerWidth) {
-                downLeft = window.innerWidth - downWidth + this.option.gap;
-            }
 
 
             this.$down.css("left", downLeft);
@@ -257,18 +262,28 @@ layui.define(['jquery', 'laytpl'], function (exports){
         };
 
         // 显示下拉内容
-        Dropdown.prototype.show = function (fource) {
-            this.initPosition();
+        Dropdown.prototype.show = function () {
+            var _this = this;
 
-            this.$down.addClass("layui-show");
-            this.opened = true;
-            this.fource = fource || false;
+            _this.initPosition();
+
+            _this.opening = true; // 引入这个字段用于确保在动画过程中鼠标移除组件区域时不会隐藏下拉框。
+            // 使用settimeout原因:
+            // 如果 这个show方法在某个点击事件里面调用，那么立即调用focus方法的话是不会生效的。
+            // 为了稳妥起见，延时100毫秒，这样使下拉框获取焦点。从而在其失去焦点时能够自动隐藏。
+            setTimeout(function () {
+                _this.$down.focus();
+                _this.opening = false;
+            }, 100);
+
+            _this.$down.addClass("layui-show");
+            _this.opened = true;
 
             // 发出通知，告诉其他dropdown，我打开了，你们自己看情况办事!
-            makeEvent(EVENT.DROPDOWN_SHOW, this);
+            makeEvent(EVENT.DROPDOWN_SHOW, _this);
 
             // 调起回调。
-            this.option.onShow && this.option.onShow(this.$dom, this.$down);
+            _this.option.onShow && _this.option.onShow(_this.$dom, _this.$down);
         };
 
         // 隐藏下拉内容
@@ -276,7 +291,6 @@ layui.define(['jquery', 'laytpl'], function (exports){
             this.fcd = false;
             this.$down.removeClass("layui-show");
             this.opened = false;
-            this.fource = false;
 
             this.option.onHide && this.option.onHide(this.$dom, this.$down);
         };
@@ -287,7 +301,7 @@ layui.define(['jquery', 'laytpl'], function (exports){
             if (this.mic) {
                 return;
             }
-            if (this.fource) {
+            if (this.opening) {
                 return;
             }
             if (this.fcd) {
@@ -301,6 +315,17 @@ layui.define(['jquery', 'laytpl'], function (exports){
             if (this.opened) {
                 this.hide();
             } else {
+                this.show();
+            }
+        };
+
+        Dropdown.prototype.onSuccess = function () {
+
+            // 调起回调。
+            this.option.success && this.option.success(this.$down);
+
+            // 如果配置了立即显示，这里进行显示。
+            if (this.option.immed) {
                 this.show();
             }
         };
@@ -356,12 +381,12 @@ layui.define(['jquery', 'laytpl'], function (exports){
                 });
             }
 
-            $body.on("click", function () {
+           /* 现通过失焦来保证下拉框隐藏，就不用这块了 $body.on("click", function () {
                 if (!_this.mic) {
                     _this.fcd = false;
                     _this.hideWhenCan();
                 }
-            });
+            });*/
 
             $(window).on("scroll", function () {_this._onScroll();});
             _this.$dom.parents().on("scroll", function () {_this._onScroll();});
@@ -457,10 +482,14 @@ layui.define(['jquery', 'laytpl'], function (exports){
                 var $this = $(this);
                 var dp = $this.data(MOD_NAME);
                 if (dp) {
-                    dp.show(true);
+                    dp.show();
                 } else {
                     layui.hint().error("警告：尝试在选择器【" + sector + "】上进行下拉框show操作，但此选择器对应的dom并没有初始化下拉框。");
                     // 尝试在一个没有初始化下拉框的dom上调用show方法，这里立即进行初始化。
+                    option = option || {};
+
+                    // 立即显示。
+                    option.immed = true;
                     suite(sector, option);
                 }
             });

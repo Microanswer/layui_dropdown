@@ -26,6 +26,9 @@
         .bold {
             font-weight: bold;
         }
+        .m-inline {
+            display: inline-block;
+        }
     </style>
 </head>
 <body>
@@ -44,40 +47,40 @@
     <h1>二、控件体验</h1>
     <p class="bold">1、基本效果：</p>
     <p>
-        <button class="layui-btn layui-btn-sm" lay-filter="test0">
+        <div class="m-inline"><button class="layui-btn layui-btn-sm" lay-filter="test0" id="xxxxx">
             <span>下拉菜单</span>
             <i class="layui-icon layui-icon-triangle-d" style="display: inline-block"></i>
-        </button>、
-        <button class="layui-btn layui-btn-sm" lay-filter="test1"
+        </button></div>、
+    <div class="m-inline"><button class="layui-btn layui-btn-sm" lay-filter="test1"
                 lay-dropdown="{align:'left', menus: [{layIcon:'layui-icon-username',txt: '个人中心', event:'usercenter'}, {layIcon: 'layui-icon-set',txt: '设置', event:'set'}, {layIcon: 'layui-icon-logout', txt: '退出登录', event:'loginout'}]}">
             <span>左对齐</span>
             <i class="layui-icon layui-icon-triangle-d"></i>
-        </button>、
-        <button class="layui-btn layui-btn-sm" lay-filter="test2"
+        </button></div>、
+    <div class="m-inline"><button class="layui-btn layui-btn-sm" lay-filter="test2"
                 lay-dropdown="{align:'center', menus: [{layIcon:'layui-icon-username',txt: '个人中心', event:'usercenter'}, {layIcon: 'layui-icon-set',txt: '设置', event:'set'}, {layIcon: 'layui-icon-logout', txt: '退出登录', event:'loginout'}]}">
             <span>中对齐</span>
             <i class="layui-icon layui-icon-triangle-d"></i>
-        </button>、
-        <button class="layui-btn layui-btn-sm" lay-filter="test3"
+        </button></div>、
+    <div class="m-inline"><button class="layui-btn layui-btn-sm" lay-filter="test3"
                 lay-dropdown="{align:'right', menus: [{layIcon:'layui-icon-username',txt: '个人中心', event:'usercenter'}, {layIcon: 'layui-icon-set',txt: '设置', event:'set'}, {layIcon: 'layui-icon-logout', txt: '退出登录', event:'loginout'}]}">
             <span>右对齐</span>
             <i class="layui-icon layui-icon-triangle-d"></i>
-        </button>、
-        <button class="layui-btn layui-btn-sm" lay-filter="test4"
+        </button></div>、
+    <div class="m-inline"><button class="layui-btn layui-btn-sm" lay-filter="test4"
                 lay-dropdown="{menus: [{layIcon:'layui-icon-username',txt: '个人中心', event:'usercenter'}, {layIcon: 'layui-icon-set',txt: '设置', event:'set'}, 'hr',{layIcon: 'layui-icon-logout', txt: '退出登录', event:'loginout'}]}">
             <span>菜单分割线</span>
             <i class="layui-icon layui-icon-triangle-d"></i>
-        </button>、
-        <button class="layui-btn layui-btn-sm" lay-filter="test5"
+        </button></div>、
+    <div class="m-inline"><button class="layui-btn layui-btn-sm" lay-filter="test5"
                 lay-dropdown="{menus: [{header: '用户'},{layIcon:'layui-icon-username',txt: '个人中心', event:'usercenter'}, {layIcon: 'layui-icon-set',txt: '信息设置', event:'set'}, {header: '操作',align:'center'},{layIcon: 'layui-icon-praise', txt: '点赞加油', event:'praise'},{layIcon: 'layui-icon-logout', txt: '退出登录', event:'loginout'},{header: '其他',align:'right'},{layIcon: 'layui-icon-tips', txt: '关于网站', event:'about'}]}">
             <span>带header的下拉菜单</span>
             <i class="layui-icon layui-icon-triangle-d"></i>
-        </button>、
-        <button class="layui-btn layui-btn-sm" lay-filter="test6"
+        </button></div>、
+    <div class="m-inline"><button class="layui-btn layui-btn-sm" lay-filter="test6"
                 lay-dropdown="{menus: [{header: '用户', withLine: true},{layIcon:'layui-icon-username',txt: '个人中心', event:'usercenter'}, {layIcon: 'layui-icon-set',txt: '设置', event:'set'}, {header: '操作', withLine: true},{layIcon: 'layui-icon-logout', txt: '退出登录', event:'loginout'}]}">
             <span>带header的下拉菜单2</span>
             <i class="layui-icon layui-icon-triangle-d"></i>
-        </button>
+        </button></div>
     </p>
     <p class="bold">2、Hover触发：</p>
     <p>
@@ -89,14 +92,14 @@
     </p>
     <p class="bold">3、自定义下拉内容：</p>
     <p>
-        <button class="layui-btn layui-btn-sm" lay-filter="test8">
+    <div class="m-inline"><button class="layui-btn layui-btn-sm" lay-filter="test8">
             <span>下拉自定义内容</span>
             <i class="layui-icon layui-icon-triangle-d"></i>
-        </button>、
-        <button class="layui-btn layui-btn-sm" lay-filter="test9" lay-dropdown="{template: '#myimg'}">
+        </button></div>、
+    <div class="m-inline"><button class="layui-btn layui-btn-sm" lay-filter="test9" lay-dropdown="{template: '#myimg'}">
             <span>下拉显示图片</span>
             <i class="layui-icon layui-icon-triangle-d"></i>
-        </button>
+        </button></div>
     </p>
     <p class="bold">4、任意下拉触发器：</p>
     <p>
@@ -183,6 +186,8 @@
         // ====================================================================================
 
         dropdown.suite("[lay-filter='test0']", {
+            arrow: false,
+            immed: true,
             menus: [
                 {txt: "菜单1", event: "menu1"},
                 {txt: "菜单2", event: "menu2"},
