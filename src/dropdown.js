@@ -96,7 +96,7 @@ layui.define(['jquery', 'laytpl'], function (exports){
             align: "left",
 
             // 最小宽度
-            minWidth: 10,
+            minWidth: 80,
 
             minHeight: 10,
 
@@ -270,10 +270,9 @@ layui.define(['jquery', 'laytpl'], function (exports){
             _this.opening = true; // 引入这个字段用于确保在动画过程中鼠标移除组件区域时不会隐藏下拉框。
             // 使用settimeout原因:
             // 如果 这个show方法在某个点击事件里面调用，那么立即调用focus方法的话是不会生效的。
-            // 为了稳妥起见，延时100毫秒，这样使下拉框获取焦点。从而在其失去焦点时能够自动隐藏。
+            // 为了稳妥起见，延时100毫秒，再使下拉框获取焦点。从而在其失去焦点时能够自动隐藏。
             setTimeout(function () {
                 _this.$down.focus();
-                _this.opening = false;
             }, 100);
 
             _this.$down.addClass("layui-show");
@@ -334,6 +333,14 @@ layui.define(['jquery', 'laytpl'], function (exports){
         // 滚动界面时此方法会执行
         Dropdown.prototype._onScroll = function() {
             var _this = this;
+
+            // 如果下拉框不是展开状态，不用执行这些逻辑。
+            // OHHHHHH! md才发现，当界面上出现很多下拉框(很少情况)，这个判断真的极大提高了性能，避免了无用的执行。
+            // 。使页面滚动不卡顿了，尤其是在ie里。
+            if (!_this.opened) {
+                return;
+            }
+
             if (this.option.scrollBehavior === 'follow') {
                 setTimeout(function () {
                     _this.initPosition();
@@ -399,6 +406,11 @@ layui.define(['jquery', 'laytpl'], function (exports){
             _this.$down.on("blur", function () {
                 _this.fcd = false;
                 _this.hideWhenCan();
+            });
+
+            // 当下拉框获取焦点时，必然下拉框显示了，这时 吧 opening 设置false
+            _this.$down.on("focus", function () {
+                _this.opening = false;
             });
 
             // 点击下拉菜单里的条目事件
