@@ -397,7 +397,12 @@ layui.define(['jquery', 'laytpl'], function (exports){
 
             $(window).on("scroll", function () {_this._onScroll();});
             _this.$dom.parents().on("scroll", function () {_this._onScroll();});
-            $(window).on("resize", function () {_this.initPosition();});
+            $(window).on("resize", function () {
+                if (!_this.opened) {
+                    return;
+                }
+                _this.initPosition();
+            });
 
             _this.$dom.on("blur", function () {
                 _this.fcd = false;
