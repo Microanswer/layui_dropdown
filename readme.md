@@ -293,7 +293,13 @@ var option = {
     scrollBehavior: "follow",
 
     // 下拉框背景颜色
-    backgroundColor: "#FFF"
+    backgroundColor: "#FFF",
+
+    // 初始化完成后是否立即显示下拉框。 v2.2.0 新增
+    immed: false,
+
+    // 是否显示下拉框上的箭头。v2.2.0 新增
+    arrow: true,
 }
 ```
 
