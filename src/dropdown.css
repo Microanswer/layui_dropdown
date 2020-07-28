@@ -40,10 +40,23 @@ html #layuicss-dropdown_css{display:none; position: absolute; width:1989px;}
     box-shadow: 1px 1px 3px #a9a9a9;
 }
 
+.dropdown-root .dropdown-content ul{
+    margin: 0;
+    padding: 0;
+}
+.dropdown-root .dropdown-content ul li{
+    list-style: none;
+}
+
 .dropdown-root .dropdown-content .menu-header:first-child {
     margin-top: 10px;
 }
 
+.dropdown-root .dropdown-content .menu-header.withLine{
+    margin-left:0;
+    margin-bottom: 0;
+    margin-right: 0;
+}
 .dropdown-root .dropdown-content .menu-header,
 .dropdown-root .dropdown-content .menu-header legend{
     font-size: 12px!important;
@@ -51,10 +64,10 @@ html #layuicss-dropdown_css{display:none; position: absolute; width:1989px;}
     padding: 0 10px!important;
     color: #c2c2c2;
 }
-.dropdown-root .dropdown-content .menu-item:first-child {
+.dropdown-root .dropdown-content ul li:first-child {
     margin-top: 10px;
 }
-.dropdown-root .dropdown-content .menu-item:last-child {
+.dropdown-root .dropdown-content ul li:last-child {
     margin-bottom: 10px;
 }
 .dropdown-root .dropdown-content .menu-item {

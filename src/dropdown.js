@@ -60,12 +60,13 @@ layui.define(['jquery', 'laytpl'], function (exports){
         // 菜单项目模板。
         MENUS_TEMPLATE =
             MENUS_TEMPLATE_START +
-                "{{# layui.each(d.menus, function(index, item){ }}" +
+                "<ul>{{# layui.each(d.menus, function(index, item){ }}" +
+                    "<li>" +
                     "{{# if ('hr' === item) { }}" +
                         "<hr>" +
                     "{{# } else if (item.header) { }}" +
                         "{{# if (item.withLine) { }}" +
-                            "<fieldset class=\"layui-elem-field layui-field-title menu-header\" style=\"margin-left:0;margin-bottom: 0;margin-right: 0\">" +
+                            "<fieldset class=\"layui-elem-field layui-field-title menu-header withLine\">" +
                                 "<legend>{{item.header}}</legend>" +
                             "</fieldset>" +
                         "{{# } else { }}" +
@@ -77,11 +78,11 @@ layui.define(['jquery', 'laytpl'], function (exports){
                                 "{{# if (item.layIcon){ }}" +
                                     "<i class='layui-icon {{item.layIcon}}'></i>&nbsp;" +
                                 "{{# } }}" +
-                                "<span>{{item.txt}}</span>" +
+                                "<span class='{{item.txtClass}}'>{{item.txt}}</span>" +
                             "</a>" +
                         "</div>" +
-                    "{{# } }}" +
-                "{{# }); }}" +
+                    "{{# } }}</li>" +
+                "{{# }); }}</ul>" +
             MENUS_TEMPLATE_END,
 
 
@@ -162,7 +163,7 @@ layui.define(['jquery', 'laytpl'], function (exports){
         };
 
         // 加载css，使外部不需要手动引入css。允许通过设置 window.dropdown_cssLink 来修改默认css地址。
-        layui.link(window[MOD_NAME+"_cssLink"] || DEFAULT_OPTION.cssLink, function () {/*ignore*/}, MOD_NAME + "_css");
+        // layui.link(window[MOD_NAME+"_cssLink"] || DEFAULT_OPTION.cssLink, function () {/*ignore*/}, MOD_NAME + "_css");
 
         // 初始化下拉菜单。
         Dropdown.prototype.init = function () {
