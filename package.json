@@ -23,5 +23,8 @@
     "gulp-zip": "^5.0.1",
     "minimist": "^1.2.5",
     "webpack": "^4.42.0"
+  },
+  "dependencies": {
+    "layui-src": "^2.5.5"
   }
 }
