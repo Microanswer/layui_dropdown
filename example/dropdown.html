@@ -189,12 +189,17 @@
         dropdown.suite("[lay-filter='test0']", {
             arrow: false,
             immed: true,
-            menus: [
+            menus: [[
                 {txt: "菜单1", event: "menu1"},
                 {txt: "菜单2", event: "menu2"},
                 {txt: "菜单3", event: "menu3"},
                 {txt: "菜单4", event: "menu4"},
-            ],
+            ],[
+                {txt: "菜单5", event: "menu5"},
+                {txt: "菜单6", event: "menu6"},
+                {txt: "菜单7", event: "menu7"},
+                {txt: "菜单8", event: "menu8"},
+            ]],
             onShow: function ($maker, $down) {
                 $maker.find(".layui-icon").css('transition-duration', '300ms');
                 $maker.find(".layui-icon").css('transform', 'rotate(180deg)');

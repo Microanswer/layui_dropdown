@@ -43,6 +43,7 @@ html #layuicss-dropdown_css{display:none; position: absolute; width:1989px;}
 .dropdown-root .dropdown-content ul{
     margin: 0;
     padding: 0;
+    display: inline-block;
 }
 .dropdown-root .dropdown-content ul li{
     list-style: none;
