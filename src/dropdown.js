@@ -33,6 +33,12 @@ layui.define(['jquery', 'laytpl'], function (exports) {
     };
     // <=== 内部事件模块 ===================================================
 
+    var parseTemplateMenuStatuMap = {
+        FIND_MENU: "1",
+        FIND_MENU_ITEM:"2",
+        FIND_MENU_ITEM_CONTENT: "3"
+    };
+
     /**
      *  将模板菜单格式化为可用于dom的html。
      *
@@ -47,8 +53,59 @@ layui.define(['jquery', 'laytpl'], function (exports) {
      *  [@(icon-xxxx) 文字] 指定图标的菜单
      */
     function parseTemplateMenu(html, sptor) {
-        var ms = html.match(/\[[(^\]\[).*]\]/g);
-        console.log("菜单：", ms);
+        if (!html) {return "";}
+        if (!sptor) { throw new Error("请指定菜单模板限定符。");}
+        console.log("呵", html);
+
+        var sptor1 = sptor.charAt(0);
+        var sptor2 = sptor.charAt(1);
+
+        var totalLength = html.length;
+        var currentIndex = 0;
+
+        var parseStatus = parseTemplateMenuStatuMap.FIND_MENU;
+        var meaning = false; // 用此字段表示当前是否处于转义状态，转义状态时，下一个字符就按原样输出。
+
+        var menus = [];
+        var menu;
+        var item;
+        while (currentIndex < totalLength) {
+            var currentChar = html.charAt(currentIndex);
+
+            if (parseStatus === parseTemplateMenuStatuMap.FIND_MENU && !meaning) {
+                if (sptor1 === currentChar) {
+                    menu = [];
+                    menus.push(menu);
+                    parseStatus = parseTemplateMenuStatuMap.FIND_MENU_ITEM;
+                }
+            } else if (parseStatus === parseTemplateMenuStatuMap.FIND_MENU_ITEM && !meaning) {
+                if (sptor1 === currentChar) {
+                    item = {srcStr: ""};
+                    menu.push(item);
+                    parseStatus = parseTemplateMenuStatuMap.FIND_MENU_ITEM_CONTENT;
+                } else if (sptor2 === currentChar) {
+                    parseStatus = parseTemplateMenuStatuMap.FIND_MENU;
+                }
+            } else if (parseStatus === parseTemplateMenuStatuMap.FIND_MENU_ITEM_CONTENT) {
+                if (meaning) {
+                    item.srcStr += currentChar;
+                    meaning = false;
+                } else {
+                    if (currentChar === "\\") {
+                        meaning = true;
+                    } else {
+                        if (currentChar === sptor2) {
+                            parseStatus = parseTemplateMenuStatuMap.FIND_MENU_ITEM;
+                        } else {
+                            item.srcStr += currentChar;
+                        }
+                    }
+                }
+            }
+            currentIndex += 1;
+        }
+
+        console.log("呵呵", menus);
 
         return "来了老弟！";
     }
