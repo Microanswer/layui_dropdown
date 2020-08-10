@@ -33,6 +33,26 @@ layui.define(['jquery', 'laytpl'], function (exports) {
     };
     // <=== 内部事件模块 ===================================================
 
+    /**
+     *  将模板菜单格式化为可用于dom的html。
+     *
+     *  [---] 横线
+     *  [菜单文字] 文字
+     *  [-- 文字] 菜单头 居中
+     *  [:-- 文字] 菜单头 左对齐
+     *  [--: 文字] 菜单头 右对齐
+     *  [--- 文字] 带横线菜单头 居中
+     *  [:--- 文字] 带横线菜单头 左对齐
+     *  [---: 文字] 带横线菜单头 右对齐
+     *  [@(icon-xxxx) 文字] 指定图标的菜单
+     */
+    function parseTemplateMenu(html, sptor) {
+        var ms = html.match(/\[[(^\]\[).*]\]/g);
+        console.log("菜单：", ms);
+
+        return "来了老弟！";
+    }
+
     // 允许通过为 window 设置 MICROANSWER_DROPDOWAN 变量来改变本组件的注册名。
     // 以避免将来 layui 官方加入下拉控件与本控件重名时，可让本控件依然能正常运行
     // 在另一个名称上。
@@ -137,6 +157,9 @@ layui.define(['jquery', 'laytpl'], function (exports) {
 
         // 是否显示小箭头
         arrow: true,
+
+        // 模板菜单里使用的分隔符。
+        templateMenuSptor: "[]"
     };
 
     /**
@@ -196,6 +219,23 @@ layui.define(['jquery', 'laytpl'], function (exports) {
                 _this.downHtml = html;
                 _this.initEvent();
             });
+        } else if(_this.option.templateMenu) {
+            // 配置了模板菜单
+            hasDrop = false;
+            var templateMenu;
+            if (_this.option.templateMenu.indexOf("#") === -1) {
+                templateMenu = "#" + _this.option.templateMenu;
+            } else {
+                templateMenu = _this.option.templateMenu;
+            }
+
+            var data = $.extend($.extend({}, _this.option), _this.option.data || {});
+
+            laytpl($(templateMenu).text()).render(data, function (html) {
+                html = parseTemplateMenu(html, _this.option.templateMenuSptor);
+                console.log("结果：" , html);
+            });
+
         } else if (_this.option.template) {
             hasDrop = true;
             var templateId;
