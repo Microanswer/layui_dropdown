@@ -34,23 +34,38 @@ html #layuicss-dropdown_css{display:none; position: absolute; width:1989px;}
 }
 
 .dropdown-root .dropdown-content {
-    overflow: hidden;
+    overflow: auto;
     background-color: white;
     border-radius: 2px;
     box-shadow: 1px 1px 3px #a9a9a9;
+    white-space: nowrap;
+    width: 100%;
+
+    display: flex;
+    display: -webkit-flex;
+    justify-content: center;
+    -webkit-justify-content: center;
+    flex-direction: row;
+    -webkit-flex-direction: row;
+    flex-wrap: nowrap;
+    -webkit-flex-wrap: nowrap;
+}
+.dropdown-root .dropdown-content .dropdown-menu{
+    vertical-align: top;
+    border-right: 1px solid #e6e6e6;
+    padding: 0;
+}
+.dropdown-root .dropdown-content .dropdown-menu:last-child{
+    border-right: none;
 }
 
-.dropdown-root .dropdown-content ul{
-    margin: 0;
-    padding: 0;
-    display: inline-block;
-}
-.dropdown-root .dropdown-content ul li{
+
+.dropdown-root .dropdown-content .dropdown-menu li{
     list-style: none;
 }
 
 .dropdown-root .dropdown-content .menu-header:first-child {
-    margin-top: 10px;
+    margin-top: 6px;
 }
 
 .dropdown-root .dropdown-content .menu-header.withLine{

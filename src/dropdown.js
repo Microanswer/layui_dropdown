@@ -40,22 +40,34 @@ layui.define(['jquery', 'laytpl'], function (exports) {
     };
 
     /**
+     * 解析单个菜单配置。
+     * @param itemStr 巴拉拉啦！变身！。
+     */
+    function parseTemplateMenuItem(itemStr) {
+        if (!itemStr) {
+            throw new Error("菜单条目内必须填写内容。");
+        }
+
+        if ("hr" === itemStr) {
+            return "hr";
+        } else if (itemStr.indexOf("{") === 0){
+            var f = new Function("return " + itemStr);
+            return f();
+        } else {
+            throw new Error("除了分割线hr，别的菜单条目都必须保证是合格的Javascript对象或json对象。");
+        }
+    }
+
+    /**
      *  将模板菜单格式化为可用于dom的html。
      *
-     *  [---] 横线
-     *  [菜单文字] 文字
-     *  [-- 文字] 菜单头 居中
-     *  [:-- 文字] 菜单头 左对齐
-     *  [--: 文字] 菜单头 右对齐
-     *  [--- 文字] 带横线菜单头 居中
-     *  [:--- 文字] 带横线菜单头 左对齐
-     *  [---: 文字] 带横线菜单头 右对齐
-     *  [@(icon-xxxx) 文字] 指定图标的菜单
+     *  [hr] 横线
+     *  [{header: "通用", align: "left", withLine: true}] 菜单头
+     *  [{layIcon: "", txt: "", event: ""}] 菜单
      */
     function parseTemplateMenu(html, sptor) {
         if (!html) {return "";}
         if (!sptor) { throw new Error("请指定菜单模板限定符。");}
-        console.log("呵", html);
 
         var sptor1 = sptor.charAt(0);
         var sptor2 = sptor.charAt(1);
@@ -81,7 +93,6 @@ layui.define(['jquery', 'laytpl'], function (exports) {
             } else if (parseStatus === parseTemplateMenuStatuMap.FIND_MENU_ITEM && !meaning) {
                 if (sptor1 === currentChar) {
                     item = {srcStr: ""};
-                    menu.push(item);
                     parseStatus = parseTemplateMenuStatuMap.FIND_MENU_ITEM_CONTENT;
                 } else if (sptor2 === currentChar) {
                     parseStatus = parseTemplateMenuStatuMap.FIND_MENU;
@@ -95,6 +106,11 @@ layui.define(['jquery', 'laytpl'], function (exports) {
                         meaning = true;
                     } else {
                         if (currentChar === sptor2) {
+
+                            // 发现菜单配置内容闭合符。立即解析此条目使用的菜单类型。
+                            item = parseTemplateMenuItem(item.srcStr);
+
+                            menu.push(item);
                             parseStatus = parseTemplateMenuStatuMap.FIND_MENU_ITEM;
                         } else {
                             item.srcStr += currentChar;
@@ -105,9 +121,7 @@ layui.define(['jquery', 'laytpl'], function (exports) {
             currentIndex += 1;
         }
 
-        console.log("呵呵", menus);
-
-        return "来了老弟！";
+        return menus;
     }
 
     // 允许通过为 window 设置 MICROANSWER_DROPDOWAN 变量来改变本组件的注册名。
@@ -128,15 +142,14 @@ layui.define(['jquery', 'laytpl'], function (exports) {
         "min-width: {{d.minWidth}}px;" +
         "max-width: {{d.maxWidth}}px;" +
         "min-height: {{d.minHeight}}px;" +
-        "max-height: {{d.maxHeight}}px;" +
-        "overflow: auto;'>";
+        "max-height: {{d.maxHeight}}px;'>";
     var MENUS_TEMPLATE_END = "</div></div>";
 
 
     // 菜单项目模板。
     var MENUS_TEMPLATE =
         MENUS_TEMPLATE_START +
-        "{{# layui.each(d.menus, function(i, menu){ }}<ul>{{# layui.each(menu, function(index, item){ }}" +
+        "{{# layui.each(d.menus, function(i, menu){ }}<ul class='dropdown-menu'>{{# layui.each(menu, function(index, item){ }}" +
         "<li>" +
         "{{# if ('hr' === item) { }}" +
         "<hr>" +
@@ -182,12 +195,12 @@ layui.define(['jquery', 'laytpl'], function (exports) {
         minWidth: 80,
 
         // 最大宽度
-        maxWidth: 300,
+        maxWidth: 500,
 
         minHeight: 10,
 
         // 最大高度
-        maxHeight: 300,
+        maxHeight: 400,
 
         zIndex: 891,
 
@@ -288,9 +301,13 @@ layui.define(['jquery', 'laytpl'], function (exports) {
 
             var data = $.extend($.extend({}, _this.option), _this.option.data || {});
 
-            laytpl($(templateMenu).text()).render(data, function (html) {
-                html = parseTemplateMenu(html, _this.option.templateMenuSptor);
-                console.log("结果：" , html);
+            laytpl($(templateMenu).text()).render(data, function (str) {
+                _this.option.menus = parseTemplateMenu(str, _this.option.templateMenuSptor);
+                laytpl(MENUS_TEMPLATE).render(_this.option, function (html) {
+
+                    _this.downHtml = html;
+                    _this.initEvent();
+                });
             });
 
         } else if (_this.option.template) {
