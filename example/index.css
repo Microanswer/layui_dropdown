@@ -1,7 +1,6 @@
 .head {
     background: #2E2D3C;
     color: white;
-    height: 350px;
     padding: 100px 0;
     text-align: center;
 }
@@ -61,4 +60,57 @@ button.mbtn.mbtn-small {
 
 .head .info{
     margin-top: 15px;
+}
+
+.body {
+    padding: 10px;
+    text-align: center;
+    background-color: #f5f5f5;
+}
+
+.mcard {
+    width: 270px;
+    margin: 10px;
+    vertical-align: top;
+    text-align: left;
+}
+
+.mcard .layui-card-body {
+    height: 120px;
+}
+
+.d-inline {
+    display: inline-block;
+}
+
+.preview {
+    text-align: center;
+    margin-top: 50px;
+}
+.doc {
+    text-align: center;
+}
+.reason .title,
+.doc .title,
+.preview .title {
+    margin: 40px 0 20px 0;
+    font-size: 25px;
+}
+
+.preview .img img{
+    width: 900px;
+}
+
+.foot {
+    text-align: center;
+    padding: 20px;
+}
+
+.usenow {
+    font-size: 23px;
+    border-radius: 3px;
+    display: inline-block;
+    padding: 20px 40px;
+    background-color: #1E9FFF;
+    color: white;
 }
