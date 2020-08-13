@@ -327,10 +327,25 @@
 </script>
 <!-- 表格行toolbar模板 -->
 <script id="tb2" type="text/html">
-    <button class="layui-btn layui-btn-xs" lay-dropdown="{align:'right', menus: [{layIcon:'layui-icon-edit',txt: '修改用户名', event:'edit'}, {layIcon: 'layui-icon-delete',txt: '干掉他', event:'delete'}, {layIcon: 'layui-icon-face-smile-fine', txt: 'OHHHHHHHHHHHH', event:'info'}]}">
+    <button class="layui-btn layui-btn-xs" id="layuidropdown_{{d.id}}" lay-dropdown="{align:'right', templateMenu: 'table2toolMenu'}">
         <span>操作</span>
         <i class="layui-icon layui-icon-triangle-d"></i>
     </button>
+</script>
+
+<script id="table2toolMenu" type="text/plain">
+[
+  [{layIcon: 'layui-icon-edit',            txt: '修改用户名',     event:'edit'}]
+
+  {{# if(d.score > 130) { }}
+    [{layIcon: 'layui-icon-praise',            txt: '成绩优异',     event:'scre_good'}]
+  {{# } else { }}
+    [{layIcon: 'layui-icon-tread',          txt: '成绩不合格',     event:'scre_to_low'}]
+  {{# } }}
+
+  [{layIcon: 'layui-icon-delete',          txt: '干掉他',         event:'delete'}]
+  [{layIcon: 'layui-icon-face-smile-fine', txt: 'OHHHHHHHHHHHH', event:'info'}]
+]
 </script>
 
 <script src="./layui/layui.js"></script>
@@ -501,7 +516,11 @@
                 ]],
                 done: function (res) {
                     // 在表格渲染完成后进行下拉框渲染。
-                    dropdown.suite();
+                    for (var i = 0; i < res.data.length; i++) {
+                        dropdown.suite("#layuidropdown_" + res.data[i].id, {
+                            data: res.data[i]
+                        });
+                    }
                 }
             });
 
@@ -515,6 +534,10 @@
                 } else if (something.event === "delete") {
                     something.del();
                     layer.msg("删除了" + something.data.username);
+                } else if (something.event === "scre_good") {
+                    layer.msg(something.data.username + "的成绩优异！");
+                }  else if (something.event === "scre_to_low") {
+                    layer.msg(something.data.username + "的成绩不合格！");
                 } else {
                     layer.alert("在 数据表格里使用时，可以通过 数据表格的监听行工具的方法来监听菜单条目的事件。文档:<a href='https://www.layui.com/doc/modules/table.html#ontool'>监听行工具事件</a>。");
                 }
@@ -550,70 +573,6 @@
         });
 
     });
-</script>
-
-<script type="text/plain" id="mymenuyeah">
-[[{txt: "1×1=1", event: "menu1"}]]
-[
-  [{txt: "2×1=2", event: "menu1"}]
-  [{txt: "2×2=4", event: "menu1"}]
-]
-[
-  [{txt: "3×1=3", event: "menu1"}]
-  [{txt: "3×2=6", event: "menu1"}]
-  [{txt: "3×3=9", event: "menu1"}]
-]
-[
-  [{txt: "4×1=4", event: "menu1"}]
-  [{txt: "4×2=8", event: "menu1"}]
-  [{txt: "4×3=12", event: "menu1"}]
-  [{txt: "4×4=16", event: "menu1"}]
-]
-[
-  [{txt: "5×1=5", event: "menu1"}]
-  [{txt: "5×2=10", event: "menu1"}]
-  [{txt: "5×3=15", event: "menu1"}]
-  [{txt: "5×4=20", event: "menu1"}]
-  [{txt: "5×5=25", event: "menu1"}]
-]
-[
-  [{txt: "6×1=6", event: "menu1"}]
-  [{txt: "6×2=12", event: "menu1"}]
-  [{txt: "6×3=18", event: "menu1"}]
-  [{txt: "6×4=24", event: "menu1"}]
-  [{txt: "6×5=30", event: "menu1"}]
-  [{txt: "6×6=36", event: "menu1"}]
-]
-[
-  [{txt: "7×1=7", event: "menu1"}]
-  [{txt: "7×2=14", event: "menu1"}]
-  [{txt: "7×3=21", event: "menu1"}]
-  [{txt: "7×4=28", event: "menu1"}]
-  [{txt: "7×5=35", event: "menu1"}]
-  [{txt: "7×6=42", event: "menu1"}]
-  [{txt: "7×7=49", event: "menu1"}]
-]
-[
-  [{txt: "8×1=8", event: "menu1"}]
-  [{txt: "8×2=16", event: "menu1"}]
-  [{txt: "8×3=24", event: "menu1"}]
-  [{txt: "8×4=32", event: "menu1"}]
-  [{txt: "8×5=40", event: "menu1"}]
-  [{txt: "8×6=48", event: "menu1"}]
-  [{txt: "8×7=56", event: "menu1"}]
-  [{txt: "8×8=64", event: "menu1"}]
-]
-[
-  [{txt: "9×1=9", event: "menu1"}]
-  [{txt: "9×2="+(9*2), event: "menu1"}]
-  [{txt: "9×3="+(9*3), event: "menu1"}]
-  [{txt: "9×4="+(9*4), event: "menu1"}]
-  [{txt: "9×5="+(9*5), event: "menu1"}]
-  [{txt: "9×6="+(9*6), event: "menu1"}]
-  [{txt: "9×7="+(9*7), event: "menu1"}]
-  [{txt: "9×8=" + (8*9), event: "menu1"}]
-  [{txt: "9×9=81", event: "menu1"}]
-]
 </script>
 </body>
 </html>
