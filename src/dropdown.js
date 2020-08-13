@@ -47,7 +47,6 @@ layui.define(['jquery', 'laytpl'], function (exports) {
         if (!itemStr) {
             throw new Error("菜单条目内必须填写内容。");
         }
-
         if ("hr" === itemStr) {
             return "hr";
         } else if (itemStr.indexOf("{") === 0){
@@ -142,7 +141,8 @@ layui.define(['jquery', 'laytpl'], function (exports) {
         "min-width: {{d.minWidth}}px;" +
         "max-width: {{d.maxWidth}}px;" +
         "min-height: {{d.minHeight}}px;" +
-        "max-height: {{d.maxHeight}}px;'>";
+        "max-height: {{d.maxHeight}}px;" +
+        "white-space: {{d.nowrap?\"nowrap\":\"normal\"}}'>"; /*nowrap只有在显示菜单的时候不准换号，自定义下拉是可以换行的。*/
     var MENUS_TEMPLATE_END = "</div></div>";
 
 
@@ -171,7 +171,7 @@ layui.define(['jquery', 'laytpl'], function (exports) {
         "</a>" +
         "</div>" +
         "{{# } }}</li>" +
-        "{{# }); }}</ul>{{# }); }}" +
+        "{{# }); }}</ul>{{#});}}" +
         MENUS_TEMPLATE_END;
 
 
@@ -180,6 +180,9 @@ layui.define(['jquery', 'laytpl'], function (exports) {
 
         // 要显示的下拉菜单
         menus: [],
+
+        // 菜单模板，使用规定语法的模板。支持 laytpl 动态渲染。
+        templateMenu: "",
 
         // 要显示的下拉模板， 这个和上面的menus只能传递其中一个，如果同时传递了2个，以menus为准。
         template: "",
@@ -229,7 +232,10 @@ layui.define(['jquery', 'laytpl'], function (exports) {
         arrow: true,
 
         // 模板菜单里使用的分隔符。
-        templateMenuSptor: "[]"
+        templateMenuSptor: "[]",
+
+        // 配置是否显示多列菜单的分割线。
+        menuSplitor: true
     };
 
     /**
@@ -267,7 +273,7 @@ layui.define(['jquery', 'laytpl'], function (exports) {
     };
 
     // 加载css，使外部不需要手动引入css。允许通过设置 window.dropdown_cssLink 来修改默认css地址。
-    // layui.link(window[MOD_NAME+"_cssLink"] || DEFAULT_OPTION.cssLink, function () {/*ignore*/}, MOD_NAME + "_css");
+    (!window[MOD_NAME+"_useOwnCss"]) && layui.link(window[MOD_NAME+"_cssLink"] || DEFAULT_OPTION.cssLink, function () {/*ignore*/}, MOD_NAME + "_css");
 
     // 初始化下拉菜单。
     Dropdown.prototype.init = function () {
@@ -282,6 +288,7 @@ layui.define(['jquery', 'laytpl'], function (exports) {
                 _this.option.menus = [_this.option.menus];
             }
 
+            _this.option.nowrap = true;
             laytpl(MENUS_TEMPLATE).render(_this.option, function (html) {
 
                 // 以前（2020年8月8日20点29分以前）是在init的时候就把相关dom元素直接添加到网页的dom树里，
@@ -303,6 +310,7 @@ layui.define(['jquery', 'laytpl'], function (exports) {
 
             laytpl($(templateMenu).text()).render(data, function (str) {
                 _this.option.menus = parseTemplateMenu(str, _this.option.templateMenuSptor);
+                _this.option.nowrap = true;
                 laytpl(MENUS_TEMPLATE).render(_this.option, function (html) {
 
                     _this.downHtml = html;
@@ -320,6 +328,7 @@ layui.define(['jquery', 'laytpl'], function (exports) {
             }
 
             var data = $.extend($.extend({}, _this.option), _this.option.data || {});
+            data.nowrap = false;
             laytpl(MENUS_TEMPLATE_START + $(templateId).html() + MENUS_TEMPLATE_END).render(data, function (html) {
                 _this.downHtml = html;
                 _this.initEvent();

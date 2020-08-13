@@ -31,6 +31,9 @@
         }
     </style>
     <link rel="stylesheet" href="../dist/dropdown.css">
+    <script>
+        window.dropdown_useOwnCss = true;
+    </script>
 </head>
 <body>
 <div>
@@ -110,15 +113,34 @@
                                         lay-dropdown="{align:'left', menus: [{layIcon:'layui-icon-username',txt: '个人中心', event:'usercenter'}, {layIcon: 'layui-icon-set',txt: '设置', event:'set'}, {layIcon: 'layui-icon-logout', txt: '退出登录', event:'loginout'}]}">
     </p>
     <br>
-    <p class="bold">5、在表格里使用：</p>
+    <p class="bold">5、多列菜单</p>
+    <p>
+    <div class="m-inline"><button class="layui-btn layui-btn-sm" lay-filter="test_m_1" lay-dropdown="{templateMenu: 'test_m_1_template'}">
+        <span>双列下拉菜单</span>
+        <i class="layui-icon layui-icon-triangle-d"></i>
+    </button></div>、
+    <div class="m-inline"><button class="layui-btn layui-btn-sm" lay-filter="test_m_2" lay-dropdown="{templateMenu: 'test_m_2_template'}">
+        <span>三列下拉菜单</span>
+        <i class="layui-icon layui-icon-triangle-d"></i>
+    </button></div>、
+    <div class="m-inline"><button class="layui-btn layui-btn-sm" lay-filter="test_m_3" lay-dropdown="{templateMenu: 'test_m_3_template'}">
+        <span>四列下拉菜单</span>
+        <i class="layui-icon layui-icon-triangle-d"></i>
+    </button></div>、
+    <div class="m-inline"><button class="layui-btn layui-btn-sm" lay-filter="test_m_3" lay-dropdown="{templateMenu: 'test_m_4_template'}">
+        <span>十列下拉菜单</span>
+        <i class="layui-icon layui-icon-triangle-d"></i>
+    </button></div>
+    </p>
+    <p class="bold">6、在表格里使用：</p>
     <p>
     <table id="mytable" lay-filter="table1"></table>
     </p>
-    <p class="bold">6、在表格里使用，并支持表格数据操作：</p>
+    <p class="bold">7、在表格里使用，并支持表格数据操作：</p>
     <p>
     <table id="mytable2" lay-filter="table2"></table>
     </p>
-    <p class="bold">7、手动显示与隐藏(v2.0.1)：</p>
+    <p class="bold">8、手动显示与隐藏(v2.0.1)：</p>
     <p>
         <button class="layui-btn layui-btn-sm" title="此按钮已被置为disabled，使用右侧按钮操作" disabled lay-filter="test_man" lay-dropdown="{align:'left', menus: [{layIcon:'layui-icon-username',txt: '个人中心', event:'usercenter'}, {layIcon: 'layui-icon-set',txt: '设置', event:'set'}, {layIcon: 'layui-icon-logout', txt: '退出登录', event:'loginout'}]}">手动显示隐藏</button>
         <button class="layui-btn layui-btn-sm layui-btn-warm test_man_show">显示</button><span></span>
@@ -141,6 +163,158 @@
     </script>
 </div>
 
+<!-- 双列下拉 菜单配置模板 -->
+<script id="test_m_1_template" type="text/plain">
+
+  [
+    [{txt: "个人中心1", event: "usercenter"}]
+    [{txt: "头像设置", event: "sethead"}]
+    [{txt: "注销账号", event: "desctroy"}]
+  ]
+
+  [
+    [{txt: "赠送红包", event: "redp"}]
+    [{txt: "缴费通知", event: "qftt"}]
+    [{txt: "强制下线", event: "offline"}]
+  ]
+
+</script>
+
+<!-- 三列下拉按钮 菜单配置模板 -->
+<script id="test_m_2_template" type="text/plain">
+
+  [
+    [{txt: "个人中心", event: "usercenter"}]
+    [{txt: "头像设置", event: "sethead"}]
+    [{txt: "注销账号", event: "desctroy"}]
+    [{txt: "赠送红包", event: "redp"}]
+    [{txt: "缴费通知", event: "qftt"}]
+    [{txt: "强制下线", event: "offline"}]
+  ]
+
+  [
+    [{txt: "添加好友", event: "addff"}]
+    [{txt: "赠送key码", event: "zskm"}]
+    [{txt: "账号升级", event: "upad"}]
+  ]
+
+
+  [
+    [{txt: "添加对象", event: "addfdf"}]
+    [{txt: "移除对象", event: "rbdd"}]
+    [{txt: "账号详情", event: "detaa"}]
+  ]
+
+</script>
+
+<!-- 四列下拉按钮 菜单配置模板 -->
+<script id="test_m_3_template" type="text/plain">
+
+  [
+    [{txt: "个人中心", event: "usercenter"}]
+    [{txt: "头像设置", event: "sethead"}]
+    [{txt: "注销账号", event: "desctroy"}]
+  ]
+
+  [
+    [{txt: "赠送红包", event: "redp"}]
+    [{txt: "缴费通知", event: "qftt"}]
+    [{txt: "强制下线", event: "offline"}]
+  ]
+
+
+  [
+    [{txt: "添加好友", event: "addff"}]
+    [{txt: "赠送key码", event: "zskm"}]
+    [{txt: "账号升级", event: "upad"}]
+  ]
+
+
+  [
+    [{txt: "添加对象", event: "addfdf"}]
+    [{txt: "移除对象", event: "rbdd"}]
+    [{txt: "账号详情", event: "detaa"}]
+  ]
+
+</script>
+
+
+<!-- 十列下拉按钮 菜单配置模板 -->
+<script id="test_m_4_template" type="text/plain">
+
+  [
+    [{txt: "第1列", event: "l1"}]
+    [{txt: "个人中心", event: "usercenter"}]
+    [{txt: "头像设置", event: "sethead"}]
+    [{txt: "注销账号", event: "desctroy"}]
+  ]
+
+  [
+    [{txt: "第2列", event: "l1"}]
+    [{txt: "赠送红包", event: "redp"}]
+    [{txt: "缴费通知", event: "qftt"}]
+    [{txt: "强制下线", event: "offline"}]
+  ]
+
+
+  [
+    [{txt: "第3列", event: "l1"}]
+    [{txt: "添加好友", event: "addff"}]
+    [{txt: "赠送key码", event: "zskm"}]
+    [{txt: "账号升级", event: "upad"}]
+  ]
+
+
+  [
+    [{txt: "第4列", event: "l1"}]
+    [{txt: "添加对象", event: "addfdf"}]
+    [{txt: "移除对象", event: "rbdd"}]
+    [{txt: "账号详情", event: "detaa"}]
+  ]
+  [
+    [{txt: "第5列", event: "l1"}]
+    [{txt: "个人中心", event: "usercenter"}]
+    [{txt: "头像设置", event: "sethead"}]
+    [{txt: "注销账号", event: "desctroy"}]
+  ]
+
+  [
+    [{txt: "第6列", event: "l1"}]
+    [{txt: "赠送红包", event: "redp"}]
+    [{txt: "缴费通知", event: "qftt"}]
+    [{txt: "强制下线", event: "offline"}]
+  ]
+
+
+  [
+    [{txt: "第7列", event: "l1"}]
+    [{txt: "添加好友", event: "addff"}]
+    [{txt: "赠送key码", event: "zskm"}]
+    [{txt: "账号升级", event: "upad"}]
+  ]
+
+
+  [
+    [{txt: "第8列", event: "l1"}]
+    [{txt: "添加对象", event: "addfdf"}]
+    [{txt: "移除对象", event: "rbdd"}]
+    [{txt: "账号详情", event: "detaa"}]
+  ]
+
+   [
+    [{txt: "第9列", event: "l1"}]
+    [{txt: "个人中心", event: "usercenter"}]
+    [{txt: "头像设置", event: "sethead"}]
+    [{txt: "注销账号", event: "desctroy"}]
+  ]
+
+  [
+    [{txt: "第10列", event: "l1"}]
+    [{txt: "赠送红包", event: "redp"}]
+    [{txt: "缴费通知", event: "qftt"}]
+    [{txt: "强制下线", event: "offline"}]
+  ]
+</script>
 <!-- 自定义下拉菜单内容 -->
 <script id="mymenu" type="text/html">
     <div style="padding: 20px;max-width: 300px;display: flex;display: -webkit-flex">
@@ -187,18 +361,12 @@
         // ====================================================================================
 
         dropdown.suite("[lay-filter='test0']", {
-            arrow: false,
             immed: true,
             menus: [[
                 {txt: "菜单1", event: "menu1"},
                 {txt: "菜单2", event: "menu2"},
                 {txt: "菜单3", event: "menu3"},
                 {txt: "菜单4", event: "menu4"},
-            ],[
-                {txt: "菜单5", event: "menu5"},
-                {txt: "菜单6", event: "menu6"},
-                {txt: "菜单7", event: "menu7"},
-                {txt: "菜单8", event: "menu8"},
             ]],
             onShow: function ($maker, $down) {
                 $maker.find(".layui-icon").css('transition-duration', '300ms');

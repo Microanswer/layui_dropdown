@@ -12,7 +12,7 @@
     <p class="title">一个基于Layui的下拉菜单模块</p>
     <p class="desc">由个人开发者倾情打造，面向全层次的前后端开发者，低门槛开箱即用的菜单 UI 解决方案</p>
     <p class="fun">
-        <button class="mbtn mbtn-big">
+        <button class="mbtn mbtn-big" tohref="http://file.microanswer.cn/dropdown_v2.2.0.zip" showdoc="1">
             <svg class="icon" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="30" height="30">
                 <path d="M512 1007.2c273.4 0 495-221.6 495-495s-221.6-495-495-495-495 221.6-495 495 221.6 495 495 495zM190.3 190.5c41.8-41.8 90.5-74.6 144.6-97.5C391 69.2 450.6 57.2 512 57.2s121 12 177.1 35.7c54.2 22.9 102.8 55.7 144.6 97.5s74.6 90.5 97.5 144.6C955 391.2 967 450.8 967 512.2c0 61.5-12 121-35.7 177.1-22.9 54.2-55.7 102.8-97.5 144.6s-90.5 74.6-144.6 97.5C633 955.2 573.4 967.2 512 967.2s-121-12-177.1-35.7c-54.2-22.9-102.8-55.7-144.6-97.5s-74.6-90.5-97.5-144.6C69 633.3 57 573.7 57 512.2c0-61.4 12-121 35.7-177.1 23-54.1 55.8-102.8 97.6-144.6z"
                       fill="#ffffff"></path>
@@ -23,12 +23,12 @@
         </button>
     </p>
     <p class="info">
-        当前版本：2.3.0 更新日志 下载量：16000+
+        当前版本：2.3.0 <a style="color: white" href="https://www.microanswer.cn/blog/74#%E4%B8%83%E3%80%81%E6%9B%B4%E6%96%B0%E5%8E%86%E5%8F%B2" target="_blank">更新日志</a> 下载量：16000+
     </p>
     <p class="info">
-        <button class="mbtn mbtn-small">Star</button>&nbsp;
-        <button class="mbtn mbtn-small">Fork</button>&nbsp;
-        <button class="mbtn mbtn-small">GitHub</button>
+        <button class="mbtn mbtn-small" tohref="https://github.com/MicroAnswer/layui_dropdown">Star</button>&nbsp;
+        <button class="mbtn mbtn-small" tohref="https://github.com/MicroAnswer/layui_dropdown/network/members">Fork</button>&nbsp;
+        <button class="mbtn mbtn-small" tohref="https://github.com/MicroAnswer/layui_dropdown">GitHub</button>
     </p>
 </div>
 
@@ -117,12 +117,29 @@
     }).use(['dropdown', 'table', 'layer', 'jquery'], function () {
 
         var $ = layui.jquery || layui.$;
+        var layer = layui.layer;
 
         $(".mbtn").hover(function (){
             $(this).find("path").attr("fill", "#000000");
         }, function (){
             $(this).find("path").attr("fill", "#ffffff");
-        })
+        }).click(function (){
+            var $this = $(this);
+            if ($this.attr("tohref")) {
+                var a = document.createElement("a");
+                a.href = $this.attr("tohref");
+                a.target = "_blank";
+                a.click();
+
+                if ($this.attr("showdoc")) {
+                    layer.confirm("真棒，现在去文档页面看看怎么使用它。好吗？", {
+                        btn: ["立刻阅读文档", "暂时不用"],
+                    }, function () {
+                        window.location.href = "https://www.microanswer.cn/blog/74";
+                    });
+                }
+            }
+        });
     });
 
 </script>
