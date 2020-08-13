@@ -133,7 +133,7 @@ layui.define(['jquery', 'laytpl'], function (exports) {
     var MENUS_POINTER_TEMPLATE = "{{# if (d.arrow){ }}<div class='dropdown-pointer'></div>{{# } }}";
     var MENUS_TEMPLATE_START = "<div tabindex='0' " +
         "class='layui-anim layui-anim-upbit dropdown-root' " + MOD_NAME + "-id='{{d.downid}}' " +
-        "style='z-index: {{d.zIndex}}'>" +
+        "style='display: none;z-index: {{d.zIndex}}'>" +
         MENUS_POINTER_TEMPLATE +
         "<div class='dropdown-content' " +
         "style='" +
@@ -340,8 +340,18 @@ layui.define(['jquery', 'laytpl'], function (exports) {
 
     Dropdown.prototype.initSize = function () {
         if (!this.$down) return;
-        this.$down.find(".dropdown-pointer").css("width", this.option.gap * 2);
-        this.$down.find(".dropdown-pointer").css("height", this.option.gap * 2);
+        this.$down.find(".dropdown-pointer").css({
+            "width": this.option.gap * 2,
+            "height": this.option.gap * 2
+        });
+
+        var maxHeight = 0;
+        this.$down.find(".dropdown-menu").each(function () {
+            maxHeight = Math.max(maxHeight, $(this).height());
+        });
+        this.$down.find(".dropdown-menu").css({
+            "height": maxHeight
+        });
     };
 
     // 初始化位置信息
@@ -422,7 +432,6 @@ layui.define(['jquery', 'laytpl'], function (exports) {
             isDidDomAdd = true;
         }
         _this.initPosition();
-        _this.initSize();
 
         _this.opening = true; // 引入这个字段用于确保在动画过程中鼠标移出组件区域时不会隐藏下拉框。
         // 使用settimeout原因:
@@ -433,6 +442,7 @@ layui.define(['jquery', 'laytpl'], function (exports) {
         }, 100);
 
         _this.$down.addClass("layui-show");
+        _this.initSize();
         _this.opened = true;
 
         if (isDidDomAdd) {

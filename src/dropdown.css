@@ -7,8 +7,7 @@ html #layuicss-dropdown_css{display:none; position: absolute; width:1989px;}
 .dropdown-root {
     position: fixed;
     outline: none;
-
-    display: none;
+    overflow: hidden;
 }
 
 .dropdown-pointer {
@@ -34,23 +33,15 @@ html #layuicss-dropdown_css{display:none; position: absolute; width:1989px;}
 }
 
 .dropdown-root .dropdown-content {
-    overflow: auto;
     background-color: white;
     border-radius: 2px;
     box-shadow: 1px 1px 3px #a9a9a9;
+    overflow: auto;
     white-space: nowrap;
-    width: 100%;
 
-    display: flex;
-    display: -webkit-flex;
-    justify-content: center;
-    -webkit-justify-content: center;
-    flex-direction: row;
-    -webkit-flex-direction: row;
-    flex-wrap: nowrap;
-    -webkit-flex-wrap: nowrap;
 }
 .dropdown-root .dropdown-content .dropdown-menu{
+    display: inline-block;
     vertical-align: top;
     border-right: 1px solid #e6e6e6;
     padding: 0;
@@ -95,6 +86,8 @@ html #layuicss-dropdown_css{display:none; position: absolute; width:1989px;}
     padding: 0 20px;
     text-indent: 0;
     font-size: 14px;
+
+    white-space: nowrap;
 }
 .dropdown-root .dropdown-content .menu-item a:hover{
     color: #000;

@@ -33,7 +33,7 @@
     <link rel="stylesheet" href="../dist/dropdown.css">
 </head>
 <body>
-<div class="layui-container">
+<div>
     <h1>一、控件简介</h1>
     <p>
         dropdown 是一款基于layui框架的下拉框控件，填补了layui原生没有下拉框这个空隙。借助下拉框的操作方式和UI交互，可以带来更加直观、便于操作、模块划分清晰等优势。<br>
@@ -44,13 +44,6 @@
         <li>如果下拉框出现的位置会超出浏览器边缘，那么会自动找一个‘凉快’的地方呆着。</li>
         <li>在你打开下拉框后又进行了界面滚动，她也不依不舍的跟着你走。</li>
     </ul>
-
-    <p>
-        <button class="layui-btn layui-btn-sm" lay-filter="test10000" lay-dropdown="{templateMenu: 'mymenuyeah'}">
-            <span>下拉菜单</span>
-            <i class="layui-icon layui-icon-triangle-d" style="display: inline-block"></i>
-        </button>
-    </p>
 
     <h1>二、控件体验</h1>
     <p class="bold">1、基本效果：</p>
@@ -400,16 +393,67 @@
 </script>
 
 <script type="text/plain" id="mymenuyeah">
-[[{txt: "1", event: "menu1"}]]
-[[{txt: "12", event: "menu1"}][{txt: "12", event: "menu1"}]]
-[[{txt: "13", event: "menu1"}]]
-[[{txt: "14", event: "menu1"}]]
-[[{txt: "15", event: "menu1"}]]
-[[{txt: "16", event: "menu1"}]]
-[[{txt: "17", event: "menu1"}]]
-[[{txt: "18", event: "menu1"}]]
-[[{txt: "19", event: "menu1"}]]
-[[{txt: "10", event: "menu1"}]]
+[[{txt: "1×1=1", event: "menu1"}]]
+[
+  [{txt: "2×1=2", event: "menu1"}]
+  [{txt: "2×2=4", event: "menu1"}]
+]
+[
+  [{txt: "3×1=3", event: "menu1"}]
+  [{txt: "3×2=6", event: "menu1"}]
+  [{txt: "3×3=9", event: "menu1"}]
+]
+[
+  [{txt: "4×1=4", event: "menu1"}]
+  [{txt: "4×2=8", event: "menu1"}]
+  [{txt: "4×3=12", event: "menu1"}]
+  [{txt: "4×4=16", event: "menu1"}]
+]
+[
+  [{txt: "5×1=5", event: "menu1"}]
+  [{txt: "5×2=10", event: "menu1"}]
+  [{txt: "5×3=15", event: "menu1"}]
+  [{txt: "5×4=20", event: "menu1"}]
+  [{txt: "5×5=25", event: "menu1"}]
+]
+[
+  [{txt: "6×1=6", event: "menu1"}]
+  [{txt: "6×2=12", event: "menu1"}]
+  [{txt: "6×3=18", event: "menu1"}]
+  [{txt: "6×4=24", event: "menu1"}]
+  [{txt: "6×5=30", event: "menu1"}]
+  [{txt: "6×6=36", event: "menu1"}]
+]
+[
+  [{txt: "7×1=7", event: "menu1"}]
+  [{txt: "7×2=14", event: "menu1"}]
+  [{txt: "7×3=21", event: "menu1"}]
+  [{txt: "7×4=28", event: "menu1"}]
+  [{txt: "7×5=35", event: "menu1"}]
+  [{txt: "7×6=42", event: "menu1"}]
+  [{txt: "7×7=49", event: "menu1"}]
+]
+[
+  [{txt: "8×1=8", event: "menu1"}]
+  [{txt: "8×2=16", event: "menu1"}]
+  [{txt: "8×3=24", event: "menu1"}]
+  [{txt: "8×4=32", event: "menu1"}]
+  [{txt: "8×5=40", event: "menu1"}]
+  [{txt: "8×6=48", event: "menu1"}]
+  [{txt: "8×7=56", event: "menu1"}]
+  [{txt: "8×8=64", event: "menu1"}]
+]
+[
+  [{txt: "9×1=9", event: "menu1"}]
+  [{txt: "9×2="+(9*2), event: "menu1"}]
+  [{txt: "9×3="+(9*3), event: "menu1"}]
+  [{txt: "9×4="+(9*4), event: "menu1"}]
+  [{txt: "9×5="+(9*5), event: "menu1"}]
+  [{txt: "9×6="+(9*6), event: "menu1"}]
+  [{txt: "9×7="+(9*7), event: "menu1"}]
+  [{txt: "9×8=" + (8*9), event: "menu1"}]
+  [{txt: "9×9=81", event: "menu1"}]
+]
 </script>
 </body>
 </html>

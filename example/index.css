@@ -1,0 +1,64 @@
+.head {
+    background: #2E2D3C;
+    color: white;
+    height: 350px;
+    padding: 100px 0;
+    text-align: center;
+}
+
+.head .name {
+    font-size: 65px;
+    margin: 10px 0 30px 0;
+}
+
+.head .title {
+    font-size: 41px;
+    font-weight: 300;
+}
+
+.head .desc {
+    margin-top: 10px;
+    color: #c9c9c9;
+}
+
+.head .fun {
+    margin-top: 40px;
+}
+button.mbtn {
+    cursor: pointer;
+    border: 1px solid white;
+    outline: none;
+    background: transparent;
+    border-radius: 3px;
+    color: white;
+
+    transition-duration: 200ms;
+}
+
+button.mbtn.mbtn-big {
+    font-size: 27px;
+    padding: 20px 55px;
+}
+button.mbtn .icon,
+button.mbtn .span {
+    vertical-align: middle;
+    line-height: 30px;
+    overflow: hidden;
+}
+
+button.mbtn:hover {
+    background: white;
+    color: #2E2D3C;
+}
+button.mbtn:active {
+    text-decoration: underline;
+}
+
+button.mbtn.mbtn-small {
+    font-size: 14px;
+    padding: 5px 10px;
+}
+
+.head .info{
+    margin-top: 15px;
+}
