@@ -37,18 +37,8 @@
 </head>
 <body>
 <div>
-    <h1>一、控件简介</h1>
-    <p>
-        dropdown 是一款基于layui框架的下拉框控件，填补了layui原生没有下拉框这个空隙。借助下拉框的操作方式和UI交互，可以带来更加直观、便于操作、模块划分清晰等优势。<br>
-    </p>
-    <p>    带来了这些优势的同时又加入了许多意想不到的细节:
-    </p>
-    <ul>
-        <li>如果下拉框出现的位置会超出浏览器边缘，那么会自动找一个‘凉快’的地方呆着。</li>
-        <li>在你打开下拉框后又进行了界面滚动，她也不依不舍的跟着你走。</li>
-    </ul>
 
-    <h1>二、控件体验</h1>
+    <h1>一、在线体验</h1>
     <p class="bold">1、基本效果：</p>
     <p>
         <div class="m-inline"><button class="layui-btn layui-btn-sm" lay-filter="test0" id="xxxxx">
@@ -115,7 +105,7 @@
     <br>
     <p class="bold">5、多列菜单</p>
     <p>
-    <div class="m-inline"><button class="layui-btn layui-btn-sm" lay-filter="test_m_1" lay-dropdown="{templateMenu: 'test_m_1_template'}">
+    <div class="m-inline"><button class="layui-btn layui-btn-sm" lay-filter="test_m_1" lay-dropdown="{templateMenu: 'test_m_1_template', templateMenuSptor:'()'}">
         <span>双列下拉菜单</span>
         <i class="layui-icon layui-icon-triangle-d"></i>
     </button></div>、
@@ -127,7 +117,7 @@
         <span>四列下拉菜单</span>
         <i class="layui-icon layui-icon-triangle-d"></i>
     </button></div>、
-    <div class="m-inline"><button class="layui-btn layui-btn-sm" lay-filter="test_m_3" lay-dropdown="{templateMenu: 'test_m_4_template'}">
+    <div class="m-inline"><button class="layui-btn layui-btn-sm" lay-filter="test_m_4" lay-dropdown="{templateMenu: 'test_m_4_template'}">
         <span>十列下拉菜单</span>
         <i class="layui-icon layui-icon-triangle-d"></i>
     </button></div>
@@ -151,11 +141,8 @@
     <h1>二、控件&文档</h1>
     <p>
         直接下载使用：<a href="http://file.microanswer.cn/dropdown_2.0.0.zip">下载控件(v2.0.0)</a><br>
-        查看使用文档：<a href="https://www.microanswer.cn/blog/74">dropdown下拉控件文档</a>。
+        查看使用文档：<a href="https://www.microanswer.cn/blog/74">dropdown下拉控件文档</a>，<a href="https://github.com/MicroAnswer/layui_dropdown" target="_blank">Github</a>。
     </p>
-    <hr>
-    <h1>三、Github</h1>
-    <p>觉得不错，去<a href="https://github.com/MicroAnswer/layui_dropdown" target="_blank">Github</a>给个<strong>star</strong>吧！</p>
 
     <script type="text/javascript">
         var cnzz_protocol = (("https:" == document.location.protocol) ? "https://" : "http://");
@@ -166,17 +153,17 @@
 <!-- 双列下拉 菜单配置模板 -->
 <script id="test_m_1_template" type="text/plain">
 
-  [
-    [{txt: "个人中心1", event: "usercenter"}]
-    [{txt: "头像设置", event: "sethead"}]
-    [{txt: "注销账号", event: "desctroy"}]
-  ]
+  (
+    ({txt: "个人中心1", event: "usercenter"})
+    ({txt: "头像设置", event: "sethead"})
+    ({txt: "注销账号", event: "desctroy"})
+  )
 
-  [
-    [{txt: "赠送红包", event: "redp"}]
-    [{txt: "缴费通知", event: "qftt"}]
-    [{txt: "强制下线", event: "offline"}]
-  ]
+  (
+    ({txt: "赠送红包", event: "redp"})
+    ({txt: "缴费通知", event: "qftt"})
+    ({txt: "强制下线", event: "offline"})
+  )
 
 </script>
 
@@ -250,7 +237,7 @@
   ]
 
   [
-    [{txt: "第2列", event: "l1"}]
+    [{txt: "第2列", event: "l2"}]
     [{txt: "赠送红包", event: "redp"}]
     [{txt: "缴费通知", event: "qftt"}]
     [{txt: "强制下线", event: "offline"}]
@@ -258,7 +245,7 @@
 
 
   [
-    [{txt: "第3列", event: "l1"}]
+    [{txt: "第3列", event: "l3"}]
     [{txt: "添加好友", event: "addff"}]
     [{txt: "赠送key码", event: "zskm"}]
     [{txt: "账号升级", event: "upad"}]
@@ -266,20 +253,20 @@
 
 
   [
-    [{txt: "第4列", event: "l1"}]
+    [{txt: "第4列", event: "l4"}]
     [{txt: "添加对象", event: "addfdf"}]
     [{txt: "移除对象", event: "rbdd"}]
     [{txt: "账号详情", event: "detaa"}]
   ]
   [
-    [{txt: "第5列", event: "l1"}]
+    [{txt: "第5列", event: "l5"}]
     [{txt: "个人中心", event: "usercenter"}]
     [{txt: "头像设置", event: "sethead"}]
     [{txt: "注销账号", event: "desctroy"}]
   ]
 
   [
-    [{txt: "第6列", event: "l1"}]
+    [{txt: "第6列", event: "l6"}]
     [{txt: "赠送红包", event: "redp"}]
     [{txt: "缴费通知", event: "qftt"}]
     [{txt: "强制下线", event: "offline"}]
@@ -287,7 +274,7 @@
 
 
   [
-    [{txt: "第7列", event: "l1"}]
+    [{txt: "第7列", event: "l7"}]
     [{txt: "添加好友", event: "addff"}]
     [{txt: "赠送key码", event: "zskm"}]
     [{txt: "账号升级", event: "upad"}]
@@ -295,21 +282,21 @@
 
 
   [
-    [{txt: "第8列", event: "l1"}]
+    [{txt: "第8列", event: "l8"}]
     [{txt: "添加对象", event: "addfdf"}]
     [{txt: "移除对象", event: "rbdd"}]
     [{txt: "账号详情", event: "detaa"}]
   ]
 
    [
-    [{txt: "第9列", event: "l1"}]
+    [{txt: "第9列", event: "l9"}]
     [{txt: "个人中心", event: "usercenter"}]
     [{txt: "头像设置", event: "sethead"}]
     [{txt: "注销账号", event: "desctroy"}]
   ]
 
   [
-    [{txt: "第10列", event: "l1"}]
+    [{txt: "第10列", event: "l10"}]
     [{txt: "赠送红包", event: "redp"}]
     [{txt: "缴费通知", event: "qftt"}]
     [{txt: "强制下线", event: "offline"}]
@@ -548,6 +535,11 @@
         dropdown.onFilter("test_man", function (event) {
             layer.msg(event);
         });
+
+        dropdown.onFilter("test_m_1", function (event) {layer.msg(event);});
+        dropdown.onFilter("test_m_2", function (event) {layer.msg(event);});
+        dropdown.onFilter("test_m_3", function (event) {layer.msg(event);});
+        dropdown.onFilter("test_m_4", function (event) {layer.msg(event);});
 
         $(".test_man_show").on("click", function () {
             dropdown.show("[lay-filter='test_man']");
