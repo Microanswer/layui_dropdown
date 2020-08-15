@@ -24,7 +24,5 @@
     "minimist": "^1.2.5",
     "webpack": "^4.44.1"
   },
-  "dependencies": {
-    "layui-src": "^2.5.5"
-  }
+  "dependencies": {}
 }
