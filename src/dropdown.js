@@ -142,15 +142,18 @@ layui.define(['jquery', 'laytpl'], function (exports) {
         "max-width: {{d.maxWidth}}px;" +
         "min-height: {{d.minHeight}}px;" +
         "max-height: {{d.maxHeight}}px;" +
-        "white-space: {{d.nowrap?\"nowrap\":\"normal\"}}'>"; /*nowrap只有在显示菜单的时候不准换号，自定义下拉是可以换行的。*/
+        "white-space: {{d.nowrap?\"nowrap\":\"normal\"}}'>"; /*nowrap只有在显示菜单的时候不准换行，自定义下拉是可以换行的。*/
     var MENUS_TEMPLATE_END = "</div></div>";
 
 
     // 菜单项目模板。
     var MENUS_TEMPLATE =
         MENUS_TEMPLATE_START +
-        "{{# layui.each(d.menus, function(i, menu){ }}<ul class='dropdown-menu'>{{# layui.each(menu, function(index, item){ }}" +
-        "<li>" +
+        "{{# layui.each(d.menus, function(i, menu){ }}<ul class='dropdown-menu {{d.menuSplitor?'menu-splitor':''}} overflowauto' style='" +
+        "min-height: {{d.minHeight}}px;" +
+        "max-height: {{d.maxHeight}}px;" +
+        "'>{{# layui.each(menu, function(index, item){ }}" +
+        "<li class='menu-item-wrap'>" +
         "{{# if ('hr' === item) { }}" +
         "<hr>" +
         "{{# } else if (item.header) { }}" +
@@ -354,13 +357,16 @@ layui.define(['jquery', 'laytpl'], function (exports) {
             "height": this.option.gap * 2
         });
 
-        var maxHeight = 0;
-        this.$down.find(".dropdown-menu").each(function () {
-            maxHeight = Math.max(maxHeight, $(this).height());
-        });
-        this.$down.find(".dropdown-menu").css({
-            "height": maxHeight
-        });
+        /*if (!this._sized) {
+            var height = 0;
+            this.$down.find(".dropdown-menu").each(function () {
+                height = Math.max(height, $(this).height());
+            });
+            this.$down.find(".dropdown-menu").css({
+                "max-height": height
+            });
+            this._sized = true;
+        }*/
     };
 
     // 初始化位置信息
@@ -594,6 +600,48 @@ layui.define(['jquery', 'laytpl'], function (exports) {
     // 初始化下拉框下拉后的事件， 比如说鼠标移动到下拉框外面、点击外部等事件。
     Dropdown.prototype.initDropdownEvent = function () {
         var _this = this;
+        _this.$down.find("ul.dropdown-menu").on("mousewheel", function (e) { // DOMMouseScroll scroll
+            var $this = $(this);
+            e = e || window.event;
+            e.cancelable = true;
+            e.cancelBubble = true;
+            e.preventDefault();
+            e.stopPropagation();
+            e.stopImmediatePropagation && e.stopImmediatePropagation();
+            e.returnValue = false;
+
+            if (_this.scrolling) {return;}
+            _this.scrolling = true;
+            var delta = -e.originalEvent.wheelDelta || e.originalEvent.detail;//firefox使用detail:下3上-3,其他浏览器使用wheelDelta:下-120上120//下滚
+            if(delta>0){
+                console.log('下滚', delta);
+                // $this.scrollTop($this.scrollTop() + 20);
+                $this.animate({
+                    scrollTop: $this.scrollTop() + 70
+                }, {
+                    duration : 170,
+                    complete: function () {
+                        _this.scrolling = false;
+                        console.log("下完")
+                    }
+                });
+            }
+            //上滚
+            if(delta<0){
+                console.log('上滚', delta);
+                // $this.scrollTop($this.scrollTop() - 20);
+
+                $this.animate({
+                    scrollTop: $this.scrollTop() - 70
+                }, {
+                    duration : 170,
+                    complete: function () {
+                        _this.scrolling = false;
+                    }
+                });
+            }
+        });
+
         _this.$down.mouseenter(function () {
             _this.mic = true;
             _this.$down.focus();
