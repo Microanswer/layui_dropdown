@@ -35,59 +35,81 @@ html #layuicss-dropdown_css{display:none; position: absolute; width:1989px;}
     background-color: white;
     border-radius: 2px;
     box-shadow: 1px 1px 3px #a9a9a9;
-    /*overflow: auto;*/
-
-    display: flex;
-    justify-content: center;
-    align-items: stretch;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -ms-overflow-style: scrollbar;
 }
-.dropdown-root .dropdown-content .dropdown-menu{
-    border-right: 1px solid transparent;
+
+.dropdown-root .dropdown-content table {
+    border: none;
+}
+
+.dropdown-root .dropdown-content table th{
     padding: 0;
-    margin: 0;
+    overflow: hidden;
+}
+.dropdown-root .dropdown-content .dropdown-menu-wrap {
+    border-right: 1px solid transparent;
     overflow-y: auto;
     overflow-x: hidden;
 }
 
-.dropdown-root .dropdown-content .dropdown-menu.menu-splitor {border-right-color: #e6e6e6;}
-/*.dropdown-root .dropdown-content .dropdown-menu.overflowauto {overflow-y: auto;overflow-x: hidden}*/
+.dropdown-root .dropdown-content .dropdown-menu-fixed-head {
+    border-right: 1px solid transparent;
+    overflow: hidden;
+}
+.dropdown-root .dropdown-content .dropdown-menu-fixed-head .menu-fixed-head{
 
-.dropdown-root .dropdown-content .dropdown-menu:last-child{
-    border-right: none;
+    margin: 6px 10px 2px 10px;
+    color: #c2c2c2;
+    font-size: 12px;
+}
+.dropdown-root .dropdown-content .dropdown-menu-fixed-head.menu-splitor,
+.dropdown-root .dropdown-content .dropdown-menu-wrap.menu-splitor{border-right:1px solid #e6e6e6;}
+.dropdown-root .dropdown-content .dropdown-menu-wrap.overflowauto {overflow-y: auto;overflow-x: hidden}
+
+.dropdown-root .dropdown-content .dropdown-menu-wrap .dropdown-menu{
+    /*overflow: hidden;*/
+    padding: 0;
+    margin: 0;
 }
 
 
-.dropdown-root .dropdown-content .dropdown-menu .menu-item-wrap {
+.dropdown-root .dropdown-content .dropdown-menu-wrap .dropdown-menu .menu-item-wrap {
     list-style: none;
     outline: none;
 }
+.dropdown-root .dropdown-content .dropdown-menu-wrap .dropdown-menu .menu-item-wrap:first-child {
+    margin-top: 10px;
+}
+.dropdown-root .dropdown-content .dropdown-menu-wrap .dropdown-menu .menu-item-wrap.nomargin {
+    margin-top: 0 !important;
+}
+.dropdown-root .dropdown-content .dropdown-menu-wrap .dropdown-menu .menu-item-wrap:last-child {
+    margin-bottom: 10px;
+}
 
-.dropdown-root .dropdown-content .dropdown-menu .menu-item-wrap .menu-header:first-child {
+.dropdown-root .dropdown-content .dropdown-menu-wrap .dropdown-menu .menu-item-wrap .menu-header {
     margin-top: 6px;
 }
 
-.dropdown-root .dropdown-content .dropdown-menu .menu-item-wrap .menu-header.withLine{
+.dropdown-root .dropdown-content .dropdown-menu-wrap .dropdown-menu .menu-item-wrap .menu-header.withLine{
     margin-left:0;
     margin-bottom: 0;
     margin-right: 0;
 }
-.dropdown-root .dropdown-content .dropdown-menu .menu-item-wrap .menu-header,
-.dropdown-root .dropdown-content .dropdown-menu .menu-item-wrap .menu-header legend{
+.dropdown-root .dropdown-content .dropdown-menu-wrap .dropdown-menu .menu-item-wrap .menu-header,
+.dropdown-root .dropdown-content .dropdown-menu-wrap .dropdown-menu .menu-item-wrap .menu-header legend{
     font-size: 12px!important;
     line-height: 15px!important;
     padding: 0 10px!important;
     color: #c2c2c2;
 }
-.dropdown-root .dropdown-content .dropdown-menu .menu-item-wrap:first-child {
-    margin-top: 10px;
-}
-.dropdown-root .dropdown-content .dropdown-menu .menu-item-wrap:last-child {
-    margin-bottom: 10px;
-}
-.dropdown-root .dropdown-content .dropdown-menu .menu-item-wrap .menu-item {
+
+.dropdown-root .dropdown-content .dropdown-menu-wrap .dropdown-menu .menu-item-wrap .menu-item {
     line-height: 36px;
 }
-.dropdown-root .dropdown-content .dropdown-menu .menu-item-wrap .menu-item a{
+.dropdown-root .dropdown-content .dropdown-menu-wrap .dropdown-menu .menu-item-wrap .menu-item a{
     display: block;
     color: #333;
     padding: 0 20px;
@@ -97,7 +119,7 @@ html #layuicss-dropdown_css{display:none; position: absolute; width:1989px;}
 
     white-space: nowrap;
 }
-.dropdown-root .dropdown-content .dropdown-menu .menu-item-wrap .menu-item a:hover{
+.dropdown-root .dropdown-content .dropdown-menu-wrap .dropdown-menu .menu-item-wrap .menu-item a:hover{
     color: #000;
     background-color: #f2f2f2;
 }

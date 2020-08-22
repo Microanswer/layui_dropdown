@@ -123,58 +123,135 @@ layui.define(['jquery', 'laytpl'], function (exports) {
         return menus;
     }
 
+    /**
+     * 从菜单中寻找固定到头部的菜单。
+     * @param menus
+     */
+    function findFixHeadInMenu(menus) {
+        if (menus && menus.length > 0) {
+
+            var findCount = 0;
+            var result = new Array(menus.length);
+
+            for (var i = 0; i < menus.length; i++) {
+                var menu = menus[i];
+                for (var j = 0; j < menu.length; j++) {
+                    if (menu[j].header && menu[j].fixed) {
+                        findCount ++;
+                        result[i] = menu[j];
+                        menu.splice(j, 1);
+                        j--;
+                    }
+                }
+            }
+
+            if (findCount > 0) {
+                return result;
+            }
+        }
+
+        return null;
+    }
+
     // 允许通过为 window 设置 MICROANSWER_DROPDOWAN 变量来改变本组件的注册名。
     // 以避免将来 layui 官方加入下拉控件与本控件重名时，可让本控件依然能正常运行
     // 在另一个名称上。
     var MOD_NAME = window.MICROANSWER_DROPDOWAN || "dropdown";
 
     // 小箭头模板
-    var MENUS_POINTER_TEMPLATE = "{{# if (d.arrow){ }}<div class='dropdown-pointer'></div>{{# } }}";
-    var MENUS_TEMPLATE_START = "<div tabindex='0' " +
-        "class='layui-anim layui-anim-upbit dropdown-root' " + MOD_NAME + "-id='{{d.downid}}' " +
-        "style='display: none;z-index: {{d.zIndex}}'>" +
-        MENUS_POINTER_TEMPLATE +
-        "<div class='dropdown-content' " +
-        "style='" +
-        "margin: {{d.gap}}px {{d.gap}}px;" +
-        "background-color: {{d.backgroundColor}};" +
-        "min-width: {{d.minWidth}}px;" +
-        "max-width: {{d.maxWidth}}px;" +
-        "min-height: {{d.minHeight}}px;" +
-        "max-height: {{d.maxHeight}}px;" +
-        "white-space: {{d.nowrap?\"nowrap\":\"normal\"}}'>"; /*nowrap只有在显示菜单的时候不准换行，自定义下拉是可以换行的。*/
-    var MENUS_TEMPLATE_END = "</div></div>";
+    var MENUS_POINTER_TEMPLATE = "" +
+        "{{# if (d.arrow){ }}" +
+            "<div class='dropdown-pointer'></div>" +
+        "{{# } }}";
+
+    var MENUS_TEMPLATE_START = "" +
+        "<div tabindex='0' " +
+            "class='layui-anim layui-anim-upbit dropdown-root' " + MOD_NAME + "-id='{{d.downid}}' " +
+            "style='display: none;z-index: {{d.zIndex}}'" +
+        ">" +
+            MENUS_POINTER_TEMPLATE +
+            "<div class='dropdown-content' " +
+                "style='" +
+                    "margin: {{d.gap}}px {{d.gap}}px;" +
+                    "background-color: {{d.backgroundColor}};" +
+                    "min-width: {{d.minWidth}}px;" +
+                    "max-width: {{d.maxWidth}}px;" +
+                    "min-height: {{d.minHeight}}px;" +
+                    "max-height: {{d.maxHeight}}px;" +
+                    "white-space: {{d.nowrap?\"nowrap\":\"normal\"}}" + /*nowrap只有在显示菜单的时候不准换行，自定义下拉是可以换行的。*/
+                "'" +
+            ">";
+                var MENUS_TEMPLATE_END = "" +
+            "</div>" +
+        "</div>";
 
 
     // 菜单项目模板。
-    var MENUS_TEMPLATE =
-        MENUS_TEMPLATE_START +
-        "{{# layui.each(d.menus, function(i, menu){ }}<ul class='dropdown-menu {{d.menuSplitor?'menu-splitor':''}} overflowauto' style='" +
-        "min-height: {{d.minHeight}}px;" +
-        "max-height: {{d.maxHeight}}px;" +
-        "'>{{# layui.each(menu, function(index, item){ }}" +
-        "<li class='menu-item-wrap'>" +
-        "{{# if ('hr' === item) { }}" +
-        "<hr>" +
-        "{{# } else if (item.header) { }}" +
-        "{{# if (item.withLine) { }}" +
-        "<fieldset class=\"layui-elem-field layui-field-title menu-header withLine\">" +
-        "<legend>{{item.header}}</legend>" +
-        "</fieldset>" +
-        "{{# } else { }}" +
-        "<div class='menu-header' style='text-align: {{item.align||\'left\'}}'>{{item.header}}</div>" +
-        "{{# } }}" +
-        "{{# } else { }}" +
-        "<div class='menu-item'>" +
-        "<a href='javascript:;' lay-event='{{item.event}}'>" +
-        "{{# if (item.layIcon){ }}" +
-        "<i class='layui-icon {{item.layIcon}}'></i>&nbsp;" +
-        "{{# } }}" +
-        "<span class='{{item.txtClass||\"\"}}'>{{item.txt}}</span>" +
-        "</a>" +
-        "</div>" +
-        "{{# } }}</li>" +
-        "{{# }); }}</ul>{{#});}}" +
+    var MENUS_TEMPLATE = MENUS_TEMPLATE_START +
+        "<table cellpadding='0' cellspacing='0'>" +
+            "{{# if (d.fixHeaders && d.fixHeaders.length > 0){ }}" +
+                "<thead>" +
+                    "<tr>" +
+                        "{{# layui.each(d.fixHeaders, function(i, fixHeader){ }}" +
+                            "{{# if (fixHeader) { }}" +
+                                "<th>" +
+                                    "<div class='dropdown-menu-fixed-head {{(d.menuSplitor && i < (d.menus.length-1))?\"menu-splitor\":\"\"}}'>" +
+                                        "<div class='menu-fixed-head' style='" +
+                                            "text-align: {{fixHeader.align||\"left\"}}" +
+                                        "'>{{fixHeader.txt}}</div>" +
+                                    "</div>" +
+                                "</th>" +
+                            "{{# } else { }}" +
+                                "<th>" +
+                                    "<div class='dropdown-menu-fixed-head {{(d.menuSplitor && i < (d.menus.length-1))?\"menu-splitor\":\"\"}}'>" +
+                                        "<div class='menu-fixed-head'>&nbsp;</div>" +
+                                    "</div>" +
+                                "</th>" +
+                            "{{# } }}" +
+                        "{{# }); }}" +
+                    "</tr>" +
+                "</thead>" +
+            "{{# } }}" +
+            "<tbody>" +
+                "<tr>" +
+                    "{{# layui.each(d.menus, function(i, menu){ }}" +
+                        "<td valign='top'>" +
+                            "<div class='dropdown-menu-wrap {{(d.menuSplitor && i < (d.menus.length-1))?\"menu-splitor\":\"\"}} overflowauto' style='" +
+                                "min-height: {{d.minHeight}}px;" +
+                                "max-height: {{d.maxHeight - ((d.fixHeaders)?24:0)}}px;" +
+                            "'>" +
+                                "<ul class='dropdown-menu' style=''>" +
+                                    "{{# layui.each(menu, function(index, item){ }}" +
+                                        "<li class='menu-item-wrap {{(d.fixHeaders && d.fixHeaders.length) > 0?\"nomargin\":\"\"}}'>" +
+                                            "{{# if ('hr' === item) { }}" +
+                                                "<hr>" +
+                                            "{{# } else if (item.header) { }}" +
+                                                "{{# if (item.withLine) { }}" +
+                                                    "<fieldset class=\"layui-elem-field layui-field-title menu-header withLine\">" +
+                                                        "<legend>{{item.header}}</legend>" +
+                                                    "</fieldset>" +
+                                                "{{# } else { }}" +
+                                                    "<div class='menu-header' style='text-align: {{item.align||\"left\"}}'>{{item.header}}</div>" +
+                                                "{{# } }}" +
+                                            "{{# } else { }}" +
+                                                "<div class='menu-item'>" +
+                                                    "<a href='javascript:;' lay-event='{{item.event}}'>" +
+                                                        "{{# if (item.layIcon){ }}" +
+                                                            "<i class='layui-icon {{item.layIcon}}'></i>&nbsp;" +
+                                                        "{{# } }}" +
+                                                        "<span class='{{item.txtClass||\"\"}}'>{{item.txt}}</span>" +
+                                                    "</a>" +
+                                                "</div>" +
+                                            "{{# } }}" +
+                                        "</li>" +
+                                    "{{# }); }}" +
+                                "</ul>" +
+                            "</div>" +
+                        "</td>" +
+                    "{{#});}}" +
+                "</tr>" +
+            "</tbody>" +
+        "</table>" +
         MENUS_TEMPLATE_END;
 
 
@@ -290,7 +367,7 @@ layui.define(['jquery', 'laytpl'], function (exports) {
             if (!Array.isArray(menu)) { // 并不是多列。处理为多列。
                 _this.option.menus = [_this.option.menus];
             }
-
+            _this.option.fixHeaders = findFixHeadInMenu(_this.option.menus);
             _this.option.nowrap = true;
             laytpl(MENUS_TEMPLATE).render(_this.option, function (html) {
 
@@ -301,7 +378,7 @@ layui.define(['jquery', 'laytpl'], function (exports) {
             });
         } else if(_this.option.templateMenu) {
             // 配置了模板菜单
-            hasDrop = false;
+            hasDrop = true;
             var templateMenu;
             if (_this.option.templateMenu.indexOf("#") === -1) {
                 templateMenu = "#" + _this.option.templateMenu;
@@ -313,6 +390,7 @@ layui.define(['jquery', 'laytpl'], function (exports) {
 
             laytpl($(templateMenu).text()).render(data, function (str) {
                 _this.option.menus = parseTemplateMenu(str, _this.option.templateMenuSptor);
+                _this.option.fixHeaders = findFixHeadInMenu(_this.option.menus);
                 _this.option.nowrap = true;
                 laytpl(MENUS_TEMPLATE).render(_this.option, function (html) {
 
@@ -357,64 +435,72 @@ layui.define(['jquery', 'laytpl'], function (exports) {
             "height": this.option.gap * 2
         });
 
-        /*if (!this._sized) {
+        if (!this._sized) {
             var height = 0;
-            this.$down.find(".dropdown-menu").each(function () {
+            this.$down.find(".dropdown-menu-wrap").each(function () {
                 height = Math.max(height, $(this).height());
             });
-            this.$down.find(".dropdown-menu").css({
-                "max-height": height
+            this.$down.find(".dropdown-menu-wrap").css({
+                "height": height
             });
             this._sized = true;
-        }*/
+        }
     };
 
     // 初始化位置信息
     Dropdown.prototype.initPosition = function () {
-        if (!this.$down) {
-            return;
-        }
+        if (!this.$down) {return;}
 
-        var btnOffset = this.$dom.offset();
-        var btnHeight = this.$dom.outerHeight();
-        var btnWidth = this.$dom.outerWidth();
-        var btnLeft = btnOffset.left;
-        var btnTop = btnOffset.top - window.pageYOffset;
-
+        var btnOffset  = this.$dom.offset();
+        var btnHeight  = this.$dom.outerHeight();
+        var btnWidth   = this.$dom.outerWidth();
+        var btnLeft    = btnOffset.left;
+        var btnTop     = btnOffset.top - window.pageYOffset;
         var downHeight = this.$down.outerHeight();
-        var downWidth = this.$down.outerWidth();
+        var downWidth  = this.$down.outerWidth();
 
         var downLeft;
         var downTop;
         var pointerLeft;  // 箭头左边偏移量
-        var pointerTop; // 箭头右边偏移量
+        var pointerTop; // 箭头上边偏移量
         if (this.option.align === 'right') {
             downLeft = (btnLeft + btnWidth) - downWidth + this.option.gap;
-            pointerLeft = -(Math.min(downWidth - (this.option.gap * 2), btnWidth) / 2);
         } else if (this.option.align === 'center') {
             downLeft = btnLeft + ((btnWidth - downWidth) / 2);
-            pointerLeft = (downWidth - (this.option.gap * 2)) / 2;
         } else {
             downLeft = btnLeft - this.option.gap;
-            pointerLeft = Math.min(downWidth - (this.option.gap * 2), btnWidth) / 2;
         }
-        downTop = btnHeight + btnTop;// + this.option.gap;
+        downTop = btnHeight + btnTop; // + this.option.gap;
+
+        // 检测是否超出浏览器边缘 downLeft 是一个不包含 gap 的结果。所以这里要算上一个gap。
+        if (downLeft + downWidth >= window.innerWidth) {
+            downLeft = window.innerWidth - downWidth - (this.option.gap * 2);
+        }
+
+        // 计算箭头左侧坐标。
+        if (btnLeft > downLeft) {
+            if (downWidth > btnWidth) {
+                pointerLeft = btnLeft - downLeft + (btnWidth / 2);
+            } else {
+                pointerLeft = downWidth / 2;
+            }
+        } else /*downLeft >= btnLeft*/{
+            if (downWidth > btnWidth) {
+                pointerLeft = downLeft + ((btnLeft + btnWidth - downLeft) / 2);
+            } else {
+                pointerLeft = downWidth / 2;
+            }
+        }
+        pointerLeft -= this.option.gap;
+
 
         var pt = this.$arrowDom;
         // var pointerHeigt = Math.pow(this.option.gap, 2) / Math.sqrt(Math.pow(this.option.gap, 2)*2);
         pointerTop = -this.option.gap;
 
-        if (pointerLeft > 0) {
-            pt.css("left", pointerLeft);
-            pt.css("right", "unset");
-        } else {
-            pt.css("left", "unset");
-            pt.css("right", (-1 * pointerLeft));
-        }
-        // 检测是否超出浏览器边缘
-        if (downLeft + downWidth >= window.innerWidth) {
-            downLeft = window.innerWidth - downWidth + this.option.gap;
-        }
+        pt.css("left", pointerLeft);
+        pt.css("right", "unset");
+
         if (downTop + downHeight >= window.innerHeight) {
             downTop = btnTop - downHeight;// - this.option.gap;
             pointerTop = downHeight - (this.option.gap); //(pointerHeigt * 2) - 1;
@@ -600,7 +686,7 @@ layui.define(['jquery', 'laytpl'], function (exports) {
     // 初始化下拉框下拉后的事件， 比如说鼠标移动到下拉框外面、点击外部等事件。
     Dropdown.prototype.initDropdownEvent = function () {
         var _this = this;
-        _this.$down.find("ul.dropdown-menu").on("mousewheel", function (e) { // DOMMouseScroll scroll
+        _this.$down.find(".dropdown-menu-wrap").on("mousewheel", function (e) { // DOMMouseScroll scroll
             var $this = $(this);
             e = e || window.event;
             e.cancelable = true;
@@ -612,24 +698,21 @@ layui.define(['jquery', 'laytpl'], function (exports) {
 
             if (_this.scrolling) {return;}
             _this.scrolling = true;
-            var delta = -e.originalEvent.wheelDelta || e.originalEvent.detail;//firefox使用detail:下3上-3,其他浏览器使用wheelDelta:下-120上120//下滚
-            if(delta>0){
-                console.log('下滚', delta);
-                // $this.scrollTop($this.scrollTop() + 20);
+
+            // firefox使用detail:下3上-3,其他浏览器使用wheelDelta:下-120上120
+            var delta = -e.originalEvent.wheelDelta || e.originalEvent.detail;
+            if(delta > 0) { // 下滚
                 $this.animate({
                     scrollTop: $this.scrollTop() + 70
                 }, {
                     duration : 170,
                     complete: function () {
                         _this.scrolling = false;
-                        console.log("下完")
                     }
                 });
             }
-            //上滚
-            if(delta<0){
-                console.log('上滚', delta);
-                // $this.scrollTop($this.scrollTop() - 20);
+
+            if(delta < 0) { // 上滚
 
                 $this.animate({
                     scrollTop: $this.scrollTop() - 70
