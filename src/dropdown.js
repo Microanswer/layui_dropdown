@@ -197,8 +197,8 @@ layui.define(['jquery', 'laytpl'], function (exports) {
                                 "<th>" +
                                     "<div class='dropdown-menu-fixed-head {{(d.menuSplitor && i < (d.menus.length-1))?\"menu-splitor\":\"\"}}'>" +
                                         "<div class='menu-fixed-head' style='" +
-                                            "text-align: {{fixHeader.align||\"left\"}}" +
-                                        "'>{{fixHeader.txt}}</div>" +
+                                            "text-align: {{fixHeader.align||\"center\"}}" +
+                                        "'>{{fixHeader.header}}</div>" +
                                     "</div>" +
                                 "</th>" +
                             "{{# } else { }}" +
@@ -686,7 +686,9 @@ layui.define(['jquery', 'laytpl'], function (exports) {
     // 初始化下拉框下拉后的事件， 比如说鼠标移动到下拉框外面、点击外部等事件。
     Dropdown.prototype.initDropdownEvent = function () {
         var _this = this;
-        _this.$down.find(".dropdown-menu-wrap").on("mousewheel", function (e) { // DOMMouseScroll scroll
+
+        // 这段是启用内部滚动实现，以免在菜单内滚动时，会影响外部界面的滚动，但是这宾不能管理到笔记本触摸板上的滚动。
+        _this.$down.find(".dropdown-menu-wrap").on("mousewheel", function (e) {
             var $this = $(this);
             e = e || window.event;
             e.cancelable = true;
@@ -696,32 +698,36 @@ layui.define(['jquery', 'laytpl'], function (exports) {
             e.stopImmediatePropagation && e.stopImmediatePropagation();
             e.returnValue = false;
 
-            if (_this.scrolling) {return;}
-            _this.scrolling = true;
+            if (_this.scrolling) {
+                $this.finish(); // 立即完成没有完成的动画。
+            }
 
             // firefox使用detail:下3上-3,其他浏览器使用wheelDelta:下-120上120
             var delta = -e.originalEvent.wheelDelta || e.originalEvent.detail;
             if(delta > 0) { // 下滚
+                if (delta > 50) {delta = 50;}
+                _this.scrolling = true;
                 $this.animate({
-                    scrollTop: $this.scrollTop() + 70
+                    scrollTop: $this.scrollTop() + delta
                 }, {
                     duration : 170,
                     complete: function () {
                         _this.scrolling = false;
                     }
                 });
-            }
-
-            if(delta < 0) { // 上滚
-
+            } else if(delta < 0) { // 上滚
+                if (delta < -50) {delta = -50;}
+                _this.scrolling = true;
                 $this.animate({
-                    scrollTop: $this.scrollTop() - 70
+                    scrollTop: $this.scrollTop() + delta
                 }, {
                     duration : 170,
                     complete: function () {
                         _this.scrolling = false;
                     }
                 });
+            } else /* delta === 0 */{
+                _this.scrolling = false;
             }
         });
 

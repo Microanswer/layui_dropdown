@@ -76,7 +76,18 @@
             <i class="layui-icon layui-icon-triangle-d"></i>
         </button></div>
     </p>
-    <p class="bold">2、Hover触发：</p>
+    <p class="bold">2、固定菜单头</p>
+    <p>
+    <div class="m-inline"><button class="layui-btn layui-btn-sm" lay-filter="test_f_1" lay-dropdown="{templateMenu: 'test_f_1_template', maxHeight: 220}">
+        <span>固定菜单头示例1</span>
+        <i class="layui-icon layui-icon-triangle-d"></i>
+    </button></div>、
+    <div class="m-inline"><button class="layui-btn layui-btn-sm" lay-filter="test_f_2" lay-dropdown="{templateMenu: 'test_f_2_template', maxHeight: 220}">
+        <span>固定菜单头示例2</span>
+        <i class="layui-icon layui-icon-triangle-d"></i>
+    </button></div>、
+    </p>
+    <p class="bold">3、Hover触发：</p>
     <p>
         <button class="layui-btn layui-btn-sm" lay-filter="test7"
                 lay-dropdown="{showBy: 'hover',align:'left', menus: [{layIcon:'layui-icon-username',txt: '个人中心', event:'usercenter'}, {layIcon: 'layui-icon-set',txt: '设置', event:'set'}, {layIcon: 'layui-icon-logout', txt: '退出登录', event:'loginout'}]}">
@@ -84,7 +95,7 @@
             <i class="layui-icon layui-icon-triangle-d"></i>
         </button>
     </p>
-    <p class="bold">3、自定义下拉内容：</p>
+    <p class="bold">4、自定义下拉内容：</p>
     <p>
     <div class="m-inline"><button class="layui-btn layui-btn-sm" lay-filter="test8">
             <span>下拉自定义内容</span>
@@ -95,7 +106,7 @@
             <i class="layui-icon layui-icon-triangle-d"></i>
         </button></div>
     </p>
-    <p class="bold">4、任意下拉触发器：</p>
+    <p class="bold">5、任意下拉触发器：</p>
     <p>
         <small>点击这个小图片弹出下拉:</small><img style="width: 20px;height: 20px;background-color: #ff6619;border-radius: 50%"
                                         src="https://file.microanswer.cn/microanswer_head.png"
@@ -103,13 +114,13 @@
                                         lay-dropdown="{align:'left', menus: [{layIcon:'layui-icon-username',txt: '个人中心', event:'usercenter'}, {layIcon: 'layui-icon-set',txt: '设置', event:'set'}, {layIcon: 'layui-icon-logout', txt: '退出登录', event:'loginout'}]}">
     </p>
     <br>
-    <p class="bold">5、多列菜单</p>
+    <p class="bold">6、多列菜单</p>
     <p>
     <div class="m-inline"><button class="layui-btn layui-btn-sm" lay-filter="test_m_1" lay-dropdown="{templateMenu: 'test_m_1_template', templateMenuSptor:'()'}">
         <span>双列下拉菜单</span>
         <i class="layui-icon layui-icon-triangle-d"></i>
     </button></div>、
-    <div class="m-inline"><button class="layui-btn layui-btn-sm" lay-filter="test_m_2" lay-dropdown="{templateMenu: 'test_m_2_template', maxHeight:240, menuSplitor: false}">
+    <div class="m-inline"><button class="layui-btn layui-btn-sm" lay-filter="test_m_2" lay-dropdown="{templateMenu: 'test_m_2_template', menuSplitor: false}">
         <span>三列下拉菜单</span>
         <i class="layui-icon layui-icon-triangle-d"></i>
     </button></div>、
@@ -122,15 +133,15 @@
         <i class="layui-icon layui-icon-triangle-d"></i>
     </button></div>
     </p>
-    <p class="bold">6、在表格里使用：</p>
+    <p class="bold">7、在表格里使用：</p>
     <p>
     <table id="mytable" lay-filter="table1"></table>
     </p>
-    <p class="bold">7、在表格里使用，并支持表格数据操作：</p>
+    <p class="bold">8、在表格里使用，并支持表格数据操作：</p>
     <p>
     <table id="mytable2" lay-filter="table2"></table>
     </p>
-    <p class="bold">8、手动显示与隐藏(v2.0.1)：</p>
+    <p class="bold">9、手动显示与隐藏(v2.0.1)：</p>
     <p>
         <button class="layui-btn layui-btn-sm" title="此按钮已被置为disabled，使用右侧按钮操作" disabled lay-filter="test_man" lay-dropdown="{align:'left', menus: [{layIcon:'layui-icon-username',txt: '个人中心', event:'usercenter'}, {layIcon: 'layui-icon-set',txt: '设置', event:'set'}, {layIcon: 'layui-icon-logout', txt: '退出登录', event:'loginout'}]}">手动显示隐藏</button>
         <button class="layui-btn layui-btn-sm layui-btn-warm test_man_show">显示</button><span></span>
@@ -150,18 +161,77 @@
     </script>
 </div>
 
+<!-- 固定菜单头示例1 -->
+<script id="test_f_1_template" type="text/plain">
+
+  [
+    [{header: "左对齐", fixed: true, align: "left"}]
+    [{txt: "个人中心1", event: "usercenter"}]
+    [{txt: "头像设置", event: "sethead"}]
+    [{txt: "我的礼包", event: "wdlb"}]
+    [{txt: "我的好友", event: "wdhy"}]
+    [{txt: "我的积分", event: "wdjf"}]
+    [{txt: "账号充值", event: "zhcz"}]
+    [{txt: "注销账号", event: "desctroy"}]
+  ]
+
+  [
+    [{header: "后台", fixed: true, align: "left"}]
+    [{txt: "赠送红包", event: "redp"}]
+    [{txt: "缴费通知", event: "qftt"}]
+    [{txt: "强制下线", event: "offline"}]
+    [{txt: "注销账户", event: "desctroy"}]
+    [{txt: "提升权限", event: "tsqx"}]
+    [{txt: "卸载权限", event: "xzqx"}]
+    [{txt: "分配任务", event: "fprw"}]
+    [{txt: "增加人手", event: "zjrs"}]
+    [{txt: "限制浏览", event: "xzll"}]
+  ]
+
+</script>
+
+
+<!-- 固定菜单头示例2 -->
+<script id="test_f_2_template" type="text/plain">
+
+  [
+    [{header: "右对齐", fixed: true, align: "right"}]
+    [{txt: "个人中心1", event: "usercenter"}]
+    [{txt: "头像设置", event: "sethead"}]
+    [{txt: "我的礼包", event: "wdlb"}]
+    [{txt: "我的好友", event: "wdhy"}]
+    [{txt: "我的积分", event: "wdjf"}]
+    [{txt: "账号充值", event: "zhcz"}]
+    [{txt: "注销账号", event: "desctroy"}]
+  ]
+
+  [
+    [{header: "右对齐", fixed: true, align: "right"}]
+    [{txt: "赠送红包", event: "redp"}]
+    [{txt: "缴费通知", event: "qftt"}]
+    [{txt: "强制下线", event: "offline"}]
+    [{txt: "注销账户", event: "desctroy"}]
+    [{txt: "提升权限", event: "tsqx"}]
+    [{txt: "卸载权限", event: "xzqx"}]
+    [{txt: "分配任务", event: "fprw"}]
+    [{txt: "增加人手", event: "zjrs"}]
+    [{txt: "限制浏览", event: "xzll"}]
+  ]
+
+</script>
+
 <!-- 双列下拉 菜单配置模板 -->
 <script id="test_m_1_template" type="text/plain">
 
   (
-    ({txt: "菜单1", header: true, fixed: true, align: "center"})
+    ({header: "菜单1", fixed: true, align: "center"})
     ({txt: "个人中心1", event: "usercenter"})
     ({txt: "头像设置", event: "sethead"})
     ({txt: "注销账号", event: "desctroy"})
   )
 
   (
-    ({txt: "菜单2", header: true, fixed: true, align: "center"})
+    ({header: "菜单2", fixed: true, align: "center"})
     ({txt: "赠送红包", event: "redp"})
     ({txt: "缴费通知", event: "qftt"})
     ({txt: "强制下线", event: "offline"})
@@ -173,54 +243,28 @@
 <script id="test_m_2_template" type="text/plain">
 
   [
-    [{txt: "常规", header: true, fixed: true}]
+    [{header: "通用功能", fixed: true}]
     [{txt: "个人中心", event: "usercenter"}]
     [{txt: "头像设置", event: "sethead"}]
     [{txt: "注销账号", event: "desctroy"}]
     [{txt: "赠送红包", event: "redp"}]
     [{txt: "缴费通知", event: "qftt"}]
     [{txt: "强制下线", event: "offline"}]
-    [{txt: "强制下线", event: "offline"}]
-    [{txt: "强制下线", event: "offline"}]
-    [{txt: "强制下线", event: "offline"}]
-    [{txt: "强制下线", event: "offline"}]
-    [{txt: "强制下线", event: "offline"}]
-    [{txt: "强制下线", event: "offline"}]
-    [{txt: "强制下线", event: "offline"}]
   ]
 
   [
+    [{header: "账号管理", fixed: true}]
     [{txt: "添加好友", event: "addff"}]
-    [{txt: "赠送key码", event: "zskm"}]
-    [{txt: "赠送key码", event: "zskm"}]
-    [{txt: "赠送key码", event: "zskm"}]
-    [{txt: "赠送key码", event: "zskm"}]
-    [{txt: "赠送key码", event: "zskm"}]
-    [{txt: "赠送key码", event: "zskm"}]
-    [{txt: "赠送key码", event: "zskm"}]
-    [{txt: "赠送key码", event: "zskm"}]
-    [{txt: "赠送key码", event: "zskm"}]
-    [{txt: "赠送key码", event: "zskm"}]
-    [{txt: "赠送key码", event: "zskm"}]
     [{txt: "赠送key码", event: "zskm"}]
     [{txt: "账号升级", event: "upad"}]
   ]
 
 
   [
-    [{txt: "添加对象", event: "addfdf"}]
+    [{header: "高危操作", fixed: true}]
     [{txt: "添加对象", event: "addfdf"}]
     [{txt: "移除对象", event: "rbdd"}]
     [{txt: "账号详情", event: "detaa"}]
-    [{txt: "账号详情", event: "detaa"}]
-    [{txt: "账号详情", event: "detaa"}]
-    [{txt: "账号详情", event: "detaa"}]
-    [{txt: "账号详情", event: "detaa"}]
-    [{txt: "账号详情", event: "detaa"}]
-    [{txt: "账号详情", event: "detaa"}]
-    [{txt: "账号详情", event: "detaa"}]
-    [{txt: "账号详情", event: "detaa"}]
-    [{txt: "其他", header: true, fixed: true}]
   ]
 
 </script>

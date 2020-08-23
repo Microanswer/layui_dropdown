@@ -60,7 +60,7 @@ html #layuicss-dropdown_css{display:none; position: absolute; width:1989px;}
 }
 .dropdown-root .dropdown-content .dropdown-menu-fixed-head .menu-fixed-head{
 
-    margin: 6px 10px 2px 10px;
+    margin: 6px 14px 2px 14px;
     color: #c2c2c2;
     font-size: 12px;
 }
@@ -102,7 +102,7 @@ html #layuicss-dropdown_css{display:none; position: absolute; width:1989px;}
 .dropdown-root .dropdown-content .dropdown-menu-wrap .dropdown-menu .menu-item-wrap .menu-header legend{
     font-size: 12px!important;
     line-height: 15px!important;
-    padding: 0 10px!important;
+    padding: 0 14px!important;
     color: #c2c2c2;
 }
 

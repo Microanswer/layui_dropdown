@@ -5,7 +5,7 @@ const uglify    = require('gulp-uglify');
 const minifyCss = require('gulp-minify-css');
 const pkg       = require('./package.json');
 
-let note = ["/* <%=name%> v<%=version%> by <%= author %>,doc:<%= url %> */\n", pkg];
+let note = ["/* <%=name%> v<%=version%> by <%= author %>,website:<%= url %> */\n", pkg];
 
 gulp.task("makejs", function () {
     let js = ['src/*.js'];
