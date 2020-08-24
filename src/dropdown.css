@@ -40,8 +40,31 @@ html #layuicss-dropdown_css{display:none; position: absolute; width:1989px;}
     -ms-overflow-style: scrollbar;
 }
 
-.dropdown-root .dropdown-content table {
-    border: none;
+.dropdown-root .dropdown-content table,
+.layui-table .dropdown-root .dropdown-content table th,
+.layui-table .dropdown-root .dropdown-content table td{
+    border: none unset;
+    text-align: unset;
+    font-weight: normal;
+    min-height: unset;
+    font-size: 12px;
+    line-height: 12px;
+    padding-top: 0;
+    padding-bottom: 0;
+
+}
+
+.layui-table .dropdown-root .dropdown-content table th {
+    font-weight: bold;
+}
+
+.layui-table .dropdown-root .dropdown-content table thead tr,
+.layui-table .dropdown-root .dropdown-content table thead tr:hover,
+.layui-table .dropdown-root .dropdown-content table tbody tr,
+.layui-table .dropdown-root .dropdown-content table tbody tr:hover,
+.layui-table .dropdown-root .dropdown-content table tr,
+.layui-table .dropdown-root .dropdown-content table tr:hover {
+    background-color: unset;
 }
 
 .dropdown-root .dropdown-content table th{
@@ -118,6 +141,9 @@ html #layuicss-dropdown_css{display:none; position: absolute; width:1989px;}
     font-size: 14px;
 
     white-space: nowrap;
+
+    transition-duration: 300ms;
+    -webkit-transition-duration: 300ms;
 }
 .dropdown-root .dropdown-content .dropdown-menu-wrap .dropdown-menu .menu-item-wrap .menu-item a:hover{
     color: #000;
