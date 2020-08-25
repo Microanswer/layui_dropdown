@@ -179,8 +179,7 @@ layui.define(['jquery', 'laytpl'], function (exports) {
                     "min-height: {{d.minHeight}}px;" +
                     "max-height: {{d.maxHeight}}px;" +
                     "white-space: {{d.nowrap?\"nowrap\":\"normal\"}}" + /*nowrap只有在显示菜单的时候不准换行，自定义下拉是可以换行的。*/
-                "'" +
-            ">";
+            "'>";
                 var MENUS_TEMPLATE_END = "" +
             "</div>" +
         "</div>";
@@ -188,19 +187,19 @@ layui.define(['jquery', 'laytpl'], function (exports) {
 
     // 菜单项目模板。
     var MENUS_TEMPLATE = MENUS_TEMPLATE_START +
-        "<table cellpadding='0' cellspacing='0'>" +
+        "<div class='dropdown-content-table' cellpadding='0' cellspacing='0'>" +
             "{{# if (d.fixHeaders && d.fixHeaders.length > 0){ }}" +
-                "<thead>" +
-                    "<tr>" +
+                "<div class='dropdown-content-thead'>" +
+                    "<div class='dropdown-content-tr'>" +
                         "{{# layui.each(d.fixHeaders, function(i, fixHeader){ }}" +
                             "{{# if (fixHeader) { }}" +
-                                "<th>" +
+                                "<div class='dropdown-content-th'>" +
                                     "<div class='dropdown-menu-fixed-head {{(d.menuSplitor && i < (d.menus.length-1))?\"menu-splitor\":\"\"}}'>" +
                                         "<div class='menu-fixed-head' style='" +
                                             "text-align: {{fixHeader.align||\"center\"}}" +
                                         "'>{{fixHeader.header}}</div>" +
                                     "</div>" +
-                                "</th>" +
+                                "</div>" +
                             "{{# } else { }}" +
                                 "<th>" +
                                     "<div class='dropdown-menu-fixed-head {{(d.menuSplitor && i < (d.menus.length-1))?\"menu-splitor\":\"\"}}'>" +
@@ -209,13 +208,13 @@ layui.define(['jquery', 'laytpl'], function (exports) {
                                 "</th>" +
                             "{{# } }}" +
                         "{{# }); }}" +
-                    "</tr>" +
-                "</thead>" +
+                    "</div>" +
+                "</div>" +
             "{{# } }}" +
-            "<tbody>" +
-                "<tr>" +
+            "<div class='dropdown-content-tbody'>" +
+                "<div class='dropdown-content-tr'>" +
                     "{{# layui.each(d.menus, function(i, menu){ }}" +
-                        "<td valign='top'>" +
+                        "<div class='dropdown-content-td' valign='top'>" +
                             "<div class='dropdown-menu-wrap {{(d.menuSplitor && i < (d.menus.length-1))?\"menu-splitor\":\"\"}} overflowauto' style='" +
                                 "min-height: {{d.minHeight}}px;" +
                                 "max-height: {{d.maxHeight - ((d.fixHeaders)?24:0)}}px;" +
@@ -247,11 +246,11 @@ layui.define(['jquery', 'laytpl'], function (exports) {
                                     "{{# }); }}" +
                                 "</ul>" +
                             "</div>" +
-                        "</td>" +
+                        "</div>" +
                     "{{#});}}" +
-                "</tr>" +
-            "</tbody>" +
-        "</table>" +
+                "</div>" +
+            "</div>" +
+        "</div>" +
         MENUS_TEMPLATE_END;
 
 

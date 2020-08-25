@@ -7,6 +7,7 @@ html #layuicss-dropdown_css{display:none; position: absolute; width:1989px;}
 .dropdown-root {
     position: fixed;
     outline: none;
+    overflow: hidden;
 }
 
 .dropdown-pointer {
@@ -33,16 +34,28 @@ html #layuicss-dropdown_css{display:none; position: absolute; width:1989px;}
 
 .dropdown-root .dropdown-content {
     background-color: white;
-    border-radius: 2px;
-    box-shadow: 1px 1px 3px #a9a9a9;
+    border-radius: 3px;
+    box-shadow: 1px 1px 5px #979797;
     overflow-x: auto;
     overflow-y: hidden;
-    -ms-overflow-style: scrollbar;
+}
+.dropdown-root .dropdown-content .dropdown-content-table {
+    display: table;
+}
+.dropdown-root .dropdown-content .dropdown-content-table .dropdown-content-thead {
+    display: table-header-group;
+}
+.dropdown-root .dropdown-content .dropdown-content-table .dropdown-content-tbody {
+    display: table-row-group;
+}
+.dropdown-root .dropdown-content .dropdown-content-table .dropdown-content-tr {
+    display: table-row;
 }
 
-.dropdown-root .dropdown-content table,
-.layui-table .dropdown-root .dropdown-content table th,
-.layui-table .dropdown-root .dropdown-content table td{
+.dropdown-root .dropdown-content .dropdown-content-table,
+.dropdown-root .dropdown-content .dropdown-content-table .dropdown-content-th,
+.dropdown-root .dropdown-content .dropdown-content-table .dropdown-content-td {
+    display: table-cell;
     border: none unset;
     text-align: unset;
     font-weight: normal;
@@ -51,26 +64,19 @@ html #layuicss-dropdown_css{display:none; position: absolute; width:1989px;}
     line-height: 12px;
     padding-top: 0;
     padding-bottom: 0;
-
 }
 
-.layui-table .dropdown-root .dropdown-content table th {
+
+.dropdown-root .dropdown-content .dropdown-content-table .dropdown-content-th {
     font-weight: bold;
 }
 
-.layui-table .dropdown-root .dropdown-content table thead tr,
-.layui-table .dropdown-root .dropdown-content table thead tr:hover,
-.layui-table .dropdown-root .dropdown-content table tbody tr,
-.layui-table .dropdown-root .dropdown-content table tbody tr:hover,
-.layui-table .dropdown-root .dropdown-content table tr,
-.layui-table .dropdown-root .dropdown-content table tr:hover {
+
+.dropdown-root .dropdown-content .dropdown-content-table .dropdown-content-tr,
+.dropdown-root .dropdown-content .dropdown-content-table .dropdown-content-tr:hover {
     background-color: unset;
 }
 
-.dropdown-root .dropdown-content table th{
-    padding: 0;
-    overflow: hidden;
-}
 .dropdown-root .dropdown-content .dropdown-menu-wrap {
     border-right: 1px solid transparent;
     overflow-y: auto;
@@ -84,11 +90,11 @@ html #layuicss-dropdown_css{display:none; position: absolute; width:1989px;}
 .dropdown-root .dropdown-content .dropdown-menu-fixed-head .menu-fixed-head{
 
     margin: 6px 14px 2px 14px;
-    color: #c2c2c2;
+    color: #a8a8a8;
     font-size: 12px;
 }
 .dropdown-root .dropdown-content .dropdown-menu-fixed-head.menu-splitor,
-.dropdown-root .dropdown-content .dropdown-menu-wrap.menu-splitor{border-right:1px solid #e6e6e6;}
+.dropdown-root .dropdown-content .dropdown-menu-wrap.menu-splitor{border-right:1px solid #D9D9D9;}
 .dropdown-root .dropdown-content .dropdown-menu-wrap.overflowauto {overflow-y: auto;overflow-x: hidden}
 
 .dropdown-root .dropdown-content .dropdown-menu-wrap .dropdown-menu{
@@ -126,7 +132,7 @@ html #layuicss-dropdown_css{display:none; position: absolute; width:1989px;}
     font-size: 12px!important;
     line-height: 15px!important;
     padding: 0 14px!important;
-    color: #c2c2c2;
+    color: #a8a8a8;
 }
 
 .dropdown-root .dropdown-content .dropdown-menu-wrap .dropdown-menu .menu-item-wrap .menu-item {
@@ -141,11 +147,7 @@ html #layuicss-dropdown_css{display:none; position: absolute; width:1989px;}
     font-size: 14px;
 
     white-space: nowrap;
-
-    transition-duration: 300ms;
-    -webkit-transition-duration: 300ms;
 }
 .dropdown-root .dropdown-content .dropdown-menu-wrap .dropdown-menu .menu-item-wrap .menu-item a:hover{
-    color: #000;
-    background-color: #f2f2f2;
+    background-color: #D9D9D9;
 }
