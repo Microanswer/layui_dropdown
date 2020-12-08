@@ -159,18 +159,18 @@ layui.define(['jquery', 'laytpl'], function (exports) {
     var MOD_NAME = window.MICROANSWER_DROPDOWAN || "dropdown";
 
     // 小箭头模板
-    var MENUS_POINTER_TEMPLATE = "" +
+    var MENUS_POINTER_TEMPLATE =
         "{{# if (d.arrow){ }}" +
-            "<div class='dropdown-pointer'></div>" +
+            "<div class='layu-dropdown-pointer'></div>" +
         "{{# } }}";
 
     var MENUS_TEMPLATE_START = "" +
         "<div tabindex='0' " +
-            "class='layui-anim layui-anim-upbit dropdown-root' " + MOD_NAME + "-id='{{d.downid}}' " +
+            "class='layui-anim layui-anim-upbit layu-dropdown-root' " + MOD_NAME + "-id='{{d.downid}}' " +
             "style='display: none;z-index: {{d.zIndex}}'" +
         ">" +
             MENUS_POINTER_TEMPLATE +
-            "<div class='dropdown-content' " +
+            "<div class='layu-dropdown-content' " +
                 "style='" +
                     "margin: {{d.gap}}px {{d.gap}}px;" +
                     "background-color: {{d.backgroundColor}};" +
@@ -187,23 +187,23 @@ layui.define(['jquery', 'laytpl'], function (exports) {
 
     // 菜单项目模板。
     var MENUS_TEMPLATE = MENUS_TEMPLATE_START +
-        "<div class='dropdown-content-table' cellpadding='0' cellspacing='0'>" +
+        "<div class='layu-dropdown-content-table' cellpadding='0' cellspacing='0'>" +
             "{{# if (d.fixHeaders && d.fixHeaders.length > 0){ }}" +
-                "<div class='dropdown-content-thead'>" +
-                    "<div class='dropdown-content-tr'>" +
+                "<div class='layu-dropdown-content-thead'>" +
+                    "<div class='layu-dropdown-content-tr'>" +
                         "{{# layui.each(d.fixHeaders, function(i, fixHeader){ }}" +
                             "{{# if (fixHeader) { }}" +
-                                "<div class='dropdown-content-th'>" +
-                                    "<div class='dropdown-menu-fixed-head {{(d.menuSplitor && i < (d.menus.length-1))?\"menu-splitor\":\"\"}}'>" +
-                                        "<div class='menu-fixed-head' style='" +
+                                "<div class='layu-dropdown-content-th'>" +
+                                    "<div class='layu-dropdown-menu-fixed-head {{(d.menuSplitor && i < (d.menus.length-1))?\"layu-menu-splitor\":\"\"}}'>" +
+                                        "<div class='layu-menu-fixed-head' style='" +
                                             "text-align: {{fixHeader.align||\"center\"}}" +
                                         "'>{{fixHeader.header}}</div>" +
                                     "</div>" +
                                 "</div>" +
                             "{{# } else { }}" +
                                 "<th>" +
-                                    "<div class='dropdown-menu-fixed-head {{(d.menuSplitor && i < (d.menus.length-1))?\"menu-splitor\":\"\"}}'>" +
-                                        "<div class='menu-fixed-head'>&nbsp;</div>" +
+                                    "<div class='layu-dropdown-menu-fixed-head {{(d.menuSplitor && i < (d.menus.length-1))?\"layu-menu-splitor\":\"\"}}'>" +
+                                        "<div class='layu-menu-fixed-head'>&nbsp;</div>" +
                                     "</div>" +
                                 "</th>" +
                             "{{# } }}" +
@@ -211,29 +211,29 @@ layui.define(['jquery', 'laytpl'], function (exports) {
                     "</div>" +
                 "</div>" +
             "{{# } }}" +
-            "<div class='dropdown-content-tbody'>" +
-                "<div class='dropdown-content-tr'>" +
+            "<div class='layu-dropdown-content-tbody'>" +
+                "<div class='layu-dropdown-content-tr'>" +
                     "{{# layui.each(d.menus, function(i, menu){ }}" +
-                        "<div class='dropdown-content-td' valign='top'>" +
-                            "<div class='dropdown-menu-wrap {{(d.menuSplitor && i < (d.menus.length-1))?\"menu-splitor\":\"\"}} overflowauto' style='" +
+                        "<div class='layu-dropdown-content-td' valign='top'>" +
+                            "<div class='layu-dropdown-menu-wrap {{(d.menuSplitor && i < (d.menus.length-1))?\"layu-menu-splitor\":\"\"}} layu-overflowauto' style='" +
                                 "min-height: {{d.minHeight}}px;" +
                                 "max-height: {{d.maxHeight - ((d.fixHeaders)?24:0)}}px;" +
                             "'>" +
-                                "<ul class='dropdown-menu' style=''>" +
+                                "<ul class='layu-dropdown-menu' style=''>" +
                                     "{{# layui.each(menu, function(index, item){ }}" +
-                                        "<li class='menu-item-wrap {{(d.fixHeaders && d.fixHeaders.length) > 0?\"nomargin\":\"\"}}'>" +
+                                        "<li class='layu-menu-item-wrap {{(d.fixHeaders && d.fixHeaders.length) > 0?\"layu-nomargin\":\"\"}}'>" +
                                             "{{# if ('hr' === item) { }}" +
                                                 "<hr>" +
                                             "{{# } else if (item.header) { }}" +
                                                 "{{# if (item.withLine) { }}" +
-                                                    "<fieldset class=\"layui-elem-field layui-field-title menu-header withLine\">" +
+                                                    "<fieldset class=\"layui-elem-field layui-field-title layu-menu-header layu-withLine\">" +
                                                         "<legend>{{item.header}}</legend>" +
                                                     "</fieldset>" +
                                                 "{{# } else { }}" +
-                                                    "<div class='menu-header' style='text-align: {{item.align||\"left\"}}'>{{item.header}}</div>" +
+                                                    "<div class='layu-menu-header' style='text-align: {{item.align||\"left\"}}'>{{item.header}}</div>" +
                                                 "{{# } }}" +
                                             "{{# } else { }}" +
-                                                "<div class='menu-item'>" +
+                                                "<div class='layu-menu-item'>" +
                                                     "<a href='javascript:;' lay-event='{{item.event}}'>" +
                                                         "{{# if (item.layIcon){ }}" +
                                                             "<i class='layui-icon {{item.layIcon}}'></i>&nbsp;" +
@@ -429,7 +429,7 @@ layui.define(['jquery', 'laytpl'], function (exports) {
 
     Dropdown.prototype.initSize = function () {
         if (!this.$down) return;
-        this.$down.find(".dropdown-pointer").css({
+        this.$down.find(".layu-dropdown-pointer").css({
             "width": this.option.gap * 2,
             "height": this.option.gap * 2
         });
@@ -527,7 +527,7 @@ layui.define(['jquery', 'laytpl'], function (exports) {
 
             // 加入界面。
             _this.$dom.after(_this.$down);
-            _this.$arrowDom = _this.$down.find(".dropdown-pointer");
+            _this.$arrowDom = _this.$down.find(".layu-dropdown-pointer");
 
             isDidDomAdd = true;
         }
@@ -687,7 +687,7 @@ layui.define(['jquery', 'laytpl'], function (exports) {
         var _this = this;
 
         // 这段是启用内部滚动实现，以免在菜单内滚动时，会影响外部界面的滚动，但是这宾不能管理到笔记本触摸板上的滚动。
-        _this.$down.find(".dropdown-menu-wrap").on("mousewheel", function (e) {
+        _this.$down.find(".layu-dropdown-menu-wrap").on("mousewheel", function (e) {
             var $this = $(this);
             e = e || window.event;
             e.cancelable = true;
