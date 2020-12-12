@@ -263,6 +263,9 @@ layui.define(['jquery', 'laytpl'], function (exports) {
         // 菜单模板，使用规定语法的模板。支持 laytpl 动态渲染。
         templateMenu: "",
 
+        // 菜单模板配置，有时候你可能不想另外写一个 节点在界面上，此时你可以直接把菜单的配置写在这个参数里。
+        templateMenuStr: "",
+
         // 要显示的下拉模板， 这个和上面的menus只能传递其中一个，如果同时传递了2个，以menus为准。
         template: "",
 
@@ -348,7 +351,14 @@ layui.define(['jquery', 'laytpl'], function (exports) {
             this.option.gap = 20;
         }
 
-        this.init();
+        var hasDrop = this.init();
+
+        if (hasDrop) {
+            // 如果配置了立即显示，这里进行显示。
+            if (this.option.immed && this.downHtml) {
+                this.show();
+            }
+        }
     };
 
     // 加载css，使外部不需要手动引入css。允许通过设置 window.dropdown_cssLink 来修改默认css地址。
@@ -375,19 +385,26 @@ layui.define(['jquery', 'laytpl'], function (exports) {
                 _this.downHtml = html;
                 _this.initEvent();
             });
-        } else if(_this.option.templateMenu) {
+        } else if(_this.option.templateMenu || _this.option.templateMenuStr) {
             // 配置了模板菜单
             hasDrop = true;
-            var templateMenu;
-            if (_this.option.templateMenu.indexOf("#") === -1) {
-                templateMenu = "#" + _this.option.templateMenu;
-            } else {
-                templateMenu = _this.option.templateMenu;
+
+            var templateMenuStr;
+            if (_this.option.templateMenu) {
+                var templateMenu;
+                if (_this.option.templateMenu.indexOf("#") === -1) {
+                    templateMenu = "#" + _this.option.templateMenu;
+                } else {
+                    templateMenu = _this.option.templateMenu;
+                }
+                templateMenuStr = $(templateMenu).text();
+            } else if (_this.option.templateMenuStr) {
+                templateMenuStr = _this.option.templateMenuStr;
             }
 
             var data = $.extend($.extend({}, _this.option), _this.option.data || {});
 
-            laytpl($(templateMenu).text()).render(data, function (str) {
+            laytpl(templateMenuStr).render(data, function (str) {
                 _this.option.menus = parseTemplateMenu(str, _this.option.templateMenuSptor);
                 _this.option.fixHeaders = findFixHeadInMenu(_this.option.menus);
                 _this.option.nowrap = true;
@@ -418,13 +435,7 @@ layui.define(['jquery', 'laytpl'], function (exports) {
             layui.hint().error("下拉框目前即没配置菜单项，也没配置下拉模板。[#" + (_this.$dom.attr("id") || "") + ",filter=" + _this.option.filter + "]");
         }
 
-        if (hasDrop) {
-
-            // 如果配置了立即显示，这里进行显示。
-            if (this.option.immed && this.downHtml) {
-                this.show();
-            }
-        }
+        return hasDrop;
     };
 
     Dropdown.prototype.initSize = function () {
