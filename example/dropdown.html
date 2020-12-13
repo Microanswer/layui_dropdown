@@ -452,7 +452,8 @@
             },
             onHide: function ($maker, $down) {
                 $maker.find(".layui-icon").css('transform', 'rotate(0)');
-            }
+            },
+            maxHeight: 200
         });
         dropdown.onFilter("test0",  function (event) {layer.msg("你点击了test0：" + event);});
         dropdown.onFilter("test1",  function (event) {layer.msg("你点击了test1：" + event);});

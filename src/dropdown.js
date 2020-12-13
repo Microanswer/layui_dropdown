@@ -325,8 +325,7 @@ layui.define(['jquery', 'laytpl'], function (exports) {
      *
      * @Param $dom 可以是这些内容: jquery对象、选择器。
      */
-    function Dropdown($dom, option) {
-
+    function Dropdown($dom) {
         /*
         * 在实现逻辑中使用了一些字段挂载在 Dropdown 上，这里统一做一个介绍：
         * this.$dom:   表示触发器的jquery对象。
@@ -336,40 +335,58 @@ layui.define(['jquery', 'laytpl'], function (exports) {
         * this.opened: 表示下拉框是否展开。
         * this.fcd:    表示当前是否处于有焦点状态。
         * this.mic:    表示鼠标是否在组件范围内， 鼠标在 触发器+下拉框 里即算是在组件范围内。mic = mouseInComponent
+        * this.initEvented: 表示是否进行过实例事件初始化。这个 下拉框里内容的初始化不同，这个初始化在整个实例只能初始化一次。 下拉框内容里的事件因为可以多次init而可以多次初始化。
         * */
 
-        if (typeof $dom === "string") {
-            $dom = $($dom);
-        }
+        if (typeof $dom === "string") {$dom = $($dom);}
         this.$dom = $dom;
-        this.option = $.extend({
-            downid: String(Math.random()).split('.')[1],
-            filter: $dom.attr("lay-filter")
-        }, DEFAULT_OPTION, option);
+    };
 
-        if (this.option.gap > 20) {
-            this.option.gap = 20;
-        }
+    Dropdown.prototype.onMenuLaytplEnd = function(html) {
+        var _this = this;
+        _this.downHtml = html;
+        _this.initEvent();
 
-        var hasDrop = this.init();
-
-        if (hasDrop) {
-            // 如果配置了立即显示，这里进行显示。
-            if (this.option.immed && this.downHtml) {
-                this.show();
-            }
+        // 如果配置了立即显示，这里进行显示。
+        if (_this.option.immed && _this.downHtml) {
+            _this.show();
         }
     };
 
-    // 加载css，使外部不需要手动引入css。允许通过设置 window.dropdown_cssLink 来修改默认css地址。
-    (!window[MOD_NAME+"_useOwnCss"]) && layui.link(window[MOD_NAME+"_cssLink"] || DEFAULT_OPTION.cssLink, function () {/*ignore*/}, MOD_NAME + "_css");
+    /**
+     * 初始化下拉菜单。
+     * @param option
+     * @returns {void}
+     */
+    Dropdown.prototype.init = function (option) {
+        var _this    = this;
+        _this.fcd    = false;
+        _this.mic    = false;
+        _this.opened = false;
 
-    // 初始化下拉菜单。
-    Dropdown.prototype.init = function () {
-        var _this = this;
-        var hasDrop = false;
+
+        var optionResult = $.extend({
+            downid: String(Math.random()).split('.')[1],
+            filter: _this.$dom.attr("lay-filter")
+        }, DEFAULT_OPTION, option);
+
+        // 已经有option，说明这时之前init过一次，这时又一次init了。
+        if (_this.option) {
+            _this.option = $.extend(_this.option, optionResult);
+        } else {
+            _this.option = optionResult;
+        }
+        if (_this.option.gap > 20) {
+            _this.option.gap = 20;
+        }
+
+        if (_this.$down) { // 已经有$down,说明之前init过，这时又一次进行init了，将之前的下拉内容清掉。
+            _this.$down.remove();
+            _this.$down = undefined;
+        }
+
+
         if (_this.option.menus && _this.option.menus.length > 0) {
-            hasDrop = true;
 
             // 判断菜单是单列还是多列
             var menu = _this.option.menus[0];
@@ -379,15 +396,10 @@ layui.define(['jquery', 'laytpl'], function (exports) {
             _this.option.fixHeaders = findFixHeadInMenu(_this.option.menus);
             _this.option.nowrap = true;
             laytpl(MENUS_TEMPLATE).render(_this.option, function (html) {
-
-                // 以前（2020年8月8日20点29分以前）是在init的时候就把相关dom元素直接添加到网页的dom树里，
-                // 现在不了，现在在每次要打开下拉框的时候再进行添加到dom里。
-                _this.downHtml = html;
-                _this.initEvent();
+                _this.onMenuLaytplEnd(html);
             });
-        } else if(_this.option.templateMenu || _this.option.templateMenuStr) {
-            // 配置了模板菜单
-            hasDrop = true;
+        }
+        else if(_this.option.templateMenu || _this.option.templateMenuStr) {
 
             var templateMenuStr;
             if (_this.option.templateMenu) {
@@ -409,14 +421,12 @@ layui.define(['jquery', 'laytpl'], function (exports) {
                 _this.option.fixHeaders = findFixHeadInMenu(_this.option.menus);
                 _this.option.nowrap = true;
                 laytpl(MENUS_TEMPLATE).render(_this.option, function (html) {
-
-                    _this.downHtml = html;
-                    _this.initEvent();
+                    _this.onMenuLaytplEnd(html);
                 });
             });
 
-        } else if (_this.option.template) {
-            hasDrop = true;
+        }
+        else if (_this.option.template) {
             var templateId;
             if (_this.option.template.indexOf("#") === -1) {
                 templateId = "#" + _this.option.template;
@@ -427,15 +437,13 @@ layui.define(['jquery', 'laytpl'], function (exports) {
             var data = $.extend($.extend({}, _this.option), _this.option.data || {});
             data.nowrap = false;
             laytpl(MENUS_TEMPLATE_START + $(templateId).html() + MENUS_TEMPLATE_END).render(data, function (html) {
-                _this.downHtml = html;
-                _this.initEvent();
+                _this.onMenuLaytplEnd(html);
             });
 
-        } else {
+        }
+        else {
             layui.hint().error("下拉框目前即没配置菜单项，也没配置下拉模板。[#" + (_this.$dom.attr("id") || "") + ",filter=" + _this.option.filter + "]");
         }
-
-        return hasDrop;
     };
 
     Dropdown.prototype.initSize = function () {
@@ -533,6 +541,8 @@ layui.define(['jquery', 'laytpl'], function (exports) {
         var isDidDomAdd = false;
 
         if (!_this.$down) {
+
+            console.log(666)
             // 创建下拉dom
             _this.$down = $(_this.downHtml);
 
@@ -630,7 +640,7 @@ layui.define(['jquery', 'laytpl'], function (exports) {
         if (this.option.scrollBehavior === 'follow') {
             setTimeout(function () {
                 _this.initPosition();
-            }, 1);
+            }, 10);
         } else {
             this.hide();
         }
@@ -639,6 +649,8 @@ layui.define(['jquery', 'laytpl'], function (exports) {
     // 初始化事件。
     Dropdown.prototype.initEvent = function () {
         var _this = this;
+        if (_this.initEvented) {return}
+        _this.initEvented = true;
 
         // 全局仅允许同时开启一个下拉菜单。所以这里注册一个监听。
         // 如果打开的下拉菜单不是我本身，则我应该隐藏自己。
@@ -789,13 +801,18 @@ layui.define(['jquery', 'laytpl'], function (exports) {
             var $this = $(this);
             var attrOption = new Function('return ' + ($this.attr("lay-" + MOD_NAME) || "{}"))();
             $this.removeAttr("lay-" + MOD_NAME); // 移除节点上的这个标签，因为它很长，不利于调试。
-            var dp = $this.data(MOD_NAME) || new Dropdown($this, $.extend({}, attrOption, option || {}));
+            var opt = $.extend({}, attrOption, option || {});
+            var dp = $this.data(MOD_NAME) || new Dropdown($this);
             $this.data(MOD_NAME, dp);
+            dp.init(opt);
         });
     }
 
     // 执行一次，立马让界面上的dropdown乖乖听话。
     suite();
+
+    // 加载css，使外部不需要手动引入css。允许通过设置 window.dropdown_cssLink 来修改默认css地址。
+    (!window[MOD_NAME+"_useOwnCss"]) && layui.link(window[MOD_NAME+"_cssLink"] || DEFAULT_OPTION.cssLink, function () {/*ignore*/}, MOD_NAME + "_css");
 
     exports(MOD_NAME, {
 
