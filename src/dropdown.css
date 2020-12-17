@@ -49,6 +49,7 @@ html #layuicss-dropdown_css{display:none; position: absolute; width:1989px;}
 .layu-dropdown-root .layu-dropdown-content .layu-dropdown-content-table,
 .layu-dropdown-root .layu-dropdown-content .layu-dropdown-content-table .layu-dropdown-content-th,
 .layu-dropdown-root .layu-dropdown-content .layu-dropdown-content-table .layu-dropdown-content-td {
+    position: relative;
     display: table-cell;
     border: none unset;
     text-align: unset;
@@ -71,8 +72,8 @@ html #layuicss-dropdown_css{display:none; position: absolute; width:1989px;}
 .layu-dropdown-root .layu-dropdown-content .layu-dropdown-menu-fixed-head { border-right: none; overflow: hidden; }
 .layu-dropdown-root .layu-dropdown-content .layu-dropdown-menu-fixed-head .layu-menu-fixed-head{ margin: 6px 14px 2px 14px;color: #a8a8a8;font-size: 12px; }
 
-.layu-dropdown-root .layu-dropdown-content .layu-dropdown-menu-fixed-head.layu-menu-splitor,
-.layu-dropdown-root .layu-dropdown-content .layu-dropdown-menu-wrap.layu-menu-splitor {border-right:1px solid #D9D9D9;}
+.layu-dropdown-root .layu-dropdown-content .layu-dropdown-menu-fixed-head.layu-menu-splitor::after,
+.layu-dropdown-root .layu-dropdown-content .layu-dropdown-menu-wrap.layu-menu-splitor::after {border-right:1px solid #D9D9D9;content: " ";position: absolute;top: 0;bottom: 0;right: 0}
 .layu-dropdown-root .layu-dropdown-content .layu-dropdown-menu-wrap.layu-overflowauto {overflow-y: auto;overflow-x: hidden}
 
 .layu-dropdown-root .layu-dropdown-content .layu-dropdown-menu-wrap .layu-dropdown-menu {padding: 0;margin: 0;}
@@ -100,7 +101,6 @@ html #layuicss-dropdown_css{display:none; position: absolute; width:1989px;}
     display: block;
     color: #333;
     padding: 0 20px;
-    min-width: 80px;
     text-indent: 0;
     font-size: 14px;
     white-space: nowrap;

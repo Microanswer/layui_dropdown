@@ -277,7 +277,7 @@ layui.define(['jquery', 'laytpl'], function (exports) {
         align: "left",
 
         // 最小宽度
-        minWidth: 80,
+        minWidth: 76,
 
         // 最大宽度
         maxWidth: 500,
@@ -365,16 +365,14 @@ layui.define(['jquery', 'laytpl'], function (exports) {
         _this.opened = false;
 
 
-        var optionResult = $.extend({
-            downid: String(Math.random()).split('.')[1],
-            filter: _this.$dom.attr("lay-filter")
-        }, DEFAULT_OPTION, option);
-
         // 已经有option，说明这时之前init过一次，这时又一次init了。
         if (_this.option) {
-            _this.option = $.extend(_this.option, optionResult);
+            _this.option = $.extend(_this.option, option||{});
         } else {
-            _this.option = optionResult;
+            _this.option = $.extend({
+                downid: String(Math.random()).split('.')[1],
+                filter: _this.$dom.attr("lay-filter")
+            }, DEFAULT_OPTION, option);
         }
         if (_this.option.gap > 20) {
             _this.option.gap = 20;
@@ -542,7 +540,6 @@ layui.define(['jquery', 'laytpl'], function (exports) {
 
         if (!_this.$down) {
 
-            console.log(666)
             // 创建下拉dom
             _this.$down = $(_this.downHtml);
 
