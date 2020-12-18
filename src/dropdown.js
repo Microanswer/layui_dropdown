@@ -5,9 +5,8 @@
  * @Version: ${version}
  */
 layui.define(['jquery', 'laytpl'], function (exports) {
-
+    var version = "${version}";
     var $ = layui.jquery || layui.$;
-
     var laytpl = layui.laytpl;
 
 
@@ -866,6 +865,6 @@ layui.define(['jquery', 'laytpl'], function (exports) {
                 }
             });
         },
-        version: "${version}"
+        version: version
     });
 });
