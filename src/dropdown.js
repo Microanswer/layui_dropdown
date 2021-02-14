@@ -6,12 +6,15 @@
  */
 layui.define(['jquery', 'laytpl'], function (exports) {
     var version = "${version}";
-    var $ = layui.jquery || layui.$;
-    var laytpl = layui.laytpl;
+    var $       = layui.jquery || layui.$;
+    var laytpl  = layui.laytpl;
 
 
     // === 内部事件模块, 由于layui不让同一事件注册多次监听了，故此处自己实现。 ===>
-    var EVENT = {DROPDOWN_SHOW: "a"};
+    var EVENT = {
+        DROPDOWN_SHOW: "a",
+        DROPDOWN_ITEM_CLICK: "b",
+    };
 
     // 内部事件。目前仅仅有一个打开下拉框事件。此事件不暴露给开发者，仅作为内部使用。
     var INNER_EVENT = {};
@@ -218,7 +221,7 @@ layui.define(['jquery', 'laytpl'], function (exports) {
                                 "min-height: {{d.minHeight}}px;" +
                                 "max-height: {{d.maxHeight - ((d.fixHeaders)?24:0)}}px;" +
                             "'>" +
-                                "<ul class='layu-dropdown-menu' style=''>" +
+                                "<ul class='layu-dropdown-menu' dropdown-menu-index='{{i}}' style=''>" +
                                     "{{# layui.each(menu, function(index, item){ }}" +
                                         "<li class='layu-menu-item-wrap {{(d.fixHeaders && d.fixHeaders.length) > 0?\"layu-nomargin\":\"\"}}'>" +
                                             "{{# if ('hr' === item) { }}" +
@@ -232,7 +235,7 @@ layui.define(['jquery', 'laytpl'], function (exports) {
                                                     "<div class='layu-menu-header' style='text-align: {{item.align||\"left\"}}'>{{item.header}}</div>" +
                                                 "{{# } }}" +
                                             "{{# } else { }}" +
-                                                "<div class='layu-menu-item'>" +
+                                                "<div class='layu-menu-item' dropdown-menu-item-index='{{index}}'>" +
                                                     "<a href='javascript:;' lay-event='{{item.event}}'>" +
                                                         "{{# if (item.layIcon){ }}" +
                                                             "<i class='layui-icon {{item.layIcon}}'></i>&nbsp;" +
@@ -297,6 +300,9 @@ layui.define(['jquery', 'laytpl'], function (exports) {
         // 显示事件
         onShow: function ($dom, $down) {},
 
+        // 条目点击事件。
+        onItemClick: function (event, menu) {},
+
         // 滚动界面的时候，如果下拉框是显示的，则将隐藏，如果值为 follow 则不会隐藏。
         scrollBehavior: "follow",
 
@@ -316,7 +322,10 @@ layui.define(['jquery', 'laytpl'], function (exports) {
         templateMenuSptor: "[]",
 
         // 配置是否显示多列菜单的分割线。
-        menuSplitor: true
+        menuSplitor: true,
+
+        // 将下拉菜单dom内容初始化到此字段指定的位置。允许填：next(默认),before,selector_xxx,
+        appendTo: "next"
     };
 
     /**
@@ -335,11 +344,13 @@ layui.define(['jquery', 'laytpl'], function (exports) {
         * this.fcd:    表示当前是否处于有焦点状态。
         * this.mic:    表示鼠标是否在组件范围内， 鼠标在 触发器+下拉框 里即算是在组件范围内。mic = mouseInComponent
         * this.initEvented: 表示是否进行过实例事件初始化。这个 下拉框里内容的初始化不同，这个初始化在整个实例只能初始化一次。 下拉框内容里的事件因为可以多次init而可以多次初始化。
+        * this.systemListeners: 下拉框的正常运行离不开有些事件的监听，有很多事件是针对触发按钮设置的，又有很多事件是针对下拉框设置的，此对象内将保存那些对触发按钮设置的事件函数，这样在销毁实例时可以方便的获取到这些函数从而取消对响应事件的监听。
         * */
 
         if (typeof $dom === "string") {$dom = $($dom);}
         this.$dom = $dom;
-    };
+        this.systemListeners = {};
+    }
 
     Dropdown.prototype.onMenuLaytplEnd = function(html) {
         var _this = this;
@@ -530,6 +541,26 @@ layui.define(['jquery', 'laytpl'], function (exports) {
         this.$down.css("top", downTop);
     };
 
+    // 到了需要把下拉内容渲染到界面上的时候
+    // 本方法会被执行。
+    Dropdown.prototype.renderDownHtml = function() {
+
+        // 创建下拉dom
+        this.$down = $(this.downHtml);
+
+        var appendTo = this.option.appendTo;
+        if (appendTo === "next") {
+            this.$dom.after(this.$down);
+        } else if (appendTo === "before") {
+            this.$dom.before(this.$down);
+        } else if (appendTo.indexOf("selector_") === 0) {
+            var $target = $(appendTo.substr(appendTo.indexOf("_") + 1));
+            $target.append(this.$down);
+        } else {
+            throw new Error("不支持此渲染方式。请填写：next, before, selector_xxx 某一项内容。");
+        }
+    };
+
     // 显示下拉内容
     Dropdown.prototype.show = function () {
         var _this = this;
@@ -538,12 +569,8 @@ layui.define(['jquery', 'laytpl'], function (exports) {
         var isDidDomAdd = false;
 
         if (!_this.$down) {
-
-            // 创建下拉dom
-            _this.$down = $(_this.downHtml);
-
             // 加入界面。
-            _this.$dom.after(_this.$down);
+            _this.renderDownHtml();
             _this.$arrowDom = _this.$down.find(".layu-dropdown-pointer");
 
             isDidDomAdd = true;
@@ -642,6 +669,14 @@ layui.define(['jquery', 'laytpl'], function (exports) {
         }
     };
 
+    // 界面大小变化时，此方法会执行。
+    Dropdown.prototype._onResize = function () {
+        if (!this.opened) {
+            return;
+        }
+        this.initPosition();
+    };
+
     // 初始化事件。
     Dropdown.prototype.initEvent = function () {
         var _this = this;
@@ -656,18 +691,12 @@ layui.define(['jquery', 'laytpl'], function (exports) {
             }
         });
 
-        $(window).on("scroll", function () {
-            _this._onScroll();
-        });
-        _this.$dom.parents().on("scroll", function () {
-            _this._onScroll();
-        });
-        $(window).on("resize", function () {
-            if (!_this.opened) {
-                return;
-            }
-            _this.initPosition();
-        });
+        this.systemListeners.scrollListener = _this._onScroll.bind(_this);
+        this.systemListeners.resizeListener = _this._onResize.bind(_this);
+
+        $(window).on("scroll", this.systemListeners.scrollListener);
+        _this.$dom.parents().on("scroll", this.systemListeners.scrollListener);
+        $(window).on("resize", this.systemListeners.resizeListener);
 
         _this.initDomEvent();
     };
@@ -772,9 +801,25 @@ layui.define(['jquery', 'laytpl'], function (exports) {
             var $md = $("[" + MOD_NAME + "-id='" + _this.option.downid + "']");
 
             $md.on("click", "a", function () {
-                var event = ($(this).attr('lay-event') || '').trim();
+                var $this = $(this);
+                var event = ($this.attr('lay-event') || '').trim();
                 if (event) {
-                    layui.event.call(this, MOD_NAME, MOD_NAME + '(' + _this.option.filter + ')', event);
+                    // layui.event.call(this, MOD_NAME, MOD_NAME + '(' + _this.option.filter + ')', event);
+                    var mEvent = MOD_NAME + "(" + _this.option.filter + ")" + "." + EVENT.DROPDOWN_ITEM_CLICK;
+                    var $menuIndex = $this.parents("[dropdown-menu-index]");
+                    var $menuItemIndex = $this.parents("[dropdown-menu-item-index]");
+                    var menu = _this.option.menus
+                        [parseInt($menuIndex.attr("dropdown-menu-index"))]
+                        [parseInt($menuItemIndex.attr("dropdown-menu-item-index"))];
+
+                    if (_this.option.onItemClick){
+                        _this.option.onItemClick(event, menu);
+                    }
+
+                    makeEvent(mEvent, {
+                        event: event,
+                        data: menu
+                    });
                     _this.hide();
                 } else {
                     layui.hint().error("菜单条目[" + this.outerHTML + "]未设置event。");
@@ -783,11 +828,42 @@ layui.define(['jquery', 'laytpl'], function (exports) {
         }
     };
 
+    // 销毁该下拉框实例。
+    Dropdown.prototype.destroy = function (keepListener) {
+
+        this.fcd = false;
+        this.downHtml = undefined;
+        this.mic = false;
+        this.opened = false;
+
+
+        $(window).off("scroll", this.systemListeners.scrollListener);
+        this.$dom.parents().off("scroll", this.systemListeners.scrollListener);
+        $(window).off("resize", this.systemListeners.resizeListener);
+        if (this.$down) {
+            this.$down.remove();
+        }
+
+        this.$dom.removeData(MOD_NAME, null);
+
+        if (typeof keepListener === "undefined") keepListener = true;
+        if (!keepListener) {
+            var event = MOD_NAME + "(" + this.option.filter + ")" + "." + EVENT.DROPDOWN_ITEM_CLICK;
+            delete INNER_EVENT[event];
+        }
+
+    };
+
     // 监听事件方法
     function onFilter(layFitler, cb) {
-        layui.onevent(MOD_NAME, MOD_NAME + "(" + layFitler + ")", function (event) {
-            cb && cb(event);
+        var event = MOD_NAME + "(" + layFitler + ")" + "." + EVENT.DROPDOWN_ITEM_CLICK;
+        onEvent(event, function (param) {
+            cb && cb(param.event, param.data);
         });
+
+        // layui.onevent(MOD_NAME, , function (event) {
+        //     cb && cb(event);
+        // });
     }
 
     // 全局初始化方法。
@@ -839,6 +915,7 @@ layui.define(['jquery', 'laytpl'], function (exports) {
                 }
             });
         },
+
         /**
          * 传入选择器，将其对应的下拉框显示。
          *
@@ -865,6 +942,23 @@ layui.define(['jquery', 'laytpl'], function (exports) {
                 }
             });
         },
+
+
+        /**
+         * 传入选择器，将其对应的下拉框实例进行销毁。
+         * @param {String} sector
+         */
+        destroy: function (sector, keepListener) {
+            // 隐藏指定下拉框。
+            $(sector).each(function () {
+                var $this = $(this);
+                var dp = $this.data(MOD_NAME);
+                if (dp) {
+                    dp.destroy(keepListener);
+                }
+            });
+        },
+
         version: version
     });
 });

@@ -143,15 +143,16 @@
     </p>
     <p class="bold">9、手动显示与隐藏(v2.0.1)：</p>
     <p>
-        <button class="layui-btn layui-btn-sm" title="此按钮已被置为disabled，使用右侧按钮操作" disabled lay-filter="test_man" lay-dropdown="{align:'left', menus: [{layIcon:'layui-icon-username',txt: '个人中心', event:'usercenter'}, {layIcon: 'layui-icon-set',txt: '设置', event:'set'}, {layIcon: 'layui-icon-logout', txt: '退出登录', event:'loginout'}]}">手动显示隐藏</button>
-        <button class="layui-btn layui-btn-sm layui-btn-warm test_man_show">显示</button><span></span>
-        <button class="layui-btn layui-btn-sm layui-btn-primary  test_man_hide">隐藏</button><span></span>
+        <button class="layui-btn layui-btn-sm layui-btn-primary" title="此按钮已被置为disabled，使用右侧按钮操作" disabled lay-filter="test_man">手动显示隐藏到这儿</button>
+        <button class="layui-btn layui-btn-sm test_man_show">显示</button><span></span>
+        <button class="layui-btn layui-btn-sm layui-btn-normal  test_man_hide">隐藏</button><span></span>
+        <button class="layui-btn layui-btn-sm layui-btn-warm test_man_destroy">销毁</button><span></span>
     </p>
 
     <hr>
     <h1>二、控件&文档</h1>
     <p>
-        直接下载使用：<a href="http://file.microanswer.cn/dropdown_2.3.2.zip">下载控件(v2.3.2)</a><br>
+        直接下载使用：<a href="http://file.microanswer.cn/dropdown_2.3.4.zip">下载控件(v2.3.4)</a><br>
         查看使用文档：<a href="https://www.microanswer.cn/blog/74">dropdown下拉控件文档</a>，<a href="https://github.com/MicroAnswer/layui_dropdown" target="_blank">Github</a>。
     </p>
 
@@ -455,7 +456,7 @@
             },
             maxHeight: 200
         });
-        dropdown.onFilter("test0",  function (event) {layer.msg("你点击了test0：" + event);});
+        dropdown.onFilter("test0",  function (event, menu) {layer.msg("你点击了test0：" + event); console.log(menu)});
         dropdown.onFilter("test1",  function (event) {layer.msg("你点击了test1：" + event);});
         dropdown.onFilter("test2",  function (event) {layer.msg("你点击了test2：" + event);});
         dropdown.onFilter("test3",  function (event) {layer.msg("你点击了test3：" + event);});
@@ -508,12 +509,37 @@
             ]],
             done: function (res) {
                 tableData1 = res;
-                dropdown.suite();
+
+                // 设置下拉菜单监听。
+                // 在表格每行右侧使用下拉框，其实可以不需要使用 onFilter 来设置监听。
+                // 直接使用 table.on("tool(xxxxx)", fun); 就可以像表格里的“监听工具行事件”那样进行监听了。
+                // 此处示列仅表示：在表格里依然可以使用 onFilter 进行监听。但更建议使用 table 的监听工具行事件的方式。
                 for (var i = 0; i < tableData1.data.length; i++) {
-                    dropdown.onFilter("ft" + tableData1.data[i].id, function (event) {
-                        layer.msg("你点击了："  + event);
+                    dropdown.onFilter("ft" + tableData1.data[i].id, function (event, menu) {
+
+                        // event 表示对应菜单的事件。
+                        // 在2.3.4及以后的版本中， 监听事件支持 第二个参数， 此
+                        // 参数表示被点击的菜单的配置项对象，如果你在菜单配置项中配置了自己的属性，
+                        // 在这里你可通过这个参数获取到。
+
+                        layer.open({
+                            type: 1,
+                            title: "监听到点击事件",
+                            content: `
+                                <table style="margin: 12px" border="1">
+                                    <tr><td valign="top" align="right" style="padding: 4px">事件：</td><td style="padding: 4px">${event}</td></tr>
+                                    <tr><td valign="top" align="right" style="padding: 4px">触发的菜单：</td><td style="padding: 4px"><pre>${JSON.stringify(menu, undefined, 2)}</pre></td></tr>
+                                </table>
+                            `,
+                            area: [420]
+                        });
+
+                        // layer.alert("你点击了："  + event + ", " + JSON.stringify(menu));
                     });
                 }
+
+
+                dropdown.suite();
             }
         });
         table.on("sort(table1)", function () {
@@ -642,12 +668,18 @@
         dropdown.onFilter("test_m_4", function (event) {layer.msg(event);});
 
         $(".test_man_show").on("click", function () {
-            dropdown.show("[lay-filter='test_man']");
+            dropdown.show("[lay-filter='test_man']",{
+                align: 'left',
+                menus: [
+                    {layIcon: 'layui-icon-username', txt: '个人中心', event: 'usercenter'},
+                    {layIcon: 'layui-icon-set', txt: '设置', event: 'set'},
+                    {layIcon: 'layui-icon-logout', txt: '退出登录', event: 'loginout'}
+                ],
+                appendTo: 'selector_body'
+            });
         });
-
-        $(".test_man_hide").on("click", function () {
-            dropdown.hide("[lay-filter='test_man']");
-        });
+        $(".test_man_hide").on("click", function () { dropdown.hide("[lay-filter='test_man']"); });
+        $(".test_man_destroy").on("click", function () { dropdown.destroy("[lay-filter='test_man']"); });
 
     });
 </script>
