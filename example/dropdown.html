@@ -454,9 +454,13 @@
             onHide: function ($maker, $down) {
                 $maker.find(".layui-icon").css('transform', 'rotate(0)');
             },
+            onItemClick: function (event, menu) {
+                layer.msg("你点击了test0：" + event);
+                console.log(menu)
+            },
             maxHeight: 200
         });
-        dropdown.onFilter("test0",  function (event, menu) {layer.msg("你点击了test0：" + event); console.log(menu)});
+        // dropdown.onFilter("test0",  function (event, menu) {layer.msg("你点击了test0：" + event); console.log(menu)});
         dropdown.onFilter("test1",  function (event) {layer.msg("你点击了test1：" + event);});
         dropdown.onFilter("test2",  function (event) {layer.msg("你点击了test2：" + event);});
         dropdown.onFilter("test3",  function (event) {layer.msg("你点击了test3：" + event);});
