@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Layui·dropdown-下拉控件</title>
+    <link type="text/css" rel="stylesheet" href="./layui2.6.7/css/layui.css">
+    <style>
+        ol,ul {
+            padding-left: 35px;
+        }
+        ol li, ul li {
+            list-style-position: inside;
+            list-style-type: unset;
+        }
+        body {
+            padding: 20px;
+        }
+        h1 {
+            margin: 24px 0 12px;
+        }
+        p {
+            margin: 23px 10px 6px 10px;
+            font-size: 17px;
+            line-height: 23px;
+        }
+        .bold {
+            font-weight: bold;
+        }
+        .m-inline {
+            display: inline-block;
+        }
+    </style>
+    <link rel="stylesheet" href="../dist/dropdown.css">
+    <script>
+        window.dropdown_useOwnCss = true;
+        window.MICROANSWER_DROPDOWAN = "mDropdown";
+    </script>
+</head>
+<body>
+<div>
+
+    <h1>一、在线体验</h1>
+    <p class="bold">1、基本效果：</p>
+    <p>
+        <div class="m-inline"><button class="layui-btn layui-btn-sm" lay-filter="test0" id="xxxxx">
+            <span>下拉菜单</span>
+            <i class="layui-icon layui-icon-triangle-d" style="display: inline-block"></i>
+        </button></div>、
+    <div class="m-inline"><button class="layui-btn layui-btn-sm" lay-filter="test1"
+                lay-mDropdown="{align:'left', menus: [{layIcon:'layui-icon-username',txt: '个人中心', event:'usercenter'}, {layIcon: 'layui-icon-set',txt: '设置', event:'set'}, {layIcon: 'layui-icon-logout', txt: '退出登录', event:'loginout'}]}">
+            <span>左对齐</span>
+            <i class="layui-icon layui-icon-triangle-d"></i>
+        </button></div>、
+    <div class="m-inline"><button class="layui-btn layui-btn-sm" lay-filter="test2"
+                lay-mDropdown="{align:'center', menus: [{layIcon:'layui-icon-username',txt: '个人中心', event:'usercenter'}, {layIcon: 'layui-icon-set',txt: '设置', event:'set'}, {layIcon: 'layui-icon-logout', txt: '退出登录', event:'loginout'}]}">
+            <span>中对齐</span>
+            <i class="layui-icon layui-icon-triangle-d"></i>
+        </button></div>、
+    <div class="m-inline"><button class="layui-btn layui-btn-sm" lay-filter="test3"
+                lay-mDropdown="{align:'right', menus: [{layIcon:'layui-icon-username',txt: '个人中心', event:'usercenter'}, {layIcon: 'layui-icon-set',txt: '设置', event:'set'}, {layIcon: 'layui-icon-logout', txt: '退出登录', event:'loginout'}]}">
+            <span>右对齐</span>
+            <i class="layui-icon layui-icon-triangle-d"></i>
+        </button></div>、
+    <div class="m-inline"><button class="layui-btn layui-btn-sm" lay-filter="test4"
+                lay-mDropdown="{menus: [{layIcon:'layui-icon-username',txt: '个人中心', event:'usercenter'}, {layIcon: 'layui-icon-set',txt: '设置', event:'set'}, 'hr',{layIcon: 'layui-icon-logout', txt: '退出登录', event:'loginout'}]}">
+            <span>菜单分割线</span>
+            <i class="layui-icon layui-icon-triangle-d"></i>
+        </button></div>、
+    <div class="m-inline"><button class="layui-btn layui-btn-sm" lay-filter="test5"
+                lay-mDropdown="{menus: [{header: '用户'},{layIcon:'layui-icon-username',txt: '个人中心', event:'usercenter'}, {layIcon: 'layui-icon-set',txt: '信息设置', event:'set'}, {header: '操作',align:'center'},{layIcon: 'layui-icon-praise', txt: '点赞加油', event:'praise'},{layIcon: 'layui-icon-logout', txt: '退出登录', event:'loginout'},{header: '其他',align:'right'},{layIcon: 'layui-icon-tips', txt: '关于网站', event:'about'}]}">
+            <span>带header的下拉菜单</span>
+            <i class="layui-icon layui-icon-triangle-d"></i>
+        </button></div>、
+    <div class="m-inline"><button class="layui-btn layui-btn-sm" lay-filter="test6"
+                lay-mDropdown="{menus: [{header: '用户', withLine: true},{layIcon:'layui-icon-username',txt: '个人中心', event:'usercenter'}, {layIcon: 'layui-icon-set',txt: '设置', event:'set'}, {header: '操作', withLine: true},{layIcon: 'layui-icon-logout', txt: '退出登录', event:'loginout'}]}">
+            <span>带header的下拉菜单2</span>
+            <i class="layui-icon layui-icon-triangle-d"></i>
+        </button></div>
+    </p>
+    <p class="bold">2、固定菜单头</p>
+    <p>
+    <div class="m-inline"><button class="layui-btn layui-btn-sm" lay-filter="test_f_1" lay-mDropdown="{templateMenu: 'test_f_1_template', maxHeight: 220}">
+        <span>固定菜单头示例1</span>
+        <i class="layui-icon layui-icon-triangle-d"></i>
+    </button></div>、
+    <div class="m-inline"><button class="layui-btn layui-btn-sm" lay-filter="test_f_2" lay-mDropdown="{templateMenu: 'test_f_2_template', maxHeight: 220}">
+        <span>固定菜单头示例2</span>
+        <i class="layui-icon layui-icon-triangle-d"></i>
+    </button></div>、
+    </p>
+    <p class="bold">3、Hover触发：</p>
+    <p>
+        <button class="layui-btn layui-btn-sm" lay-filter="test7"
+                lay-mDropdown="{showBy: 'hover',align:'left', menus: [{layIcon:'layui-icon-username',txt: '个人中心', event:'usercenter'}, {layIcon: 'layui-icon-set',txt: '设置', event:'set'}, {layIcon: 'layui-icon-logout', txt: '退出登录', event:'loginout'}]}">
+            <span>hover触发下拉菜单</span>
+            <i class="layui-icon layui-icon-triangle-d"></i>
+        </button>
+    </p>
+    <p class="bold">4、自定义下拉内容：</p>
+    <p>
+    <div class="m-inline"><button class="layui-btn layui-btn-sm" lay-filter="test8">
+            <span>下拉自定义内容</span>
+            <i class="layui-icon layui-icon-triangle-d"></i>
+        </button></div>、
+    <div class="m-inline"><button class="layui-btn layui-btn-sm" lay-filter="test9" lay-mDropdown="{template: '#myimg'}">
+            <span>下拉显示图片</span>
+            <i class="layui-icon layui-icon-triangle-d"></i>
+        </button></div>
+    </p>
+    <p class="bold">5、任意下拉触发器：</p>
+    <p>
+        <small>点击这个小图片弹出下拉:</small><img style="width: 20px;height: 20px;background-color: #ff6619;border-radius: 50%"
+                                        src="https://file.microanswer.cn/microanswer_head.png"
+                                        lay-filter="test10"
+                                        lay-mDropdown="{align:'left', menus: [{layIcon:'layui-icon-username',txt: '个人中心', event:'usercenter'}, {layIcon: 'layui-icon-set',txt: '设置', event:'set'}, {layIcon: 'layui-icon-logout', txt: '退出登录', event:'loginout'}]}">
+    </p>
+    <br>
+    <p class="bold">6、多列菜单</p>
+    <p>
+    <div class="m-inline"><button class="layui-btn layui-btn-sm" lay-filter="test_m_1" lay-mDropdown="{templateMenu: 'test_m_1_template', templateMenuSptor:'()'}">
+        <span>双列下拉菜单</span>
+        <i class="layui-icon layui-icon-triangle-d"></i>
+    </button></div>、
+    <div class="m-inline"><button class="layui-btn layui-btn-sm" lay-filter="test_m_2" lay-mDropdown="{templateMenu: 'test_m_2_template', menuSplitor: false}">
+        <span>三列下拉菜单</span>
+        <i class="layui-icon layui-icon-triangle-d"></i>
+    </button></div>、
+    <div class="m-inline"><button class="layui-btn layui-btn-sm" lay-filter="test_m_3" lay-mDropdown="{templateMenu: 'test_m_3_template'}">
+        <span>四列下拉菜单</span>
+        <i class="layui-icon layui-icon-triangle-d"></i>
+    </button></div>、
+    <div class="m-inline"><button class="layui-btn layui-btn-sm" lay-filter="test_m_4" lay-mDropdown="{templateMenu: 'test_m_4_template'}">
+        <span>十列下拉菜单</span>
+        <i class="layui-icon layui-icon-triangle-d"></i>
+    </button></div>
+    </p>
+    <p class="bold">7、在表格里使用：</p>
+    <p>
+    <table id="mytable" lay-filter="table1"></table>
+    </p>
+    <p class="bold">8、在表格里使用，并支持表格数据操作：</p>
+    <p>
+    <table id="mytable2" lay-filter="table2"></table>
+    </p>
+    <p class="bold">9、手动显示与隐藏(v2.0.1)：</p>
+    <p>
+        <button class="layui-btn layui-btn-sm layui-btn-primary" title="此按钮已被置为disabled，使用右侧按钮操作" disabled lay-filter="test_man">手动显示隐藏到这儿</button>
+        <button class="layui-btn layui-btn-sm test_man_show">显示</button><span></span>
+        <button class="layui-btn layui-btn-sm layui-btn-normal  test_man_hide">隐藏</button><span></span>
+        <button class="layui-btn layui-btn-sm layui-btn-warm test_man_destroy">销毁</button><span></span>
+    </p>
+
+    <hr>
+    <h1>二、控件&文档</h1>
+    <p>
+        直接下载使用：<a href="http://file.microanswer.cn/dropdown_2.3.4.zip">下载控件(v2.3.4)</a><br>
+        查看使用文档：<a href="https://www.microanswer.cn/blog/74">dropdown下拉控件文档</a>，<a href="https://github.com/MicroAnswer/layui_dropdown" target="_blank">Github</a>。
+    </p>
+
+    <script type="text/javascript">
+        var cnzz_protocol = (("https:" == document.location.protocol) ? "https://" : "http://");
+        document.write(unescape("%3Cspan style='vertical-align:middle' id='cnzz_stat_icon_1263962182'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s22.cnzz.com/z_stat.php%3Fid%3D1263962182%26show%3Dpic1' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+</div>
+
+<!-- 固定菜单头示例1 -->
+<script id="test_f_1_template" type="text/plain">
+
+  [
+    [{header: "左对齐", fixed: true, align: "left"}]
+    [{txt: "个人中心1", event: "usercenter"}]
+    [{txt: "头像设置", event: "sethead"}]
+    [{txt: "我的礼包", event: "wdlb"}]
+    [{txt: "我的好友", event: "wdhy"}]
+    [{txt: "我的积分", event: "wdjf"}]
+    [{txt: "账号充值", event: "zhcz"}]
+    [{txt: "注销账号", event: "desctroy"}]
+  ]
+
+  [
+    [{header: "后台", fixed: true, align: "left"}]
+    [{txt: "赠送红包", event: "redp"}]
+    [{txt: "缴费通知", event: "qftt"}]
+    [{txt: "强制下线", event: "offline"}]
+    [{txt: "注销账户", event: "desctroy"}]
+    [{txt: "提升权限", event: "tsqx"}]
+    [{txt: "卸载权限", event: "xzqx"}]
+    [{txt: "分配任务", event: "fprw"}]
+    [{txt: "增加人手", event: "zjrs"}]
+    [{txt: "限制浏览", event: "xzll"}]
+  ]
+
+</script>
+
+
+<!-- 固定菜单头示例2 -->
+<script id="test_f_2_template" type="text/plain">
+
+  [
+    [{header: "右对齐", fixed: true, align: "right"}]
+    [{txt: "个人中心1", event: "usercenter"}]
+    [{txt: "头像设置", event: "sethead"}]
+    [{txt: "我的礼包", event: "wdlb"}]
+    [{txt: "我的好友", event: "wdhy"}]
+    [{txt: "我的积分", event: "wdjf"}]
+    [{txt: "账号充值", event: "zhcz"}]
+    [{txt: "注销账号", event: "desctroy"}]
+  ]
+
+  [
+    [{header: "右对齐", fixed: true, align: "right"}]
+    [{txt: "赠送红包", event: "redp"}]
+    [{txt: "缴费通知", event: "qftt"}]
+    [{txt: "强制下线", event: "offline"}]
+    [{txt: "注销账户", event: "desctroy"}]
+    [{txt: "提升权限", event: "tsqx"}]
+    [{txt: "卸载权限", event: "xzqx"}]
+    [{txt: "分配任务", event: "fprw"}]
+    [{txt: "增加人手", event: "zjrs"}]
+    [{txt: "限制浏览", event: "xzll"}]
+  ]
+
+</script>
+
+<!-- 双列下拉 菜单配置模板 -->
+<script id="test_m_1_template" type="text/plain">
+
+  (
+    ({header: "菜单1", fixed: true, align: "center"})
+    ({txt: "个人中心1", event: "usercenter"})
+    ({txt: "头像设置", event: "sethead"})
+    ({txt: "注销账号", event: "desctroy"})
+  )
+
+  (
+    ({header: "菜单2", fixed: true, align: "center"})
+    ({txt: "赠送红包", event: "redp"})
+    ({txt: "缴费通知", event: "qftt"})
+    ({txt: "强制下线", event: "offline"})
+  )
+
+</script>
+
+<!-- 三列下拉按钮 菜单配置模板 -->
+<script id="test_m_2_template" type="text/plain">
+
+  [
+    [{header: "通用功能", fixed: true}]
+    [{txt: "个人中心", event: "usercenter"}]
+    [{txt: "头像设置", event: "sethead"}]
+    [{txt: "注销账号", event: "desctroy"}]
+    [{txt: "赠送红包", event: "redp"}]
+    [{txt: "缴费通知", event: "qftt"}]
+    [{txt: "强制下线", event: "offline"}]
+  ]
+
+  [
+    [{header: "账号管理", fixed: true}]
+    [{txt: "添加好友", event: "addff"}]
+    [{txt: "赠送key码", event: "zskm"}]
+    [{txt: "账号升级", event: "upad"}]
+  ]
+
+
+  [
+    [{header: "高危操作", fixed: true}]
+    [{txt: "添加对象", event: "addfdf"}]
+    [{txt: "移除对象", event: "rbdd"}]
+    [{txt: "账号详情", event: "detaa"}]
+  ]
+
+</script>
+
+<!-- 四列下拉按钮 菜单配置模板 -->
+<script id="test_m_3_template" type="text/plain">
+
+  [
+    [{txt: "个人中心", event: "usercenter"}]
+    [{txt: "头像设置", event: "sethead"}]
+    [{txt: "注销账号", event: "desctroy"}]
+  ]
+
+  [
+    [{txt: "赠送红包", event: "redp"}]
+    [{txt: "缴费通知", event: "qftt"}]
+    [{txt: "强制下线", event: "offline"}]
+  ]
+
+
+  [
+    [{txt: "添加好友", event: "addff"}]
+    [{txt: "赠送key码", event: "zskm"}]
+    [{txt: "账号升级", event: "upad"}]
+  ]
+
+
+  [
+    [{txt: "添加对象", event: "addfdf"}]
+    [{txt: "移除对象", event: "rbdd"}]
+    [{txt: "账号详情", event: "detaa"}]
+  ]
+
+</script>
+
+
+<!-- 十列下拉按钮 菜单配置模板 -->
+<script id="test_m_4_template" type="text/plain">
+
+  [
+    [{txt: "第1列", event: "l1"}]
+    [{txt: "个人中心", event: "usercenter"}]
+    [{txt: "头像设置", event: "sethead"}]
+    [{txt: "注销账号", event: "desctroy"}]
+  ]
+
+  [
+    [{txt: "第2列", event: "l2"}]
+    [{txt: "赠送红包", event: "redp"}]
+    [{txt: "缴费通知", event: "qftt"}]
+    [{txt: "强制下线", event: "offline"}]
+  ]
+
+
+  [
+    [{txt: "第3列", event: "l3"}]
+    [{txt: "添加好友", event: "addff"}]
+    [{txt: "赠送key码", event: "zskm"}]
+    [{txt: "账号升级", event: "upad"}]
+  ]
+
+
+  [
+    [{txt: "第4列", event: "l4"}]
+    [{txt: "添加对象", event: "addfdf"}]
+    [{txt: "移除对象", event: "rbdd"}]
+    [{txt: "账号详情", event: "detaa"}]
+  ]
+  [
+    [{txt: "第5列", event: "l5"}]
+    [{txt: "个人中心", event: "usercenter"}]
+    [{txt: "头像设置", event: "sethead"}]
+    [{txt: "注销账号", event: "desctroy"}]
+  ]
+
+  [
+    [{txt: "第6列", event: "l6"}]
+    [{txt: "赠送红包", event: "redp"}]
+    [{txt: "缴费通知", event: "qftt"}]
+    [{txt: "强制下线", event: "offline"}]
+  ]
+
+
+  [
+    [{txt: "第7列", event: "l7"}]
+    [{txt: "添加好友", event: "addff"}]
+    [{txt: "赠送key码", event: "zskm"}]
+    [{txt: "账号升级", event: "upad"}]
+  ]
+
+
+  [
+    [{txt: "第8列", event: "l8"}]
+    [{txt: "添加对象", event: "addfdf"}]
+    [{txt: "移除对象", event: "rbdd"}]
+    [{txt: "账号详情", event: "detaa"}]
+  ]
+
+   [
+    [{txt: "第9列", event: "l9"}]
+    [{txt: "个人中心", event: "usercenter"}]
+    [{txt: "头像设置", event: "sethead"}]
+    [{txt: "注销账号", event: "desctroy"}]
+  ]
+
+  [
+    [{txt: "第10列", event: "l10"}]
+    [{txt: "赠送红包", event: "redp"}]
+    [{txt: "缴费通知", event: "qftt"}]
+    [{txt: "强制下线", event: "offline"}]
+  ]
+</script>
+<!-- 自定义下拉菜单内容 -->
+<script id="mymenu" type="text/html">
+    <div style="padding: 20px;max-width: 300px;display: flex;display: -webkit-flex">
+        <img src="https://file.microanswer.cn/microanswer_head.png" style="width: 60px;min-width:60px;height: 60px;border-radius: 50%;">
+        <div style="display: inline-block;word-break: break-all;margin-left: 20px">
+            大家好，我是自定义下拉内容，在这里你可以放任何你希望放置的下拉内容哦。<br><br>
+            <button class="layui-btn layui-btn-xs layui-btn-primary modify">修改信息</button>
+            <button class="layui-btn layui-btn-xs openvip">开通会员</button>
+        </div>
+    </div>
+</script>
+
+<!-- 自定义下拉菜单内容 - 图片 -->
+<script id="myimg" type="text/html">
+    <img src="https://file.microanswer.cn/microanswer_head.png" style="width: 150px;height: 150px;">
+</script>
+<!-- 表格行toolbar模板 -->
+<script id="tb" type="text/html">
+    <button class="layui-btn layui-btn-xs" lay-filter="ft{{d.id}}" lay-mDropdown="{align:'right', menus: [{layIcon:'layui-icon-username',txt: '详细信息', event:'{{d.id}}-detail'}, {layIcon: 'layui-icon-set',txt: '开通会员', event:'{{d.id}}-openvip'}, {layIcon: 'layui-icon-logout', txt: '删除账户', event:'{{d.id}}-deleteaccount'}]}">
+        <span>操作</span>
+        <i class="layui-icon layui-icon-triangle-d"></i>
+    </button>
+</script>
+<!-- 表格行toolbar模板 -->
+<script id="tb2" type="text/html">
+    <button class="layui-btn layui-btn-xs" id="layuidropdown_{{d.id}}" lay-mDropdown="{align:'right', templateMenu: 'table2toolMenu'}">
+        <span>操作</span>
+        <i class="layui-icon layui-icon-triangle-d"></i>
+    </button>
+</script>
+
+<script id="table2toolMenu" type="text/plain">
+[
+  [{header: '菜单', fixed: true}]
+  [{layIcon: 'layui-icon-edit',            txt: '修改用户名',     event:'edit'}]
+
+  {{# if(d.score > 130) { }}
+    [{layIcon: 'layui-icon-praise',            txt: '成绩优异',     event:'scre_good'}]
+  {{# } else { }}
+    [{layIcon: 'layui-icon-tread',          txt: '成绩不合格',     event:'scre_to_low'}]
+  {{# } }}
+
+  [{layIcon: 'layui-icon-delete',          txt: '干掉他',         event:'delete'}]
+  [{layIcon: 'layui-icon-face-smile-fine', txt: 'OHHHHHHHHHHHH', event:'info'}]
+]
+</script>
+
+<script src="./layui2.6.7/layui.js"></script>
+<script>
+
+    layui.config({
+        base: "../dist/"
+    }).use(['mDropdown', 'table', 'layer', 'jquery'], function () {
+        var table    = layui.table;
+        var $        = layui.jquery;
+        var dropdown = layui.mDropdown;
+        var layer    = layui.layer;
+
+
+        // ====================================================================================
+
+        dropdown.suite("[lay-filter='test0']", {
+            immed: true,
+            menus: [[
+                {txt: "菜单1", event: "menu1"},
+                {txt: "菜单2", event: "menu2"},
+                {txt: "菜单3", event: "menu3"},
+                {txt: "菜单4", event: "menu4"},
+            ]],
+            onShow: function ($maker, $down) {
+                $maker.find(".layui-icon").css('transition-duration', '300ms');
+                $maker.find(".layui-icon").css('transform', 'rotate(180deg)');
+            },
+            onHide: function ($maker, $down) {
+                $maker.find(".layui-icon").css('transform', 'rotate(0)');
+            },
+            onItemClick: function (event, menu) {
+                layer.msg("你点击了test0：" + event);
+                console.log(menu)
+            },
+            maxHeight: 200
+        });
+        // dropdown.onFilter("test0",  function (event, menu) {layer.msg("你点击了test0：" + event); console.log(menu)});
+        dropdown.onFilter("test1",  function (event) {layer.msg("你点击了test1：" + event);});
+        dropdown.onFilter("test2",  function (event) {layer.msg("你点击了test2：" + event);});
+        dropdown.onFilter("test3",  function (event) {layer.msg("你点击了test3：" + event);});
+        dropdown.onFilter("test4",  function (event) {layer.msg("你点击了test4：" + event);});
+        dropdown.onFilter("test5",  function (event) {layer.msg("你点击了test5：" + event);});
+        dropdown.onFilter("test6",  function (event) {layer.msg("你点击了test6：" + event);});
+        dropdown.onFilter("test7",  function (event) {layer.msg("你点击了test7：" + event);});
+        dropdown.onFilter("test10", function (event) {layer.msg("你点击了test10：" + event);});
+
+        dropdown.suite("[lay-filter='test8']", {
+            template: "#mymenu",
+            success: function ($dom) {
+                $dom.find(".modify").click(function () {
+                    layer.msg("你点击了【修改信息】");
+                    dropdown.hide("[lay-filter='test8']");
+                });
+
+                $dom.find(".openvip").click(function () {
+                    layer.msg("你点击了【开通会员】");
+                    dropdown.hide("[lay-filter='test8']");
+                });
+            }
+        });
+
+
+        // ====================================================================================
+
+        var tableData1;
+        table.render({
+            elem: '#mytable'
+            ,height: 200
+            ,data: [
+                {id: "1", username: "张三", sex: "男", city: "成都", score: "100", classify: "会计", },
+                {id: "2", username: "王五", sex: "女", city: "成都", score: "120", classify: "CEO",},
+                {id: "3", username: "赵四", sex: "男", city: "成都", score: "130", classify: "董事长",},
+                {id: "4", username: "李六", sex: "女", city: "成都", score: "140", classify: "员工",},
+                {id: "5", username: "贵七", sex: "男", city: "成都", score: "150", classify: "助理",},
+                {id: "6", username: "老八", sex: "女", city: "成都", score: "160", classify: "财务",},
+                {id: "7", username: "宋九", sex: "男", city: "成都", score: "170", classify: "经理",}
+            ]
+            ,page: true //开启分页
+            ,cols: [[ //表头
+                {field: 'id',        title: 'ID',    width: 80, sort: true, fixed: 'left'}
+                ,{field: 'username', title: '用户名', width: 80}
+                ,{field: 'sex',      title: '性别',   width: 80, sort: true}
+                ,{field: 'city',     title: '城市',   width: 80}
+                ,{field: 'score',    title: '评分',   width: 80, sort: true}
+                ,{field: 'classify', title: '职业',   width: 80},
+                {fixed: 'right',     title: '操作',   width: 100, toolbar: "#tb"}
+            ]],
+            done: function (res) {
+                tableData1 = res;
+
+                // 设置下拉菜单监听。
+                // 在表格每行右侧使用下拉框，其实可以不需要使用 onFilter 来设置监听。
+                // 直接使用 table.on("tool(xxxxx)", fun); 就可以像表格里的“监听工具行事件”那样进行监听了。
+                // 此处示列仅表示：在表格里依然可以使用 onFilter 进行监听。但更建议使用 table 的监听工具行事件的方式。
+                for (var i = 0; i < tableData1.data.length; i++) {
+                    dropdown.onFilter("ft" + tableData1.data[i].id, function (event, menu) {
+
+                        // event 表示对应菜单的事件。
+                        // 在2.3.4及以后的版本中， 监听事件支持 第二个参数， 此
+                        // 参数表示被点击的菜单的配置项对象，如果你在菜单配置项中配置了自己的属性，
+                        // 在这里你可通过这个参数获取到。
+
+                        layer.open({
+                            type: 1,
+                            title: "监听到点击事件",
+                            content: `
+                                <table style="margin: 12px" border="1">
+                                    <tr><td valign="top" align="right" style="padding: 4px">事件：</td><td style="padding: 4px">${event}</td></tr>
+                                    <tr><td valign="top" align="right" style="padding: 4px">触发的菜单：</td><td style="padding: 4px"><pre>${JSON.stringify(menu, undefined, 2)}</pre></td></tr>
+                                </table>
+                            `,
+                            area: [420]
+                        });
+
+                        // layer.alert("你点击了："  + event + ", " + JSON.stringify(menu));
+                    });
+                }
+
+
+                dropdown.suite();
+            }
+        });
+        table.on("sort(table1)", function () {
+            dropdown.suite();
+        });
+
+
+        // ====================================================================================
+
+        // 随机一个名字
+        function randomName() {
+            // 姓
+            var fas = [
+                "赵","钱","孙","李","周","吴","郑","王","冯","陈","褚","卫","蒋","沈","韩","杨","朱","秦","尤","许何","吕",
+                "施","张","孔","曹","严","华","金","魏","陶","姜","戚","谢","邹","喻","柏","水","窦","章云","苏","潘","葛",
+                "奚","范","彭","郎","鲁","韦","昌","马","苗","凤","花","方","俞","任","袁","柳酆","鲍","史","唐","费","廉",
+                "岑","薛","雷","贺","倪","汤","滕","殷","罗","毕","郝","邬","安","常乐","于","时","傅","皮","卞","齐","康",
+                "伍","余","元","卜","顾","孟","平","黄","和","穆","萧","尹姚","邵","湛","汪","祁","毛","禹","狄","米","贝",
+                "明","臧","计","伏","成","戴","谈","宋","茅","庞熊","纪","舒","屈","项","祝","董","梁","杜","阮","蓝","闵",
+                "席","季","麻","强","贾","路","娄","危江","童","颜","郭","梅","盛","林","刁","钟","徐","邱","骆","高","夏",
+                "蔡","田","樊","胡","凌","霍虞","万","支","柯","昝","管","卢","莫","经","房","裘","缪","干","解","应","宗",
+                "丁","宣","贲","邓郁","单","杭","洪","包","诸","左","石","崔","吉","钮","龚","程","嵇","邢","滑","裴","陆",
+                "荣","翁荀","羊","於","惠","甄","曲","家","封","芮","羿","储","靳","汲","邴","糜","松","井","段","富","巫乌",
+                "焦","巴","弓","牧","隗","山","谷","车","侯","宓","蓬","全","郗","班","仰","秋","仲","伊","宫宁","仇","栾",
+                "暴","甘","钭","厉","戎","祖","武","符","刘","景","詹","束","龙","叶","幸","司","韶郜","黎","蓟","薄","印",
+                "宿","白","怀","蒲","邰","从","鄂","索","咸","籍","赖","卓","蔺","屠","蒙池","乔","阴","郁","胥","能","苍",
+                "双","闻","莘","党","翟","谭","贡","劳","逄","姬","申","扶","堵冉","宰","郦","雍","郤","璩","桑","桂","濮",
+                "牛","寿","通","边","扈","燕","冀","郏","浦","尚","农温","别","庄","晏","柴","瞿","阎","充","慕","连","茹",
+                "习","宦","艾","鱼","容","向","古","易","慎戈","廖","庾","终","暨","居","衡","步","都","耿","满","弘","匡",
+                "国","文","寇","广","禄","阙","东欧","殳","沃","利","蔚","越","夔","隆","师","巩","厍","聂","晁","勾","敖",
+                "融","冷","訾","辛","阚那","简","饶","空","曾","毋","沙","乜","养","鞠","须","丰","巢","关","蒯","相","查",
+                "後","荆","红游","竺","权","逯","盖","益","桓","公","万俟","司马","上官","欧阳","夏侯","诸葛闻人","东方","赫连",
+                "皇甫","尉迟","公羊","澹台","公冶","宗政","濮阳淳于","单于","太叔","申屠","公孙","仲孙","轩辕","令狐","钟离",
+                "宇文长孙","慕容","鲜于","闾丘","司徒","司空","亓官","司寇","仉","督","子车颛孙","端木","巫马","公西","漆雕",
+                "乐正","壤驷","公良","拓跋","夹谷宰父","谷梁","晋","楚","闫","法","汝","鄢","涂","钦","段干","百里","东郭",
+                "南门呼延","归","海","羊舌","微生","岳","帅","缑","亢","况","后","有","琴","梁丘","左丘东门","西门","商","牟",
+                "佘","佴","伯","赏","南宫","墨","哈","谯","笪","年","爱","阳","佟第五","言","福"
+            ];
+
+            // 名
+            var names = [
+                "依凡","春白","新槐","青筠","白云","盼夏","夜丹","醉芹","新柔","幼琴","痴巧","觅莲","凝蓝","秋萍","易霜",
+                "寒柳","夜青","书萱","含烟","梦雁","晓春","映凡","慕春","妙亦","怀亦","新双","碧蓉","采凡","怀萱","凝春",
+                "思荷","傲桃","沛兰","丹芹","映风","觅珍","怀蓝","凝文","绮梦","从蕊","绿珍","巧天","问菡","代风","青晴",
+                "芷海","寻绿","天芙","念梅","雪安","笑卉","雨萱","语彤","小桃","寒菱","听芹","怀之","雨云","从烟","凌翠",
+                "采雪","思香","书彤","幼桃","恨南","灵柳","妙天","诗凡","白夏","乐云","念彤","寻波","易丹","访旋","巧易",
+                "梦南","恨雁","飞青","迎珍","白亦","秋之","书巧","又山","沛蝶","海文","夜蕾","海桃","思双","夏旋","怜蕾",
+                "紫枫","绿云","晓青","亦松","慕梦","代春","香儿","天蕊","秋风","代天","水冬","雅云","寄云","亦筠","巧风",
+                "盼雁","绿夏","小烟","含梅","惜双","向柳","小柳","怀易","海菡","晓枫","梦珍","映蕾","诗山","痴晴","易真",
+                "冰桃","沛绿","安烟","凡芹","惜彤","寒兰","寄冬","向香","书露","秋菱","夏竹","以玉","代竹","芷芹","沛白",
+                "水绿","晓彤","恨雪","芷翠","访丝","谷梦","紫竹","笑枫","盼烟","语萍","妙松","巧荷","傲萍","青烟","碧卉",
+                "晓枫","友风","醉莲","易竹","安蕊","向蓝","秋儿","向萍","若莲","翠柏","谷旋","映雁","依之","诗凝","丹雪",
+                "书春","灵旋","惜蝶","雅阳","飞槐","孤珍","千莲","夏梦","梦山","听丝","问桃","凌珍","从薇","雪蝶","忆真",
+                "向丹","若曼","含真","寄兰"
+            ];
+
+            var i = Math.floor(Math.random() * fas.length);
+            var i2 = Math.floor(Math.random() * names.length);
+
+            return fas[i] + names[i2];
+        }
+
+        function initTable2(data) {
+            table.render({
+                elem: '#mytable2'
+                ,height: 200
+                ,data: data
+                ,page: true // 开启分页
+                ,cols: [[ // 表头
+                    {field: 'id',        title: 'ID', width:80}
+                    ,{field: 'username', title: '用户名', width:100}
+                    ,{field: 'sex',      title: '性别', width:80,}
+                    ,{field: 'city',     title: '城市', width:80}
+                    ,{field: 'score',    title: '评分', width: 80}
+                    ,{field: 'classify', title: '职业', width: 80},
+                    {fixed: 'right',     title: '操作', width:100, toolbar: "#tb2"}
+                ]],
+                done: function (res) {
+                    // 在表格渲染完成后进行下拉框渲染。
+                    for (var i = 0; i < res.data.length; i++) {
+                        dropdown.suite("#layuidropdown_" + res.data[i].id, {
+                            data: res.data[i]
+                        });
+                    }
+                }
+            });
+
+            // 监听下拉框里的点击事件，由于在表格里，也可以使用表格的tool事件监听方式：
+            table.on("tool(table2)", function (something) {
+                if (something.event === "edit") {
+                    // 随机一个用户名
+                    var val = something.data;
+                    val.username = randomName();
+                    something.update(val);
+                } else if (something.event === "delete") {
+                    something.del();
+                    layer.msg("删除了" + something.data.username);
+                } else if (something.event === "scre_good") {
+                    layer.msg(something.data.username + "的成绩优异！");
+                }  else if (something.event === "scre_to_low") {
+                    layer.msg(something.data.username + "的成绩不合格！");
+                } else {
+                    layer.alert("在 数据表格里使用时，可以通过 数据表格的监听行工具的方法来监听菜单条目的事件。文档:<a href='https://www.layui.com/doc/modules/table.html#ontool'>监听行工具事件</a>。");
+                }
+            });
+        }
+
+        initTable2([
+            {id: "1", username: "张三", sex: "男", city: "成都", score: "100", classify: "会计", },
+            {id: "2", username: "王五", sex: "女", city: "成都", score: "120", classify: "CEO",},
+            {id: "3", username: "赵四", sex: "男", city: "成都", score: "130", classify: "董事长",},
+            {id: "4", username: "李六", sex: "女", city: "成都", score: "140", classify: "员工",},
+            {id: "5", username: "贵七", sex: "男", city: "成都", score: "150", classify: "助理",},
+            {id: "6", username: "老八", sex: "女", city: "成都", score: "160", classify: "财务",},
+            {id: "7", username: "宋九", sex: "男", city: "成都", score: "170", classify: "经理",}
+        ]);
+
+        // =====================================================================================
+        dropdown.onFilter("test_man", function (event) {
+            layer.msg(event);
+        });
+
+        dropdown.onFilter("test_m_1", function (event) {layer.msg(event);});
+        dropdown.onFilter("test_m_2", function (event) {layer.msg(event);});
+        dropdown.onFilter("test_m_3", function (event) {layer.msg(event);});
+        dropdown.onFilter("test_m_4", function (event) {layer.msg(event);});
+
+        $(".test_man_show").on("click", function () {
+            dropdown.show("[lay-filter='test_man']",{
+                align: 'left',
+                menus: [
+                    {layIcon: 'layui-icon-username', txt: '个人中心', event: 'usercenter'},
+                    {layIcon: 'layui-icon-set', txt: '设置', event: 'set'},
+                    {layIcon: 'layui-icon-logout', txt: '退出登录', event: 'loginout'}
+                ],
+                appendTo: 'selector_body'
+            });
+        });
+        $(".test_man_hide").on("click", function () { dropdown.hide("[lay-filter='test_man']"); });
+        $(".test_man_destroy").on("click", function () { dropdown.destroy("[lay-filter='test_man']"); });
+
+    });
+</script>
+</body>
+</html>
