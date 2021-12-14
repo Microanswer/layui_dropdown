@@ -4,6 +4,7 @@ layui 下拉框控件的css。
 */
 /* 加载就绪标志 */
 html #layuicss-dropdown_css{display:none; position: absolute; width:1989px;}
+html #layuicss-mDropdown_css{display:none; position: absolute; width:1989px;}
 
 
 .layu-dropdown-root {
@@ -37,7 +38,8 @@ html #layuicss-dropdown_css{display:none; position: absolute; width:1989px;}
 .layu-dropdown-root .layu-dropdown-content {
     background-color: white;
     border-radius:    3px;
-    box-shadow:       1px 1px 5px #979797;
+    box-shadow:       1px 1px 5px #cbcbcb;
+    border:           1px solid #D9D9D9;
     overflow-x:       auto;
     overflow-y:       hidden;
 }
@@ -76,12 +78,12 @@ html #layuicss-dropdown_css{display:none; position: absolute; width:1989px;}
 .layu-dropdown-root .layu-dropdown-content .layu-dropdown-menu-wrap.layu-menu-splitor::after {border-right:1px solid #D9D9D9;content: " ";position: absolute;top: 0;bottom: 0;right: 0}
 .layu-dropdown-root .layu-dropdown-content .layu-dropdown-menu-wrap.layu-overflowauto {overflow-y: auto;overflow-x: hidden}
 
-.layu-dropdown-root .layu-dropdown-content .layu-dropdown-menu-wrap .layu-dropdown-menu {padding: 0;margin: 0;}
+.layu-dropdown-root .layu-dropdown-content .layu-dropdown-menu-wrap .layu-dropdown-menu {padding: 0;margin: 10px 0;}
 
 .layu-dropdown-root .layu-dropdown-content .layu-dropdown-menu-wrap .layu-dropdown-menu .layu-menu-item-wrap              {list-style: none;outline: none;}
-.layu-dropdown-root .layu-dropdown-content .layu-dropdown-menu-wrap .layu-dropdown-menu .layu-menu-item-wrap:first-child  {margin-top: 10px;}
+/*.layu-dropdown-root .layu-dropdown-content .layu-dropdown-menu-wrap .layu-dropdown-menu .layu-menu-item-wrap:first-child  {margin-top: 10px;}*/
 .layu-dropdown-root .layu-dropdown-content .layu-dropdown-menu-wrap .layu-dropdown-menu .layu-menu-item-wrap.layu-nomargin     {margin-top: 0 !important;}
-.layu-dropdown-root .layu-dropdown-content .layu-dropdown-menu-wrap .layu-dropdown-menu .layu-menu-item-wrap:last-child   {margin-bottom: 10px;}
+/*.layu-dropdown-root .layu-dropdown-content .layu-dropdown-menu-wrap .layu-dropdown-menu .layu-menu-item-wrap:last-child   {margin-bottom: 10px;}*/
 .layu-dropdown-root .layu-dropdown-content .layu-dropdown-menu-wrap .layu-dropdown-menu .layu-menu-item-wrap .layu-menu-header {margin-top: 6px;}
 .layu-dropdown-root .layu-dropdown-content .layu-dropdown-menu-wrap .layu-dropdown-menu .layu-menu-item-wrap .layu-menu-header.layu-withLine{
     margin-left:0;

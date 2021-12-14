@@ -78,11 +78,11 @@
     </p>
     <p class="bold">2、固定菜单头</p>
     <p>
-    <div class="m-inline"><button class="layui-btn layui-btn-sm" lay-filter="test_f_1" lay-dropdown="{templateMenu: 'test_f_1_template', maxHeight: 220}">
+    <div class="m-inline"><button class="layui-btn layui-btn-sm" lay-filter="test_f_1" lay-dropdown="{templateMenu: 'test_f_1_template', maxHeight: 255}">
         <span>固定菜单头示例1</span>
         <i class="layui-icon layui-icon-triangle-d"></i>
     </button></div>、
-    <div class="m-inline"><button class="layui-btn layui-btn-sm" lay-filter="test_f_2" lay-dropdown="{templateMenu: 'test_f_2_template', maxHeight: 220}">
+    <div class="m-inline"><button class="layui-btn layui-btn-sm" lay-filter="test_f_2" lay-dropdown="{templateMenu: 'test_f_2_template', maxHeight: 255}">
         <span>固定菜单头示例2</span>
         <i class="layui-icon layui-icon-triangle-d"></i>
     </button></div>、
@@ -144,9 +144,14 @@
     <p class="bold">9、手动显示与隐藏(v2.0.1)：</p>
     <p>
         <button class="layui-btn layui-btn-sm layui-btn-primary" title="此按钮已被置为disabled，使用右侧按钮操作" disabled lay-filter="test_man">手动显示隐藏到这儿</button>
+        <button class="layui-btn layui-btn-sm layui-btn-danger test_man_suit">初始化</button><span></span>
         <button class="layui-btn layui-btn-sm test_man_show">显示</button><span></span>
         <button class="layui-btn layui-btn-sm layui-btn-normal  test_man_hide">隐藏</button><span></span>
         <button class="layui-btn layui-btn-sm layui-btn-warm test_man_destroy">销毁</button><span></span>
+    </p>
+    <p>10、输入框实时显示</p>
+    <p>
+        请输入你想搜索的内容：<input id="myInput" type="text" />
     </p>
 
     <hr>
@@ -425,6 +430,14 @@
 ]
 </script>
 
+<script id="inputResultMenu" type="text/plain">
+[
+   {{# layui.each(d.results, function(index, item) { }}
+      [{txt: "{{item}}", event: "{{item}}"}]
+   {{# }); }}
+]
+</script>
+
 <script src="./layui/layui.js"></script>
 <script>
 
@@ -529,12 +542,11 @@
                         layer.open({
                             type: 1,
                             title: "监听到点击事件",
-                            content: `
-                                <table style="margin: 12px" border="1">
-                                    <tr><td valign="top" align="right" style="padding: 4px">事件：</td><td style="padding: 4px">${event}</td></tr>
-                                    <tr><td valign="top" align="right" style="padding: 4px">触发的菜单：</td><td style="padding: 4px"><pre>${JSON.stringify(menu, undefined, 2)}</pre></td></tr>
-                                </table>
-                            `,
+                            content:
+                                '<table style="margin: 12px" border="1">'+
+                                    '<tr><td valign="top" align="right" style="padding: 4px">事件：</td><td style="padding: 4px">'+event+'</td></tr>'+
+                                    '<tr><td valign="top" align="right" style="padding: 4px">触发的菜单：</td><td style="padding: 4px"><pre>'+JSON.stringify(menu, undefined, 2)+'</pre></td></tr>'+
+                                '</table>',
                             area: [420]
                         });
 
@@ -671,19 +683,83 @@
         dropdown.onFilter("test_m_3", function (event) {layer.msg(event);});
         dropdown.onFilter("test_m_4", function (event) {layer.msg(event);});
 
+        var opt = {
+            align: 'left',
+            menus: [
+                {layIcon: 'layui-icon-username', txt: '个人中心', event: 'usercenter'},
+                {layIcon: 'layui-icon-set', txt: '设置', event: 'set'},
+                {layIcon: 'layui-icon-logout', txt: '退出登录', event: 'loginout'}
+            ],
+            appendTo: 'selector_body',
+            onItemClick: function (event, menu) {
+                console.log("菜单点击", event, menu);
+            }
+        };
+
+        $(".test_man_suit").on("click", function () {
+            dropdown.suite("[lay-filter='test_man']", opt);
+        });
         $(".test_man_show").on("click", function () {
-            dropdown.show("[lay-filter='test_man']",{
-                align: 'left',
-                menus: [
-                    {layIcon: 'layui-icon-username', txt: '个人中心', event: 'usercenter'},
-                    {layIcon: 'layui-icon-set', txt: '设置', event: 'set'},
-                    {layIcon: 'layui-icon-logout', txt: '退出登录', event: 'loginout'}
-                ],
-                appendTo: 'selector_body'
-            });
+            dropdown.show("[lay-filter='test_man']",opt);
         });
         $(".test_man_hide").on("click", function () { dropdown.hide("[lay-filter='test_man']"); });
         $(".test_man_destroy").on("click", function () { dropdown.destroy("[lay-filter='test_man']"); });
+
+        // =====================================================================================
+
+        var lastChangeTime = -1; // 记录上次改变的时间。 通过此字段判断，如果用户快速输入则不需要进行搜索，停留了一段时间后没输入才搜索。 实现防抖嘛，当然方法很多。
+        var setTimeOutIds = [];
+        var timespace = 500;
+
+        function onInputChange() {
+            console.log("change");
+
+            // 输入很快，清空之前的任务。
+            if (Date.now() - lastChangeTime < timespace && lastChangeTime > 0) {
+                for (var i = 0; i < setTimeOutIds.length; i++) {
+                    clearTimeout(setTimeOutIds[i]);
+                }
+            }
+
+            var value = this.value;
+            var _this = this;
+            lastChangeTime = Date.now();
+            setTimeOutIds.push(setTimeout(function () {
+                for (var i = 0; i < setTimeOutIds.length; i++) {
+                    clearTimeout(setTimeOutIds[i]);
+                }
+                initdropdownForInput(_this, value);
+
+            }, 500));
+        }
+
+        var datas = [
+            "Jack Ma",
+            "Jack Ti",
+            "Jack Lei",
+            "Jack Wu",
+            "Tom Fan",
+            "Tom Ten",
+            "Tom Guo",
+            "Per KK",
+            "Per Ti",
+            "Per Wu",
+            "Li Lei"
+        ];
+
+        function initdropdownForInput(dom, value) {
+            var results = datas.filter(function(value1, index) {return value1.includes(value)});
+            var cfg = {
+                immed: true,
+                data: {
+                    results: results
+                },
+                templateMenu: "#inputResultMenu"
+            };
+            dropdown.suite(dom, cfg);
+        }
+
+        $("#myInput").on("change input", onInputChange);
 
     });
 </script>

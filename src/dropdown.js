@@ -1,3 +1,32 @@
+
+if (!Array.isArray) {
+    Array.isArray=function(obj){
+        return Object.prototype.toString.call(obj)==="[object Array]";
+    }
+}
+if (!String.prototype.trim) {
+    String.prototype.trim = function () {return this.replace(/(^\s*)|(\s*$)/g, "");};
+}
+if (!Function.prototype.bind) {
+    Function.prototype.bind = function (oThis) {
+        if (typeof this !== "function") {
+            throw new Error("Function.prototype.bind - what is trying to be bound is not callable");
+        }
+        var aArgs = Array.prototype.slice.call(arguments, 1),
+            fToBind = this,
+            fNOP = function () {},
+            fBound = function () {
+                return fToBind.apply(
+                    this instanceof fNOP && oThis ? this : oThis,
+                    aArgs.concat(Array.prototype.slice.call(arguments))
+                );
+            };
+        fNOP.prototype = this.prototype;
+        fBound.prototype = new fNOP();
+        return fBound;
+    };
+}
+
 /**
  * @Name ${name}
  * @Author: ${author}
@@ -56,6 +85,17 @@ layui.define(['jquery', 'laytpl'], function (exports) {
             return f();
         } else {
             throw new Error("除了分割线hr，别的菜单条目都必须保证是合格的Javascript对象或json对象。");
+        }
+    }
+
+    // 移除数组中的空项。
+    function removeEmptyItem(arr) {
+        // ie8， 如果遇到空元素，移除。
+        for (var i = 0; i < arr.length; i++) {
+            if (typeof arr[i] === 'undefined' || arr[i] === null){
+                arr.splice(i, 1);
+                i--;
+            }
         }
     }
 
@@ -133,14 +173,14 @@ layui.define(['jquery', 'laytpl'], function (exports) {
         if (menus && menus.length > 0) {
 
             var findCount = 0;
-            var result = new Array(menus.length);
+            var result =[];
 
             for (var i = 0; i < menus.length; i++) {
                 var menu = menus[i];
                 for (var j = 0; j < menu.length; j++) {
                     if (menu[j].header && menu[j].fixed) {
                         findCount ++;
-                        result[i] = menu[j];
+                        result.push(menu[j]);
                         menu.splice(j, 1);
                         j--;
                     }
@@ -260,7 +300,7 @@ layui.define(['jquery', 'laytpl'], function (exports) {
     var DEFAULT_OPTION = {
 
         // 要显示的下拉菜单
-        menus: [],
+        menus: undefined,
 
         // 菜单模板，使用规定语法的模板。支持 laytpl 动态渲染。
         templateMenu: "",
@@ -394,21 +434,30 @@ layui.define(['jquery', 'laytpl'], function (exports) {
         }
 
 
-        if (_this.option.menus && _this.option.menus.length > 0) {
+        if (_this.option.menus) {
+            // ie8， 如果遇到空元素，移除。
+            removeEmptyItem(_this.option.menus);
 
-            // 判断菜单是单列还是多列
-            var menu = _this.option.menus[0];
-            if (!Array.isArray(menu)) { // 并不是多列。处理为多列。
-                _this.option.menus = [_this.option.menus];
+            if (_this.option.menus.length > 0) {
+
+                // 判断菜单是单列还是多列
+                var menu = _this.option.menus[0];
+
+                if (!Array.isArray(menu)) { // 并不是多列。处理为多列。
+                    _this.option.menus = [_this.option.menus];
+                }
+
+                for (var i = 0; i < _this.option.menus.length; i++) {
+                    removeEmptyItem(_this.option.menus[i]);
+                }
+                _this.option.fixHeaders = findFixHeadInMenu(_this.option.menus);
+                _this.option.nowrap = true;
+                laytpl(MENUS_TEMPLATE).render(_this.option, function (html) {
+                    _this.onMenuLaytplEnd(html);
+                });
             }
-            _this.option.fixHeaders = findFixHeadInMenu(_this.option.menus);
-            _this.option.nowrap = true;
-            laytpl(MENUS_TEMPLATE).render(_this.option, function (html) {
-                _this.onMenuLaytplEnd(html);
-            });
         }
         else if(_this.option.templateMenu || _this.option.templateMenuStr) {
-
             var templateMenuStr;
             if (_this.option.templateMenu) {
                 var templateMenu;
@@ -417,7 +466,8 @@ layui.define(['jquery', 'laytpl'], function (exports) {
                 } else {
                     templateMenu = _this.option.templateMenu;
                 }
-                templateMenuStr = $(templateMenu).text();
+                templateMenuStr = $(templateMenu).html();
+                // console.log("菜单模板", _this.option.templateMenu, templateMenuStr,$(templateMenu)[0].innerText);
             } else if (_this.option.templateMenuStr) {
                 templateMenuStr = _this.option.templateMenuStr;
             }
@@ -477,11 +527,13 @@ layui.define(['jquery', 'laytpl'], function (exports) {
     Dropdown.prototype.initPosition = function () {
         if (!this.$down) {return;}
 
+        var pageYOffset = typeof window.pageYOffset === 'number' ? window.pageYOffset : document.documentElement.scrollTop;
+
         var btnOffset  = this.$dom.offset();
         var btnHeight  = this.$dom.outerHeight();
         var btnWidth   = this.$dom.outerWidth();
         var btnLeft    = btnOffset.left;
-        var btnTop     = btnOffset.top - window.pageYOffset;
+        var btnTop     = btnOffset.top - pageYOffset;
         var downHeight = this.$down.outerHeight();
         var downWidth  = this.$down.outerWidth();
 

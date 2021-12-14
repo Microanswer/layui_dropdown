@@ -34,7 +34,7 @@ app.use(function (req, res, next) {
 app.use("/example", express.static(path.join(__dirname, "../example/")));
 
 // 将dist也加入，方便调试。
-app.use("/dist", express.static(path.join(__dirname, "../dist/")));
+app.use("/dist", express.static(path.join(__dirname, "../src/")));
 
 // favicon.ico
 app.all("/favicon.ico", (req, res) => {
